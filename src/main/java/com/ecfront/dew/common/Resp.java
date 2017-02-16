@@ -24,6 +24,10 @@ public class Resp<E> {
         return Objects.equals(this.code, StandardCode.SUCCESS.toString());
     }
 
+    public static Resp<Void> error(Resp<?> resp){
+        return new Resp<>(resp.getCode(),resp.getMessage(),null);
+    }
+
     public String getCode() {
         return code;
     }
