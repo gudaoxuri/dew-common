@@ -13,6 +13,7 @@ Dew公共模块
 1. 定时器（TimerHelper）
 1. 常用时间处理（TimeHelper）
 1. 主流文件MIME整理（MimeHelper）
+1. 通用拦截器栈（DewInterceptorProcessor）
 
 ### 使用
 
