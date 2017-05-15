@@ -8,7 +8,7 @@
     <artifactId>common</artifactId>
     <name>Dew Common</name>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -18,13 +18,12 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
-        <jackson.version>2.8.7</jackson.version>
+        <jackson.version>2.8.8.1</jackson.version>
         <beanutils.version>1.9.3</beanutils.version>
-        <jbcrypt.version>0.3m</jbcrypt.version>
-        <slf4j.version>1.7.22</slf4j.version>
-        <logback.version>1.1.7</logback.version>
-        <log4j.version>1.7.21</log4j.version>
-        <throwing.version>1.3</throwing.version>
+        <jbcrypt.version>0.4</jbcrypt.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <logback.version>1.2.3</logback.version>
+        <log4j.version>2.8.2</log4j.version>
         <junit.version>4.12</junit.version>
     </properties>
 
@@ -48,11 +47,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pl.touk</groupId>
-            <artifactId>throwing-function</artifactId>
-            <version>${throwing.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

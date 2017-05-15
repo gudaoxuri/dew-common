@@ -35,7 +35,7 @@ public class BeanHelperTest {
 
     @Test
     public void findFieldInfo() throws Exception {
-        Map<String, FieldInfo> fieldsInfo= BeanHelper.findFieldsInfo(IdxController.class,null,null,null,null);
+        Map<String, BeanHelper.FieldInfo> fieldsInfo= BeanHelper.findFieldsInfo(IdxController.class,null,null,null,null);
         Assert.assertEquals(fieldsInfo.size(),2);
         fieldsInfo=BeanHelper.findFieldsInfo(IdxController.class,null,new HashSet<Class<? extends Annotation>>(){{add(Deprecated.class);}},null,null);
         Assert.assertEquals(fieldsInfo.size(),1);
@@ -49,7 +49,7 @@ public class BeanHelperTest {
 
     @Test
     public void findMethodInfo() throws Exception {
-        Set<MethodInfo> methodsInfo= BeanHelper.findMethodsInfo(IdxController.class,null,null,null,null);
+        Set<BeanHelper.MethodInfo> methodsInfo= BeanHelper.findMethodsInfo(IdxController.class,null,null,null,null);
         Assert.assertEquals(methodsInfo.size(),7);
         methodsInfo=BeanHelper.findMethodsInfo(IdxController.class,null,new HashSet<Class<? extends Annotation>>(){{add(TestAnnotation.GET.class);}},null,null);
         Assert.assertEquals(methodsInfo.size(),6);

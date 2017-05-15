@@ -6,6 +6,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
@@ -153,13 +155,14 @@ public class EncryptHelper {
          *
          * @param data      要加密的数据
          * @param key       公钥或私钥文件
+         * @param keyLength 密钥长度
          * @param algorithm 非对称算法，如 RSA
          * @return 加密后的数据
          */
-        public static byte[] encrypt(byte[] data, Key key, String algorithm) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        public static byte[] encrypt(byte[] data, Key key, int keyLength, String algorithm) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            return cipher.doFinal(data);
+            return packageCipher(data, cipher, keyLength / 8 - 11, data.length);
         }
 
         /**
@@ -167,13 +170,34 @@ public class EncryptHelper {
          *
          * @param data      要解密的数据
          * @param key       公钥或私钥文件
+         * @param keyLength 密钥长度
          * @param algorithm 非对称算法，如 RSA
          * @return 解密后的数据
          */
-        public static byte[] decrypt(byte[] data, Key key, String algorithm) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        public static byte[] decrypt(byte[] data, Key key, int keyLength, String algorithm) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.DECRYPT_MODE, key);
-            return cipher.doFinal(data);
+            return packageCipher(data, cipher, keyLength / 8, data.length);
+        }
+
+        private static byte[] packageCipher(byte[] data, Cipher cipher, int maxLength, int inputLength) throws IllegalBlockSizeException, BadPaddingException, IOException {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int offSet = 0;
+            byte[] cache;
+            int i = 0;
+            while (inputLength - offSet > 0) {
+                if (inputLength - offSet > maxLength) {
+                    cache = cipher.doFinal(data, offSet, maxLength);
+                } else {
+                    cache = cipher.doFinal(data, offSet, inputLength - offSet);
+                }
+                out.write(cache, 0, cache.length);
+                i++;
+                offSet = i * maxLength;
+            }
+            byte[] decryptedData = out.toByteArray();
+            out.close();
+            return decryptedData;
         }
 
         /**

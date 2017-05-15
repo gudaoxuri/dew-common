@@ -28,7 +28,7 @@ public class JsonHelperTest {
         Assert.assertEquals(model.getName(), "sunisle");
         Assert.assertEquals(model.getCid(), "1");
         Assert.assertEquals(model.getCreateTime(), "123456789");
-        Assert.assertEquals(df.format(model.getDate()),"2016-07-12 12:00:00");
+        Assert.assertEquals(df.format(model.getDate()), "2016-07-12 12:00:00");
     }
 
     @Test
@@ -37,7 +37,7 @@ public class JsonHelperTest {
         Assert.assertEquals(model.getName(), "sunisle");
         Assert.assertEquals(model.getCid(), "1");
         Assert.assertEquals(model.getCreateTime(), "123456789");
-        Assert.assertEquals(df.format(model.getDate()),"2016-07-12 12:00:00");
+        Assert.assertEquals(df.format(model.getDate()), "2016-07-12 12:00:00");
     }
 
 }

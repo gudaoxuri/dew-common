@@ -1,5 +1,7 @@
 package com.ecfront.dew.common;
 
+import org.apache.commons.beanutils.BeanUtilsBean;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -225,6 +227,95 @@ public class BeanHelper {
                 return "is" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
             }
             return "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
+        }
+    }
+
+    public static class NullAwareBeanUtilsBean extends BeanUtilsBean {
+        @Override
+        public void copyProperty(Object bean, String name, Object value) throws IllegalAccessException, InvocationTargetException {
+            if (null != value) {
+                super.copyProperty(bean, name, value);
+            }
+        }
+    }
+
+    public static class FieldInfo {
+
+        private String name;
+        private Class<?> type;
+        private Set<Annotation> annotations;
+        private Field field;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Class<?> getType() {
+            return type;
+        }
+
+        public void setType(Class<?> type) {
+            this.type = type;
+        }
+
+        public Set<Annotation> getAnnotations() {
+            return annotations;
+        }
+
+        public void setAnnotations(Set<Annotation> annotations) {
+            this.annotations = annotations;
+        }
+
+        public Field getField() {
+            return field;
+        }
+
+        public void setField(Field field) {
+            this.field = field;
+        }
+    }
+
+    public static class MethodInfo {
+
+        private String name;
+        private Class<?> returnType;
+        private Set<Annotation> annotations;
+        private Method method;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Class<?> getReturnType() {
+            return returnType;
+        }
+
+        public void setReturnType(Class<?> returnType) {
+            this.returnType = returnType;
+        }
+
+        public Set<Annotation> getAnnotations() {
+            return annotations;
+        }
+
+        public void setAnnotations(Set<Annotation> annotations) {
+            this.annotations = annotations;
+        }
+
+        public Method getMethod() {
+            return method;
+        }
+
+        public void setMethod(Method method) {
+            this.method = method;
         }
     }
 

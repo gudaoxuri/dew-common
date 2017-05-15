@@ -104,4 +104,8 @@ public class Resp<E> {
         return new Resp<>(code, message, null);
     }
 
+    public static <E> Resp<E> customFail(Resp resp) {
+        return new Resp<>(resp.getCode(), resp.getMessage(), null);
+    }
+
 }

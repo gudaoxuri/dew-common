@@ -16,6 +16,8 @@ import java.util.concurrent.Future;
  */
 public class ShellHelper {
 
+    private static final Logger logger = LoggerFactory.getLogger(ShellHelper.class);
+
     private volatile String taskId;
     private volatile String successFlag;
     private volatile String progressFlag;
@@ -53,21 +55,21 @@ public class ShellHelper {
                             //删除最后一行（\r\n）
                             reportHandler.complete(taskId, result.length() > 0 ? result.substring(0, result.length() - 2) : result.toString());
                         }
-                        LOGGER.debug("Execute Success: " + shellPath);
+                        logger.debug("Execute Success: " + shellPath);
                     } else {
-                        LOGGER.warn("Execute fail: Not Find successFlag [" + successFlag + "], shellPath:" + shellPath);
+                        logger.warn("Execute fail: Not Find successFlag [" + successFlag + "], shellPath:" + shellPath);
                         reportHandler.fail(taskId, "Not Find successFlag [" + successFlag + "], shellPath:" + shellPath);
                     }
                 } else {
-                    LOGGER.warn("Execute fail: Abnormal termination , shellPath:" + shellPath);
+                    logger.warn("Execute fail: Abnormal termination , shellPath:" + shellPath);
                     reportHandler.fail(taskId, "Abnormal termination , shellPath:" + shellPath);
                 }
             } else {
-                LOGGER.warn("Execute fail: PID NOT exist , shellPath:" + shellPath);
+                logger.warn("Execute fail: PID NOT exist , shellPath:" + shellPath);
                 reportHandler.fail(taskId, "PID NOT exist , shellPath:" + shellPath);
             }
         } catch (Exception e) {
-            LOGGER.error("Execute fail: ", e);
+            logger.error("Execute fail: ", e);
             reportHandler.fail(taskId, e.getMessage() + " , shellPath:" + shellPath);
         }
     }
@@ -91,7 +93,7 @@ public class ShellHelper {
                 isr = new InputStreamReader(is);
                 br = new BufferedReader(isr);
                 while ((line = br.readLine()) != null) {
-                    LOGGER.trace("Shell content:" + line);
+                    logger.trace("Shell content:" + line);
                     if (returnResult) {
                         result.append(line).append("\r\n");
                     }
@@ -104,34 +106,32 @@ public class ShellHelper {
                     }
                 }
             } catch (IOException e) {
-                LOGGER.warn("Execute fail: ", e);
+                logger.warn("Execute fail: ", e);
             } finally {
                 if (br != null) {
                     try {
                         br.close();
                     } catch (Exception e) {
-                        LOGGER.warn("Execute warn: ", e);
+                        logger.warn("Execute warn: ", e);
                     }
                 }
                 if (isr != null) {
                     try {
                         isr.close();
                     } catch (Exception e) {
-                        LOGGER.warn("Execute warn: ", e);
+                        logger.warn("Execute warn: ", e);
                     }
                 }
                 if (is != null) {
                     try {
                         is.close();
                     } catch (Exception e) {
-                        LOGGER.warn("Execute warn: ", e);
+                        logger.warn("Execute warn: ", e);
                     }
                 }
             }
             return false;
         }
     }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ShellHelper.class);
 
 }
