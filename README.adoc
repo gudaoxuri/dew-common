@@ -1,5 +1,10 @@
 == Dew Common(Dew公共模块)
 
+image::https://img.shields.io/travis/gudaoxuri/dew-common.svg[link="https://travis-ci.org/gudaoxuri/-common"]
+image:https://api.codacy.com/project/badge/Grade/f2fc8d2aa9594a0bae6e2a445caa56db["Codacy code quality", link="https://www.codacy.com/app/gudaoxuri/dew-common?utm_source=github.com&utm_medium=referral&utm_content=gudaoxuri/dew-common&utm_campaign=Badge_Grade"]
+image:https://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2",link="https://www.apache.org/licenses/LICENSE-2.0.txt"]
+
+
 === 功能
 
 . Json与Java对象转换（JsonHelper）
@@ -20,6 +25,6 @@
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.0</version>
 </parent>
 ----

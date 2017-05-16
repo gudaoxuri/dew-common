@@ -46,7 +46,7 @@ public interface DewInterceptor<E> {
      * @param context 参数
      */
     default void error(E obj, Map<String, Object> context) {
-
+        // Do Nothing.
     }
 
 }

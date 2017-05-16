@@ -207,12 +207,10 @@ public class BeanHelper {
 
     private static String packageMethodNameByField(Field field, boolean isSet) {
         if (isSet) {
-            if (field.getType() == boolean.class) {
-                if (field.getName().startsWith("is") && field.getName().length() > 3) {
-                    Character c = field.getName().substring(2, 1).toCharArray()[0];
-                    if (c >= 'A' && c <= 'Z') {
-                        return "set" + field.getName().substring(2);
-                    }
+            if (field.getType() == boolean.class && field.getName().startsWith("is") && field.getName().length() > 3) {
+                Character c = field.getName().substring(2, 1).toCharArray()[0];
+                if (c >= 'A' && c <= 'Z') {
+                    return "set" + field.getName().substring(2);
                 }
             }
             return "set" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);

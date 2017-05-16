@@ -78,7 +78,7 @@ public class ShellHelper {
      * 输出处理
      */
     class StreamGobbler implements Callable<Boolean> {
-        InputStream is;
+        private InputStream is;
 
         StreamGobbler(InputStream is) {
             this.is = is;
