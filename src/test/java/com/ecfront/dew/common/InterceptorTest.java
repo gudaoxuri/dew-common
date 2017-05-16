@@ -20,14 +20,14 @@ public class InterceptorTest {
         Assert.assertTrue(resp.ok());
         Assert.assertEquals("1", resp.getBody().getObj().getF());
         // has one
-        DewInterceptorProcessor.register("test",new InterceptorA());
+        DewInterceptorProcessor.register("test", new InterceptorA());
         resp = DewInterceptorProcessor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
                 Resp.success(DewInterceptRespBody.build(obj, context))
         );
         Assert.assertTrue(resp.ok());
         Assert.assertEquals("3", resp.getBody().getObj().getF());
         // error
-        DewInterceptorProcessor.register("test",new InterceptorB());
+        DewInterceptorProcessor.register("test", new InterceptorB());
         resp = DewInterceptorProcessor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
                 Resp.success(DewInterceptRespBody.build(obj, context))
         );
@@ -66,7 +66,7 @@ public class InterceptorTest {
         @Override
         public Resp<DewInterceptRespBody<Obj>> after(Obj obj, Map context) {
             obj.setF("3");
-            return Resp.success(DewInterceptRespBody.build(obj,context));
+            return Resp.success(DewInterceptRespBody.build(obj, context));
         }
 
         @Override
@@ -90,7 +90,7 @@ public class InterceptorTest {
 
         @Override
         public Resp<DewInterceptRespBody<Obj>> after(Obj obj, Map context) {
-            return Resp.success(DewInterceptRespBody.build(obj,context));
+            return Resp.success(DewInterceptRespBody.build(obj, context));
         }
 
         @Override
