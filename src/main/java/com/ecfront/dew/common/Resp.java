@@ -1,10 +1,11 @@
 package com.ecfront.dew.common;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Resp<E> {
+public class Resp<E> implements Serializable {
 
     public static final String FLAG_CODE = "code";
     public static final String FLAG_BODY = "body";

@@ -1,8 +1,9 @@
 package com.ecfront.dew.common;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PageDTO<E> {
+public class PageDTO<E> implements Serializable {
 
     private long pageNumber;
     private long pageSize;

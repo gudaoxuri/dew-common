@@ -25,6 +25,6 @@ image:https://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2",link
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
 </parent>
 ----
