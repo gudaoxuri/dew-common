@@ -14,6 +14,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+/**
+ * Json与Java对象互转<br/>
+ *
+ * 为方便在Java8 Stream中使用，操作返回的异常都是运行时异常
+ */
 public class JsonHelper {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -26,10 +31,20 @@ public class JsonHelper {
         setTimeZone(Calendar.getInstance().getTimeZone());
     }
 
+    /**
+     * 设置时区
+     * @param tz 时区
+     */
     public static void setTimeZone(TimeZone tz) {
         MAPPER.setTimeZone(tz);
     }
 
+    /**
+     * Java对象转成Json字符串
+     * @param obj Java对象
+     * @return Json字符串
+     * @throws RuntimeException
+     */
     public static String toJsonString(Object obj) throws RuntimeException {
         if (obj instanceof String) {
             return (String) obj;
@@ -42,6 +57,12 @@ public class JsonHelper {
         }
     }
 
+    /**
+     * Java对象转成JsonNode
+     * @param obj Java对象
+     * @return JsonNode
+     * @throws RuntimeException
+     */
     public static JsonNode toJson(Object obj) throws RuntimeException {
         if (obj instanceof String) {
             try {
@@ -54,6 +75,13 @@ public class JsonHelper {
         }
     }
 
+    /**
+     * 转成List泛型对象
+     * @param obj 源数据，可以是Json字符串、JsonNode或其它Java对象
+     * @param clazz 目标对象类型
+     * @return 目标对象
+     * @throws RuntimeException
+     */
     public static <E> List<E> toList(Object obj, Class<E> clazz) throws RuntimeException {
         JavaType type = MAPPER.getTypeFactory().constructParametricType(List.class, clazz);
         try {
@@ -69,6 +97,13 @@ public class JsonHelper {
         }
     }
 
+    /**
+     * 转成目标对象
+     * @param obj 源数据，可以是Json字符串、JsonNode或其它Java对象
+     * @param clazz 目标对象类型
+     * @return 目标对象
+     * @throws RuntimeException
+     */
     public static <E> E toObject(Object obj, Class<E> clazz) throws RuntimeException {
         try {
             if (obj instanceof String) {
@@ -87,14 +122,26 @@ public class JsonHelper {
         }
     }
 
+    /**
+     * 创建ObjectNode
+     * @return objectNode
+     */
     public static ObjectNode createObjectNode() {
         return MAPPER.createObjectNode();
     }
 
+    /**
+     * 创建ArrayNode
+     * @return arrayNode
+     */
     public static ArrayNode createArrayNode() {
         return MAPPER.createArrayNode();
     }
 
+    /**
+     * 获取Jackson底层操作
+     * @return Jackson ObjectMapper
+     */
     public static ObjectMapper getMapper() {
         return MAPPER;
     }

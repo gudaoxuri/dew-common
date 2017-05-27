@@ -9,16 +9,31 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Java Bean操作
+ */
 public class BeanHelper {
 
     private static NullAwareBeanUtilsBean copyPropertiesAdapter = new NullAwareBeanUtilsBean();
 
+    /**
+     * Java Bean Copy
+     *
+     * @param dest 目标Bean
+     * @param ori  源Bean
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     public static void copyProperties(Object dest, Object ori) throws InvocationTargetException, IllegalAccessException {
         copyPropertiesAdapter.copyProperties(dest, ori);
     }
 
     /**
-     * 获取Class的字段信息
+     * 获取Class的注解信息
+     *
+     * @param clazz           目标类
+     * @param annotationClass 目标注解
+     * @return 注解信息
      */
     public static <T extends Annotation> T getClassAnnotation(Class<?> clazz, Class<T> annotationClass) {
         return clazz.getAnnotation(annotationClass);
@@ -32,6 +47,7 @@ public class BeanHelper {
      * @param excludeAnnotationClasses 要排除的注解，默认为 Ignore
      * @param includeNames             要包含的名称，默认为全部
      * @param includeAnnotationClasses 要包含的注解，默认为全部
+     * @return 字段信息
      */
     public static Map<String, FieldInfo> findFieldsInfo(Class<?> clazz,
                                                         Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
@@ -69,7 +85,13 @@ public class BeanHelper {
         return fieldsInfo;
     }
 
-    private static Map<String, Field> getFields(Class<?> clazz) {
+    /**
+     * 获取当前类及父类的所有字段
+     *
+     * @param clazz 当前类
+     * @return 字段信息
+     */
+    public static Map<String, Field> getFields(Class<?> clazz) {
         Map<String, Field> fields = new HashMap<>();
         for (Field field : clazz.getDeclaredFields()) {
             fields.put(field.getName(), field);
@@ -88,11 +110,12 @@ public class BeanHelper {
      * @param excludeAnnotationClasses 要排除的注解，默认为 Ignore
      * @param includeNames             要包含的名称，默认为全部
      * @param includeAnnotationClasses 要包含的注解，默认为全部
+     * @return 方法信息
      */
-    public static Set<MethodInfo> findMethodsInfo(Class<?> clazz,
-                                                  Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
-                                                  Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) {
-        Set<MethodInfo> methodsInfo = new HashSet<>();
+    public static List<MethodInfo> findMethodsInfo(Class<?> clazz,
+                                                   Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
+                                                   Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) {
+        List<MethodInfo> methodsInfo = new ArrayList<>();
         if (excludeNames == null) {
             excludeNames = new HashSet<>();
         }
@@ -125,7 +148,13 @@ public class BeanHelper {
         return methodsInfo;
     }
 
-    private static List<Method> getMethods(Class<?> clazz) {
+    /**
+     * 获取当前类及父类的所有方法
+     *
+     * @param clazz 当前类
+     * @return 方法信息
+     */
+    public static List<Method> getMethods(Class<?> clazz) {
         List<Method> methods = new ArrayList<>();
         methods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
         if (clazz.getSuperclass() != null && clazz.getSuperclass() != Object.class) {
@@ -134,10 +163,31 @@ public class BeanHelper {
         return methods;
     }
 
+    /**
+     * 执行方法
+     *
+     * @param obj    目标对象
+     * @param method 目标方法
+     * @param args   参数
+     * @return 执行结果
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     public static Object invoke(Object obj, Method method, Object... args) throws InvocationTargetException, IllegalAccessException {
         return method.invoke(obj, args);
     }
 
+    /**
+     * 获取字段对应的Get/Set方法
+     *
+     * @param clazz                    目标Class类型
+     * @param excludeNames             要排除的名称，默认为空
+     * @param excludeAnnotationClasses 要排除的注解，默认为 Ignore
+     * @param includeNames             要包含的名称，默认为全部
+     * @param includeAnnotationClasses 要包含的注解，默认为全部
+     * @return 字段对应的Get/Set方法
+     * @throws NoSuchMethodException
+     */
     public static Map<String, Method[]> parseRelFieldAndMethod(Class<?> clazz, Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
                                                                Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) throws NoSuchMethodException {
         Map<String, Method[]> rel = new HashMap<>();
@@ -150,14 +200,33 @@ public class BeanHelper {
         return rel;
     }
 
-    public static Map<String, Object> findValuesByRel(Object obj, Map<String, Method[]> relFieldAndMehtod) throws InvocationTargetException, IllegalAccessException {
+    /**
+     * 根据字段的Get方法获取对应的值
+     *
+     * @param obj               目标对象
+     * @param relFieldAndMethod 字段对应的Get/Set方法
+     * @return 值列表
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
+    public static Map<String, Object> findValuesByRel(Object obj, Map<String, Method[]> relFieldAndMethod) throws InvocationTargetException, IllegalAccessException {
         Map<String, Object> values = new HashMap<>();
-        for (Map.Entry<String, Method[]> rel : relFieldAndMehtod.entrySet()) {
+        for (Map.Entry<String, Method[]> rel : relFieldAndMethod.entrySet()) {
             values.put(rel.getKey(), getValue(obj, rel.getValue()[0]));
         }
         return values;
     }
 
+    /**
+     * 根据字段信息获取对应的值
+     *
+     * @param obj        目标对象
+     * @param fieldsInfo 目标字段
+     * @return 值列表
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     */
     public static Map<String, Object> findValues(Object obj, Map<String, FieldInfo> fieldsInfo) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         Map<String, Object> values = new HashMap<>();
         for (Map.Entry<String, FieldInfo> info : fieldsInfo.entrySet()) {
@@ -166,6 +235,16 @@ public class BeanHelper {
         return values;
     }
 
+    /**
+     * 获取对象所有字段的值
+     *
+     * @param obj                      目标对象
+     * @param excludeNames             要排除的名称，默认为空
+     * @param excludeAnnotationClasses 要排除的注解，默认为 Ignore
+     * @param includeNames             要包含的名称，默认为全部
+     * @param includeAnnotationClasses 要包含的注解，默认为全部
+     * @return 值列表
+     */
     public static Map<String, Object> findValues(Object obj, Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
                                                  Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) {
         Map<String, Object> values = new HashMap<>();
@@ -179,28 +258,89 @@ public class BeanHelper {
         return values;
     }
 
+    /**
+     * 根据方法获取对应的值
+     *
+     * @param obj    目标对象
+     * @param method 目标方法
+     * @return 对应的值
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     public static Object getValue(Object obj, Method method) throws InvocationTargetException, IllegalAccessException {
         return invoke(obj, method);
     }
 
+    /**
+     * 根据字段获取对应的值（需要有标准的Get方法）
+     *
+     * @param obj   目标对象
+     * @param field 目标字段
+     * @return 对应的值
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     */
     public static Object getValue(Object obj, Field field) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Method method = getMethods(obj.getClass()).stream().filter(m -> Objects.equals(m.getName(), packageMethodNameByField(field, false))).findFirst().get();
         return invoke(obj, method);
     }
 
+    /**
+     * 根据字段名称获取对应的值（需要有标准的Get方法）
+     *
+     * @param obj       目标对象
+     * @param fieldName 目标字段名称
+     * @return 对应的值
+     * @throws NoSuchFieldException
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     */
     public static Object getValue(Object obj, String fieldName) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         return getValue(obj, getFields(obj.getClass()).get(fieldName));
     }
 
+
+    /**
+     * 根据方法设置值
+     *
+     * @param obj    目标对象
+     * @param method 目标方法
+     * @param value  要设置的值
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     public static void setValue(Object obj, Method method, Object value) throws InvocationTargetException, IllegalAccessException {
         invoke(obj, method, value);
     }
 
+    /**
+     * 根据字段设置值（需要有标准的Set方法）
+     *
+     * @param obj   目标对象
+     * @param field 目标字段
+     * @param value 要设置的值
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     */
     public static void setValue(Object obj, Field field, Object value) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Method method = getMethods(obj.getClass()).stream().filter(m -> Objects.equals(m.getName(), packageMethodNameByField(field, true))).findFirst().get();
         invoke(obj, method, value);
     }
 
+    /**
+     * 根据字段名称设置值（需要有标准的Set方法）
+     *
+     * @param obj       目标对象
+     * @param fieldName 目标字段名称
+     * @param value     要设置的值
+     * @throws NoSuchFieldException
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     */
     public static void setValue(Object obj, String fieldName, Object value) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         setValue(obj, getFields(obj.getClass()).get(fieldName), value);
     }
@@ -228,7 +368,7 @@ public class BeanHelper {
         }
     }
 
-    public static class NullAwareBeanUtilsBean extends BeanUtilsBean {
+    static class NullAwareBeanUtilsBean extends BeanUtilsBean {
         @Override
         public void copyProperty(Object bean, String name, Object value) throws IllegalAccessException, InvocationTargetException {
             if (null != value) {
@@ -237,11 +377,26 @@ public class BeanHelper {
         }
     }
 
+    /**
+     * 反射的字段（属性）信息
+     */
     public static class FieldInfo {
 
+        /**
+         * 字段名
+         */
         private String name;
+        /**
+         * 字段类型
+         */
         private Class<?> type;
+        /**
+         * 注解列表
+         */
         private Set<Annotation> annotations;
+        /**
+         * Field
+         */
         private Field field;
 
         public String getName() {
@@ -277,11 +432,26 @@ public class BeanHelper {
         }
     }
 
+    /**
+     * 反射的方法信息
+     */
     public static class MethodInfo {
 
+        /**
+         * 方法名
+         */
         private String name;
+        /**
+         * 返回类型
+         */
         private Class<?> returnType;
+        /**
+         * 注解列表
+         */
         private Set<Annotation> annotations;
+        /**
+         * Method
+         */
         private Method method;
 
         public String getName() {

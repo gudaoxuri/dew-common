@@ -1,0 +1,144 @@
+== Dew Common —— Java常用操作工具集
+
+image::https://img.shields.io/travis/gudaoxuri/dew-common.svg[link="https://travis-ci.org/gudaoxuri/-common"]
+image:https://api.codacy.com/project/badge/Grade/f2fc8d2aa9594a0bae6e2a445caa56db["Codacy code quality", link="https://www.codacy.com/app/gudaoxuri/dew-common?utm_source=github.com&utm_medium=referral&utm_content=gudaoxuri/dew-common&utm_campaign=Badge_Grade"]
+image:https://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2",link="https://www.apache.org/licenses/LICENSE-2.0.txt"]
+image:https://maven-badges.herokuapp.com/maven-central/com.ecfront.dew/common/badge.svg["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/com.ecfront.dew/common/"]
+
+=== 功能
+
+. Json与Java对象互转（JsonHelper）
+. Java Bean操作（BeanHelper）
+. Java Class扫描操作（ClassScanHelper）
+. Shell脚本操作（ShellHelper）
+. 加解密（EncryptHelper）
+. 响应处理模型（Resp）
+. 定时器（TimerHelper）
+. 常用时间处理（TimeHelper）
+. 主流文件MIME整理（MimeHelper）
+. 通用拦截器栈（DewInterceptorProcessor）
+
+=== 使用
+
+[source,xml]
+----
+<parent>
+        <groupId>com.ecfront.dew</groupId>
+        <artifactId>common</artifactId>
+        <version>1.0.1</version>
+</parent>
+----
+
+==== Json与Java对象互转（JsonHelper）
+
+[source,java]
+----
+// 将Json字符串转成JsonNode
+JsonNode json = JsonHelper.toJson("{'name':'gudaoxuri'}");
+// 获取json中的值
+String name = json.get("name").asText();
+
+// 将Json转成Java对象
+JavaModel java = JsonHelper.toObject(json,JavaModel.class);
+// 将Json字符串转成Java对象
+java = JsonHelper.toObject("{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}", JavaModel.class);
+// 将Json字符串转成List对象
+List<JavaModel> javas = JsonHelper.toList("[{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}]", JavaModel.class);
+
+// 将Java对象转成JsonNode
+json = JsonHelper.toJson(java);
+// 将List对象转成JsonNode
+json = JsonHelper.toJson(javas);
+
+// 将JsonNode转成Json字符串
+String str = JsonHelper.toJsonString(json);
+// 将Java对象转成Json字符串
+str = JsonHelper.toJsonString(java);
+// 将List对象转成Json字符串
+str = JsonHelper.toJsonString(javas);
+
+static class JavaModel{
+    private String name;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    private Date date;
+    ... get/set
+}
+----
+
+TIP: 更多示例见`JsonHelperTest.java`
+
+==== Java Bean操作（BeanHelper）
+
+[source,java]
+----
+// Bean Copy
+User ori = new User();
+ori.setName("gudaoxuri");
+User dist = new User();
+BeanHelper.copyProperties(ori, dist);
+// 获取Class的注解信息（此处为IdxController类的RPC注解）
+TestAnnotation.RPC rpc = BeanHelper.getClassAnnotation(IdxController.class, TestAnnotation.RPC.class);
+// 获取Class的字段信息（此处为IdxController类）
+Map<String, BeanHelper.FieldInfo> fieldsInfo = BeanHelper.findFieldsInfo(IdxController.class, null, null, null, null);
+// 获取Class的方法信息（此处为IdxController类）
+List<BeanHelper.MethodInfo> methodsInfo = BeanHelper.findMethodsInfo(IdxController.class, null, null, null, null);
+// 获取字段对应的Get/Set方法（此处为User类）
+Map<String, Method[]> rel = BeanHelper.parseRelFieldAndMethod(User.class, null, null, null, null);
+User user = new User();
+user.setName("gudaoxuri");
+// 根据字段的Get方法获取对应的值
+Map<String, Object> values = BeanHelper.findValuesByRel(user, BeanHelper.parseRelFieldAndMethod(User.class, null, null, null, null));
+// 获取对象所有字段的值
+values = BeanHelper.findValues(user, null, null, null, null);
+// 根据字段名称获取对应的值（需要有标准的Get方法）
+Object value = BeanHelper.getValue(user, "name");
+// 根据字段名称设置值（需要有标准的Set方法）
+BeanHelper.setValue(user, "name", "gudaoxuri");
+----
+
+TIP: 更多示例见`BeanHelperTest.java`
+
+==== Java Class扫描操作（ClassScanHelper）
+
+[source,java]
+----
+
+----
+
+TIP: 更多示例见`ClassScanHelperTest.java`
+
+==== Shell脚本操作（ShellHelper）
+
+[source,java]
+----
+
+----
+
+==== 加解密（EncryptHelper）
+
+[source,java]
+----
+
+----
+
+TIP: 更多示例见`EncryptHelperTest.java`
+
+==== 定时器（TimerHelper）
+
+[source,java]
+----
+
+----
+
+==== 通用拦截器栈（DewInterceptorProcessor）
+
+[source,java]
+----
+
+----
+
+TIP: 更多示例见`InterceptorTest.java`
+
+
+. 响应处理模型（Resp）
+. 主流文件MIME整理（MimeHelper）
