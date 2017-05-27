@@ -13,20 +13,20 @@ public class InterceptorTest {
 
     @Test
     public void testInterceptor() throws Exception {
-        // none
+        // 没有注册拦截器的情况
         Resp<DewInterceptRespBody<Obj>> resp = DewInterceptorProcessor.process("none", new Obj("1"), new HashMap<>(), (obj, context) ->
                 Resp.success(DewInterceptRespBody.build(obj, context))
         );
         Assert.assertTrue(resp.ok());
         Assert.assertEquals("1", resp.getBody().getObj().getF());
-        // has one
+        // 注册了一个拦截器A
         DewInterceptorProcessor.register("test", new InterceptorA());
         resp = DewInterceptorProcessor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
                 Resp.success(DewInterceptRespBody.build(obj, context))
         );
         Assert.assertTrue(resp.ok());
         Assert.assertEquals("3", resp.getBody().getObj().getF());
-        // error
+        // 注册了另一个拦截器B，假设B执行会报错
         DewInterceptorProcessor.register("test", new InterceptorB());
         resp = DewInterceptorProcessor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
                 Resp.success(DewInterceptRespBody.build(obj, context))

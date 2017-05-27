@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
- * Shell辅助类
+ * Shell脚本操作
  */
 public class ShellHelper {
 
@@ -31,9 +31,13 @@ public class ShellHelper {
      *
      * @param shellPath     sh文件路径，包含参数
      * @param taskId        任务ID
-     * @param successFlag   成功标识，只要捕捉到此标识就视为成功
-     * @param progressFlag  进度标识，只要捕捉到此标识就更新进度， 格式为 <progressFlag>空格<progress>,如： progress 40
-     * @param returnResult  是否返回结果
+     * @param successFlag   成功标识，只要捕捉到此标识就视为成功，
+     *                      为null时不会调用ReportHandler的success方法，执行结束后会调用ReportHandler的fail方法
+     * @param progressFlag  进度标识，只要捕捉到此标识就更新进度，
+     *                      格式为 <progressFlag>空格<progress>,如： progress 40，
+     *                      为null时不会调用ReportHandler的progress方法
+     * @param returnResult  是否返回结果（输出内容），为true时会返回结果到ReportHandler的complete方法中，
+     *                      结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
      * @param reportHandler 任务报告实例
      */
     public void execute(String shellPath, String taskId, String successFlag, String progressFlag, boolean returnResult, ReportHandler reportHandler) {
@@ -77,7 +81,7 @@ public class ShellHelper {
     /**
      * 输出处理
      */
-    class StreamGobbler implements Callable<Boolean> {
+    private class StreamGobbler implements Callable<Boolean> {
         private InputStream is;
 
         StreamGobbler(InputStream is) {
@@ -97,11 +101,11 @@ public class ShellHelper {
                     if (returnResult) {
                         result.append(line).append("\r\n");
                     }
-                    if (line.toLowerCase().contains(successFlag)) {
+                    if (successFlag != null && line.toLowerCase().contains(successFlag)) {
                         reportHandler.success(taskId);
                         return true;
                     }
-                    if (line.toLowerCase().contains(progressFlag)) {
+                    if (progressFlag != null && line.toLowerCase().contains(progressFlag)) {
                         reportHandler.progress(taskId, Integer.valueOf(line.substring(line.indexOf(progressFlag) + progressFlag.length()).trim()));
                     }
                 }

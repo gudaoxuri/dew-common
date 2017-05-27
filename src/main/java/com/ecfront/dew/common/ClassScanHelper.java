@@ -14,8 +14,21 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
+/**
+ * Java Class扫描操作
+ */
 public class ClassScanHelper {
 
+    /**
+     * 扫描获取指定包下符合条件的class类
+     *
+     * @param basePackage        要扫描的根包名
+     * @param includeAnnotations 要包含的注解，默认为全部
+     * @param includeNames       要包含的class名称（支持正则），默认为全部
+     * @return 符合条件的class类集合
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static Set<Class<?>> scan(String basePackage, Set<Class<? extends Annotation>> includeAnnotations, Set<String> includeNames) throws IOException, ClassNotFoundException {
         Set<Class<?>> result = new HashSet<>();
         String packageDir = basePackage.replace('.', '/');
@@ -83,15 +96,10 @@ public class ClassScanHelper {
     }
 
     private static boolean isMatch(Class<?> clazz, Set<Class<? extends Annotation>> annotations, Set<String> classNames) {
-        boolean ret;
-        ret = matchAnnotation(clazz, annotations, classNames);
-        if (!ret) {
-            return false;
-        }
-        return matchClassName(clazz, annotations, classNames);
+        return matchAnnotation(clazz, annotations) && matchClassName(clazz, classNames);
     }
 
-    private static boolean matchAnnotation(Class<?> clazz, Set<Class<? extends Annotation>> annotations, Set<String> classNames) {
+    private static boolean matchAnnotation(Class<?> clazz, Set<Class<? extends Annotation>> annotations) {
         if (annotations == null || annotations.isEmpty()) {
             return true;
         }
@@ -103,7 +111,7 @@ public class ClassScanHelper {
         return false;
     }
 
-    private static boolean matchClassName(Class<?> clazz, Set<Class<? extends Annotation>> annotations, Set<String> classNames) {
+    private static boolean matchClassName(Class<?> clazz, Set<String> classNames) {
         if (classNames == null || classNames.isEmpty()) {
             return true;
         }

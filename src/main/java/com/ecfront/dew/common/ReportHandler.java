@@ -6,14 +6,14 @@ package com.ecfront.dew.common;
 public interface ReportHandler {
 
     /**
-     * 成功
+     * 成功，在执行到successFlag时调用
      *
      * @param taskId 任务ID
      */
     void success(String taskId);
 
     /**
-     * 失败
+     * 失败，在执行完成且successFlag不存在或发生错误时调用
      *
      * @param taskId  任务ID
      * @param message 失败原因描述
@@ -21,7 +21,7 @@ public interface ReportHandler {
     void fail(String taskId, String message);
 
     /**
-     * 进度
+     * 进度回调，在执行到progressFlag且格式正确时调用
      *
      * @param taskId   任务ID
      * @param progress 0-100
@@ -29,11 +29,11 @@ public interface ReportHandler {
     void progress(String taskId, int progress);
 
     /**
-     * 完成
+     * 完成，无法是否成功，在执行完成时调用
      *
      * @param taskId 任务ID
-     * @param result 结果
+     * @param result 结果，在returnResult为true时才有值
      */
-    void complete(String taskId,String result);
+    void complete(String taskId, String result);
 
 }

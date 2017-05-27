@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * 加解密
+ */
 public class EncryptHelper {
 
     /**
@@ -35,7 +38,7 @@ public class EncryptHelper {
     }
 
     /**
-     * 数组  转 Base64
+     * 数组 转 Base64
      */
     public static String encodeBytesToBase64(byte[] str, String encode) throws UnsupportedEncodingException {
         return new String(Base64.getEncoder().encode(str), encode);

@@ -16,6 +16,7 @@ image:https://maven-badges.herokuapp.com/maven-central/com.ecfront.dew/common/ba
 . 定时器（TimerHelper）
 . 常用时间处理（TimeHelper）
 . 主流文件MIME整理（MimeHelper）
+. 常用文件操作（FileHelper）
 . 通用拦截器栈（DewInterceptorProcessor）
 
 === 使用
@@ -102,7 +103,10 @@ TIP: 更多示例见`BeanHelperTest.java`
 
 [source,java]
 ----
-
+// 扫描获取指定包下符合条件的class类（此处要求包含Deprecated注解）
+Set<Class<?>> resultInFile = ClassScanHelper.scan("com.ecfront.dew.common.test", new HashSet<Class<? extends Annotation>>(){{add(Deprecated.class);}},null);
+// 扫描获取指定包下符合条件的class类（此处要求包含Before\\w*类名）
+Set<Class<?>> resultInJar = ClassScanHelper.scan("org.junit",null, new HashSet<String>(){{add("Before\\w*");}});
 ----
 
 TIP: 更多示例见`ClassScanHelperTest.java`
@@ -111,17 +115,155 @@ TIP: 更多示例见`ClassScanHelperTest.java`
 
 [source,java]
 ----
+new ShellHelper().execute(
+        "/opt/test.sh", //  sh文件路径，包含参数
+        "test1", // 任务ID
+        "done!", // 成功标识，只要捕捉到此标识就视为成功，为null时不会调用ReportHandler的success方法，执行结束后会调用ReportHandler的fail方法
+        "step", // 进度标识，只要捕捉到此标识就更新进度，格式为 <progressFlag>空格<progress>,如： progress 40，为null时不会调用ReportHandler的progress方法
+        false, // 是否返回结果（输出内容），为true时会返回结果到ReportHandler的complete方法中，结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
+        new ReportHandler() { // 任务报告实例
+            @Override
+            public void success(String taskId) { // 成功，在执行到successFlag时调用
+            }
 
+            @Override
+            public void fail(String taskId, String message) { // 失败，在执行完成且successFlag不存在或发生错误时调用
+            }
+
+            @Override
+            public void progress(String taskId, int progress) { // 进度回调，在执行到progressFlag且格式正确时调用
+            }
+
+            @Override
+            public void complete(String taskId, String result) { // 完成，无法是否成功，在执行完成时调用
+            }
+        }
+);
 ----
+
+TIP: 更多示例见`ShellHelperTest.java`
+
 
 ==== 加解密（EncryptHelper）
 
 [source,java]
 ----
+// 字符串 转 Base64
+String base64 = EncryptHelper.encodeStringToBase64("gudaoxuri", "UTF-8");
+// 数组 转 Base64
+base64 = EncryptHelper.encodeBytesToBase64("gudaoxuri".getBytes(), "UTF-8");
+// Base64 转 字符串
+String str = EncryptHelper.decodeBase64ToString(base64, "UTF-8");
+// Base64 转 字符串
+byte[] bytes = EncryptHelper.decodeBase64ToBytes(base64);
 
+// 对称加密（此处使用SHA-256算法，支持如bcrypt SHA-256 MD5等算法）
+String encrypt = EncryptHelper.Symmetric.encrypt("gudaoxuri", "SHA-256");
+// 对称加密 - 验证（对于bcrypt之类默认使用随机slat的加密算法必须使用此方法验证）
+EncryptHelper.Symmetric.validate("gudaoxuri", encrypt, "SHA-256");
+
+// 非对称加密 - 生成公钥和私钥
+Map<String, String> keys = EncryptHelper.Asymmetric.generateKeys("RSA", 1024, "UTF-8");
+String publicStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC47dAhLLB3xhDWccgEheqTbRimAhluN/ixNyYU/MvExN/bwytthiWViRV2H1sGrGr5JyH3qQSFa57jInbXD6lGN24aw2TfiejLWGkj0hMEXEtj4Bf9OuQhHUmy8unLygOuBlIhtfPLp9cSLBgVVHbt33buNTkL7fvdE2U9B3JVyQIDAQAB";
+// 非对称加密 - 获取公钥文件
+PublicKey publicKey = EncryptHelper.Asymmetric.getPublicKey(publicStr, "RSA");
+String privateStr = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43+LE3JhT8y8TE39vDK22GJZWJFXYfWwasavknIfepBIVrnuMidtcPqUY3bhrDZN+J6MtYaSPSEwRcS2PgF/065CEdSbLy6cvKA64GUiG188un1xIsGBVUdu3fdu41OQvt+90TZT0HclXJAgMBAAECgYEAjXFndVhHCPU3P637PGppBqW06pREeybYUkNKH1dTS4cBaYcXmke2S290OMq2xp3tm++wbUqbKKkt97AOkWNrJfq8Ecpdw9s3c7yQGWaPuwiX38Cgtq6r0utjT20YgR6etGpqafoBt93RZpEm0eEzFPUnS7qYc86HprL0RJ0/i7kCQQDaOmvO82cYIK1ESkA0GdDVQoz2A1V8HvEWOsccRGqlWuasLUccyBnx1G/LDZUxcPOraDyxI8sdl7VbweLR0H9LAkEA2O/rWXwnSYKqdpt+OhpUBHNnMs3IMvRzefJ1zObnIMyYR3KXtpQ/fL4gEquNwJgFIaPJVg5/3zHISEw3e8XOuwJAIDrGl07tZ+vTiyVoLAmwBP8KMH83jdhIBN9zbqJQGdG+Bam+Oer3ofac+CEuapni8uq3I/ZEVj+EomOVKyWe1wJAATztROd2ee7q9h5RDBfWXughsKKH//JxLkL59R9kNkW0oMPApeQWsKmNGU4tUuoLLXP31CvlAusPz4nPzz8DvQJBAJXpICPNJw84fONzS0raRqlFoZMMI0cqeGtPIiCHKaRHyzQv/FFu2KxUcCrod8PngaBFRselzrwZILmXHqrHc1M=";
+// 非对称加密 - 获取私钥文件
+PrivateKey privateKey = EncryptHelper.Asymmetric.getPrivateKey(privateStr, "RSA");
+
+String d = "Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。";
+// 非对称加密 - 公钥加密/私钥解密
+byte[] encryptByPub = EncryptHelper.Asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
+String result = new String(EncryptHelper.Asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
+
+// 非对称加密 - 私钥加密/公钥解密
+byte[] encryptByPriv = EncryptHelper.Asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
+byte[] decryptByPub = EncryptHelper.Asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
+EncryptHelper.Asymmetric.verify(publicKey, decryptByPub,
+        EncryptHelper.Asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"),
+        "SHA1withRSA");
 ----
 
 TIP: 更多示例见`EncryptHelperTest.java`
+
+==== 通用拦截器栈（DewInterceptorProcessor）
+
+[source,java]
+----
+// 没有注册拦截器的情况
+Resp<DewInterceptRespBody<Obj>> resp = DewInterceptorProcessor.process("none", new Obj("1"), new HashMap<>(), (obj, context) ->
+        Resp.success(DewInterceptRespBody.build(obj, context))
+);
+Assert.assertTrue(resp.ok());
+Assert.assertEquals("1", resp.getBody().getObj().getF());
+
+// 注册了一个拦截器A
+DewInterceptorProcessor.register("test", new InterceptorA());
+resp = DewInterceptorProcessor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
+        Resp.success(DewInterceptRespBody.build(obj, context))
+);
+Assert.assertTrue(resp.ok());
+Assert.assertEquals("3", resp.getBody().getObj().getF());
+
+// 注册了另一个拦截器B，假设B执行会报错
+DewInterceptorProcessor.register("test", new InterceptorB());
+resp = DewInterceptorProcessor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
+        Resp.success(DewInterceptRespBody.build(obj, context))
+);
+Assert.assertTrue(!resp.ok());
+
+// 定义拦截器A
+public class InterceptorA implements DewInterceptor<Obj> {
+    @Override
+    public String getCategory() {
+        return "test";
+    }
+    @Override
+    public String getName() {
+        return "A";
+    }
+    @Override
+    public Resp<DewInterceptRespBody<Obj>> before(Obj obj, Map context) {
+        // 前置拦截方法把值修改成2
+        obj.setF("2");
+        return Resp.success(DewInterceptRespBody.build(obj, context));
+    }
+    @Override
+    public Resp<DewInterceptRespBody<Obj>> after(Obj obj, Map context) {
+        // 后置拦截方法把值修改成3
+        obj.setF("3");
+        return Resp.success(DewInterceptRespBody.build(obj, context));
+    }
+}
+
+// 定义拦截器B
+public class InterceptorB implements DewInterceptor<Obj> {
+    @Override
+    public String getCategory() {
+        return "test";
+    }
+    @Override
+    public String getName() {
+        return "B";
+    }
+    @Override
+    public Resp<DewInterceptRespBody<Obj>> before(Obj obj, Map context) {
+        // 前置拦截方法报错
+        return Resp.badRequest("some error");
+    }
+    @Override
+    public Resp<DewInterceptRespBody<Obj>> after(Obj obj, Map context) {
+        return Resp.success(DewInterceptRespBody.build(obj, context));
+    }
+    @Override
+    public void error(Obj obj, Map<String, Object> context) {
+        // 报错后会统一调用此方法
+        obj.setF("error");
+    }
+}
+----
+
+TIP: 更多示例见`InterceptorTest.java`
 
 ==== 定时器（TimerHelper）
 
@@ -130,15 +272,13 @@ TIP: 更多示例见`EncryptHelperTest.java`
 
 ----
 
-==== 通用拦截器栈（DewInterceptorProcessor）
+==== 常用文件操作（FileHelper）
 
 [source,java]
 ----
 
 ----
 
-TIP: 更多示例见`InterceptorTest.java`
-
-
-. 响应处理模型（Resp）
+. 响应处理模型（Resp） RespDTO
 . 主流文件MIME整理（MimeHelper）
+FormatHelper

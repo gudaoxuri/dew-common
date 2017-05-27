@@ -16,19 +16,6 @@ import java.util.Objects;
 
 public class BeanHelperTest {
 
-    static class JavaModel {
-        private String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-    }
-
     @Test
     public void copyProperties() throws Exception {
         User ori = new User();
@@ -43,33 +30,33 @@ public class BeanHelperTest {
     @Test
     public void findClassAnnotation() throws Exception {
         TestAnnotation.RPC ann = BeanHelper.getClassAnnotation(IdxController.class, TestAnnotation.RPC.class);
-        Assert.assertEquals(ann.path(), "/idx/");
+        Assert.assertEquals("/idx/", ann.path());
     }
 
     @Test
     public void findFieldInfo() throws Exception {
         Map<String, BeanHelper.FieldInfo> fieldsInfo = BeanHelper.findFieldsInfo(IdxController.class, null, null, null, null);
-        Assert.assertEquals(fieldsInfo.size(), 2);
+        Assert.assertEquals(2, fieldsInfo.size());
         fieldsInfo = BeanHelper.findFieldsInfo(IdxController.class, null, new HashSet<Class<? extends Annotation>>() {{
             add(Deprecated.class);
         }}, null, null);
-        Assert.assertEquals(fieldsInfo.size(), 1);
+        Assert.assertEquals(1, fieldsInfo.size());
         fieldsInfo = BeanHelper.findFieldsInfo(IdxController.class, new HashSet<String>() {{
             add("parentField");
         }}, new HashSet<Class<? extends Annotation>>() {{
             add(Deprecated.class);
         }}, null, null);
-        Assert.assertEquals(fieldsInfo.size(), 0);
+        Assert.assertEquals(0, fieldsInfo.size());
         fieldsInfo = BeanHelper.findFieldsInfo(IdxController.class, null, null, null, new HashSet<Class<? extends Annotation>>() {{
             add(Deprecated.class);
         }});
-        Assert.assertEquals(fieldsInfo.size(), 1);
+        Assert.assertEquals(1, fieldsInfo.size());
         fieldsInfo = BeanHelper.findFieldsInfo(IdxController.class, null, null, new HashSet<String>() {{
             add("parentField");
         }}, new HashSet<Class<? extends Annotation>>() {{
             add(Resource.class);
         }});
-        Assert.assertEquals(fieldsInfo.size(), 1);
+        Assert.assertEquals(1, fieldsInfo.size());
     }
 
     @Test
@@ -101,8 +88,8 @@ public class BeanHelperTest {
     @Test
     public void parseRelFieldAndMethod() throws Exception {
         Map<String, Method[]> rel = BeanHelper.parseRelFieldAndMethod(User.class, null, null, null, null);
-        Assert.assertEquals(rel.size(), 6);
-        Assert.assertEquals(rel.get("enable").length, 2);
+        Assert.assertEquals(6, rel.size());
+        Assert.assertEquals(2, rel.get("enable").length);
     }
 
     @Test
@@ -110,7 +97,7 @@ public class BeanHelperTest {
         User user = new User();
         user.setName("张三");
         Map<String, Object> values = BeanHelper.findValuesByRel(user, BeanHelper.parseRelFieldAndMethod(User.class, null, null, null, null));
-        Assert.assertEquals(values.get("name"), "张三");
+        Assert.assertEquals("张三", values.get("name"));
     }
 
     @Test
@@ -118,21 +105,21 @@ public class BeanHelperTest {
         User user = new User();
         user.setName("张三");
         Map<String, Object> values = BeanHelper.findValues(user, null, null, null, null);
-        Assert.assertEquals(values.get("name"), "张三");
+        Assert.assertEquals("张三", values.get("name"));
     }
 
     @Test
     public void getValue() throws Exception {
         User user = new User();
         user.setName("张三");
-        Assert.assertEquals(BeanHelper.getValue(user, "name"), "张三");
+        Assert.assertEquals("张三", BeanHelper.getValue(user, "name"));
     }
 
     @Test
     public void setValue() throws Exception {
         User user = new User();
         BeanHelper.setValue(user, "name", "张三");
-        Assert.assertEquals(user.getName(), "张三");
+        Assert.assertEquals("张三", user.getName());
     }
 
 }
