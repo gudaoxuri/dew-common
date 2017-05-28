@@ -14,9 +14,9 @@ import java.util.concurrent.Future;
 /**
  * Shell脚本操作
  */
-public class ShellHelper {
+public class ShellProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShellHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(ShellProcessor.class);
 
     private volatile String taskId;
     private volatile String successFlag;
