@@ -48,6 +48,7 @@ public class IdcardUtils {
     public static final String verifyCode[] = {
             "1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"
     };
+
     /**
      * 最低年限
      */
@@ -142,13 +143,7 @@ public class IdcardUtils {
      */
     public static boolean validateCard(String idCard) {
         String card = idCard.trim();
-        if (validateIdCard18(card)) {
-            return true;
-        }
-        if (validateIdCard15(card)) {
-            return true;
-        }
-        return false;
+        return validateIdCard18(card) || validateIdCard15(card);
     }
 
     /**
@@ -166,15 +161,13 @@ public class IdcardUtils {
             String code18 = idCard.substring(17, CHINA_ID_MAX_LENGTH);
             if (isNum(code17)) {
                 char[] cArr = code17.toCharArray();
-                if (cArr != null) {
-                    int[] iCard = converCharToInt(cArr);
-                    int iSum17 = getPowerSum(iCard);
-                    // 获取校验位
-                    String val = getCheckCode18(iSum17);
-                    if (val.length() > 0) {
-                        if (val.equalsIgnoreCase(code18)) {
-                            bTrue = true;
-                        }
+                int[] iCard = converCharToInt(cArr);
+                int iSum17 = getPowerSum(iCard);
+                // 获取校验位
+                String val = getCheckCode18(iSum17);
+                if (val.length() > 0) {
+                    if (val.equalsIgnoreCase(code18)) {
+                        bTrue = true;
                     }
                 }
             }
@@ -207,7 +200,7 @@ public class IdcardUtils {
             Calendar cal = Calendar.getInstance();
             if (birthDate != null)
                 cal.setTime(birthDate);
-            if (!valiDate(cal.get(Calendar.YEAR), Integer.valueOf(birthCode.substring(2, 4)),
+            if (!validateDate(cal.get(Calendar.YEAR), Integer.valueOf(birthCode.substring(2, 4)),
                     Integer.valueOf(birthCode.substring(4, 6)))) {
                 return false;
             }
@@ -428,7 +421,7 @@ public class IdcardUtils {
      * @return 提取的数字。
      */
     private static boolean isNum(String val) {
-        return val == null || "".equals(val) ? false : val.matches("^[0-9]*$");
+        return !(val == null || "".equals(val)) && val.matches("^[0-9]*$");
     }
 
     /**
@@ -439,7 +432,7 @@ public class IdcardUtils {
      * @param iDate  待验证日期(日)
      * @return 是否有效
      */
-    private static boolean valiDate(int iYear, int iMonth, int iDate) {
+    private static boolean validateDate(int iYear, int iMonth, int iDate) {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int datePerMonth;

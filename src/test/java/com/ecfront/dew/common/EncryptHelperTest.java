@@ -12,18 +12,6 @@ import java.util.Objects;
 public class EncryptHelperTest {
 
     @Test
-    public void a() throws UnsupportedEncodingException {
-        // 字符串 转 Base64
-        String base64 = EncryptHelper.encodeStringToBase64("gudaoxuri", "UTF-8");
-        // 数组 转 Base64
-        base64 = EncryptHelper.encodeBytesToBase64("gudaoxuri".getBytes(), "UTF-8");
-        // Base64 转 字符串
-        String str = EncryptHelper.decodeBase64ToString(base64, "UTF-8");
-        // Base64 转 字符串
-        byte[] bytes = EncryptHelper.decodeBase64ToBytes(base64);
-    }
-
-    @Test
     public void symmetric() throws Exception {
         Assert.assertEquals("70C0CC2B7BF8A8EBCD7B59C49DDDA9A1E551122BA5D7AB3B7B02141D4CE4C626".toLowerCase(),
                 EncryptHelper.Symmetric.encrypt("gudaoxuri", "SHA-256"));
