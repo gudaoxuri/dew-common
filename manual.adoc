@@ -11,13 +11,14 @@ image:https://maven-badges.herokuapp.com/maven-central/com.ecfront.dew/common/ba
 . Java Bean操作（BeanHelper）
 . Java Class扫描操作（ClassScanHelper）
 . Shell脚本操作（ShellHelper）
-. 加解密（EncryptHelper）
-. 响应处理模型（Resp）
-. 定时器（TimerHelper）
+. 加解密操作（EncryptHelper）
+. 常用字段操作（FieldHelper）
+. 定时器操作（TimerHelper）
 . 常用时间处理（TimeHelper）
 . 主流文件MIME整理（MimeHelper）
 . 常用文件操作（FileHelper）
 . 通用拦截器栈（DewInterceptorProcessor）
+. 响应处理模型（Resp）
 
 === 使用
 
@@ -144,7 +145,7 @@ new ShellHelper().execute(
 TIP: 更多示例见`ShellHelperTest.java`
 
 
-==== 加解密（EncryptHelper）
+==== 加解密操作（EncryptHelper）
 
 [source,java]
 ----
@@ -265,20 +266,60 @@ public class InterceptorB implements DewInterceptor<Obj> {
 
 TIP: 更多示例见`InterceptorTest.java`
 
-==== 定时器（TimerHelper）
+==== 定时器操作（TimerHelper）
 
 [source,java]
 ----
-
+// 延迟任务
+TimerHelper.timer(1, () -> // Do Something);
+// 周期性任务，参数 fixedRate 为true时表示每periodSec执行，为false表示fixedDelay，表示在当前任务执行完成后过periodSec再执行
+String taskId = TimerHelper.periodic(1, true, () -> // Do Something);
+// 取消周期性任务
+TimerHelper.cancel(taskId);
 ----
+
+TIP: 更多示例见`TimerHelperTest.java`
 
 ==== 常用文件操作（FileHelper）
 
 [source,java]
 ----
-
+// 根据classpath读取文件所有内容（jar包外路径优先），另外readAllByPath、readAllByFile、readAllByPathName等衍生方法
+String conf=FileHelper.readAllByClassPath("conf1.json","UTF-8");
 ----
 
+TIP: 更多示例见`FileHelperTest.java`
+
+==== 常用字段操作（FieldHelper）
+
+[source,java]
+----
+// 验证邮箱格式是否合法
+FieldHelper.validateEmail("i@sunisle.org");
+// 验证手机号格式是否合法
+FieldHelper.validateMobile("18657120000");
+// 是否是汉字
+FieldHelper.isChinese("孤岛旭日");
+// 验证身份证是否合法
+FieldHelper.validateIdNumber("330102199901015759");
+// 根据身份编号获取年龄
+FieldHelper.getAgeByIdCard("330102199901015759");
+// 根据身份编号获取生日
+FieldHelper.getBirthByIdCard("330102199901015759");
+// 根据身份编号获取生日年
+FieldHelper.getYearByIdCard("330102199901015759");
+// 根据身份编号获取生日月
+FieldHelper.getMonthByIdCard("330102199901015759");
+// 根据身份编号获取生日天
+FieldHelper.getDateByIdCard("330102199901015759");
+// 根据身份编号获取性别
+FieldHelper.getGenderByIdCard("330102199901015759");
+// 根据身份编号获取户籍省份
+FieldHelper.getProvinceByIdCard("330102199901015759");
+----
+
+TIP: 更多示例见`FieldHelperTest.java`
+
+
 . 响应处理模型（Resp） RespDTO
-. 主流文件MIME整理（MimeHelper）
-FormatHelper
+. 主流文件MIME整理（MimeHelper） time

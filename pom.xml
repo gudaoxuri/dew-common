@@ -27,6 +27,7 @@
         <logback.version>1.2.3</logback.version>
         <log4j.version>2.8.2</log4j.version>
         <junit.version>4.12</junit.version>
+        <mainClass></mainClass>
     </properties>
 
     <dependencies>
@@ -101,6 +102,29 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <encoding>${maven.compiler.encoding}</encoding>
+                    <outputDirectory>${project.build.directory}/deploy/</outputDirectory>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifestEntries>
+                            <Class-Path>. config/</Class-Path>
+                        </manifestEntries>
+                        <manifest>
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                    <finalName>${project.artifactId}</finalName>
+                </configuration>
+
+            </plugin>
+
         </plugins>
     </build>
 
