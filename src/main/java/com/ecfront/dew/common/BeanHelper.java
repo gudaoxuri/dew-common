@@ -24,7 +24,7 @@ public class BeanHelper {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    public static void copyProperties(Object dest, Object ori) throws InvocationTargetException, IllegalAccessException {
+    public void copyProperties(Object dest, Object ori) throws InvocationTargetException, IllegalAccessException {
         copyPropertiesAdapter.copyProperties(dest, ori);
     }
 
@@ -35,7 +35,7 @@ public class BeanHelper {
      * @param annotationClass 目标注解
      * @return 注解信息
      */
-    public static <T extends Annotation> T getClassAnnotation(Class<?> clazz, Class<T> annotationClass) {
+    public <T extends Annotation> T getClassAnnotation(Class<?> clazz, Class<T> annotationClass) {
         return clazz.getAnnotation(annotationClass);
     }
 
@@ -49,9 +49,9 @@ public class BeanHelper {
      * @param includeAnnotationClasses 要包含的注解，默认为全部
      * @return 字段信息
      */
-    public static Map<String, FieldInfo> findFieldsInfo(Class<?> clazz,
-                                                        Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
-                                                        Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) {
+    public Map<String, FieldInfo> findFieldsInfo(Class<?> clazz,
+                                                 Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
+                                                 Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) {
         Map<String, FieldInfo> fieldsInfo = new HashMap<>();
         if (excludeNames == null) {
             excludeNames = new HashSet<>();
@@ -91,7 +91,7 @@ public class BeanHelper {
      * @param clazz 当前类
      * @return 字段信息
      */
-    public static Map<String, Field> getFields(Class<?> clazz) {
+    public Map<String, Field> getFields(Class<?> clazz) {
         Map<String, Field> fields = new HashMap<>();
         for (Field field : clazz.getDeclaredFields()) {
             fields.put(field.getName(), field);
@@ -112,9 +112,9 @@ public class BeanHelper {
      * @param includeAnnotationClasses 要包含的注解，默认为全部
      * @return 方法信息
      */
-    public static List<MethodInfo> findMethodsInfo(Class<?> clazz,
-                                                   Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
-                                                   Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) {
+    public List<MethodInfo> findMethodsInfo(Class<?> clazz,
+                                            Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
+                                            Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) {
         List<MethodInfo> methodsInfo = new ArrayList<>();
         if (excludeNames == null) {
             excludeNames = new HashSet<>();
@@ -154,7 +154,7 @@ public class BeanHelper {
      * @param clazz 当前类
      * @return 方法信息
      */
-    public static List<Method> getMethods(Class<?> clazz) {
+    public List<Method> getMethods(Class<?> clazz) {
         List<Method> methods = new ArrayList<>();
         methods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
         if (clazz.getSuperclass() != null && clazz.getSuperclass() != Object.class) {
@@ -173,7 +173,7 @@ public class BeanHelper {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    public static Object invoke(Object obj, Method method, Object... args) throws InvocationTargetException, IllegalAccessException {
+    public Object invoke(Object obj, Method method, Object... args) throws InvocationTargetException, IllegalAccessException {
         return method.invoke(obj, args);
     }
 
@@ -188,8 +188,8 @@ public class BeanHelper {
      * @return 字段对应的Get/Set方法
      * @throws NoSuchMethodException
      */
-    public static Map<String, Method[]> parseRelFieldAndMethod(Class<?> clazz, Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
-                                                               Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) throws NoSuchMethodException {
+    public Map<String, Method[]> parseRelFieldAndMethod(Class<?> clazz, Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
+                                                        Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) throws NoSuchMethodException {
         Map<String, Method[]> rel = new HashMap<>();
         Map<String, FieldInfo> fieldsInfo = findFieldsInfo(clazz, excludeNames, excludeAnnotationClasses, includeNames, includeAnnotationClasses);
         for (Map.Entry<String, FieldInfo> info : fieldsInfo.entrySet()) {
@@ -209,7 +209,7 @@ public class BeanHelper {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    public static Map<String, Object> findValuesByRel(Object obj, Map<String, Method[]> relFieldAndMethod) throws InvocationTargetException, IllegalAccessException {
+    public Map<String, Object> findValuesByRel(Object obj, Map<String, Method[]> relFieldAndMethod) throws InvocationTargetException, IllegalAccessException {
         Map<String, Object> values = new HashMap<>();
         for (Map.Entry<String, Method[]> rel : relFieldAndMethod.entrySet()) {
             values.put(rel.getKey(), getValue(obj, rel.getValue()[0]));
@@ -227,7 +227,7 @@ public class BeanHelper {
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
      */
-    public static Map<String, Object> findValues(Object obj, Map<String, FieldInfo> fieldsInfo) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public Map<String, Object> findValues(Object obj, Map<String, FieldInfo> fieldsInfo) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         Map<String, Object> values = new HashMap<>();
         for (Map.Entry<String, FieldInfo> info : fieldsInfo.entrySet()) {
             values.put(info.getKey(), getValue(obj, info.getValue().getField()));
@@ -245,8 +245,8 @@ public class BeanHelper {
      * @param includeAnnotationClasses 要包含的注解，默认为全部
      * @return 值列表
      */
-    public static Map<String, Object> findValues(Object obj, Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
-                                                 Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) {
+    public Map<String, Object> findValues(Object obj, Set<String> excludeNames, Set<Class<? extends Annotation>> excludeAnnotationClasses,
+                                          Set<String> includeNames, Set<Class<? extends Annotation>> includeAnnotationClasses) {
         Map<String, Object> values = new HashMap<>();
         findFieldsInfo(obj.getClass(), excludeNames, excludeAnnotationClasses, includeNames, includeAnnotationClasses).forEach((k, v) -> {
             try {
@@ -267,7 +267,7 @@ public class BeanHelper {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    public static Object getValue(Object obj, Method method) throws InvocationTargetException, IllegalAccessException {
+    public Object getValue(Object obj, Method method) throws InvocationTargetException, IllegalAccessException {
         return invoke(obj, method);
     }
 
@@ -281,7 +281,7 @@ public class BeanHelper {
      * @throws IllegalAccessException
      * @throws NoSuchMethodException
      */
-    public static Object getValue(Object obj, Field field) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public Object getValue(Object obj, Field field) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Method method = getMethods(obj.getClass()).stream().filter(m -> Objects.equals(m.getName(), packageMethodNameByField(field, false))).findFirst().get();
         return invoke(obj, method);
     }
@@ -297,7 +297,7 @@ public class BeanHelper {
      * @throws IllegalAccessException
      * @throws NoSuchMethodException
      */
-    public static Object getValue(Object obj, String fieldName) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public Object getValue(Object obj, String fieldName) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         return getValue(obj, getFields(obj.getClass()).get(fieldName));
     }
 
@@ -311,7 +311,7 @@ public class BeanHelper {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    public static void setValue(Object obj, Method method, Object value) throws InvocationTargetException, IllegalAccessException {
+    public void setValue(Object obj, Method method, Object value) throws InvocationTargetException, IllegalAccessException {
         invoke(obj, method, value);
     }
 
@@ -325,7 +325,7 @@ public class BeanHelper {
      * @throws IllegalAccessException
      * @throws NoSuchMethodException
      */
-    public static void setValue(Object obj, Field field, Object value) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void setValue(Object obj, Field field, Object value) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Method method = getMethods(obj.getClass()).stream().filter(m -> Objects.equals(m.getName(), packageMethodNameByField(field, true))).findFirst().get();
         invoke(obj, method, value);
     }
@@ -341,11 +341,11 @@ public class BeanHelper {
      * @throws IllegalAccessException
      * @throws NoSuchMethodException
      */
-    public static void setValue(Object obj, String fieldName, Object value) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void setValue(Object obj, String fieldName, Object value) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         setValue(obj, getFields(obj.getClass()).get(fieldName), value);
     }
 
-    private static String packageMethodNameByField(Field field, boolean isSet) {
+    private String packageMethodNameByField(Field field, boolean isSet) {
         if (isSet) {
             if (field.getType() == boolean.class && field.getName().startsWith("is") && field.getName().length() > 3) {
                 Character c = field.getName().substring(2, 1).toCharArray()[0];

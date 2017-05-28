@@ -24,7 +24,7 @@ public class DewInterceptorProcessor {
      * @param category    拦截类型
      * @param interceptor 拦截器
      */
-    public static void register(String category, DewInterceptor<?> interceptor) {
+    public void register(String category, DewInterceptor<?> interceptor) {
         if (!CONTAINER.containsKey(category)) {
             CONTAINER.put(category, new ArrayList<>());
         }
@@ -37,7 +37,7 @@ public class DewInterceptorProcessor {
      * @param category     拦截类型
      * @param interceptors 拦截器列表
      */
-    public static void register(String category, List<DewInterceptor<?>> interceptors) {
+    public void register(String category, List<DewInterceptor<?>> interceptors) {
         CONTAINER.put(category, interceptors);
     }
 
@@ -50,7 +50,7 @@ public class DewInterceptorProcessor {
      * @param fun      实际执行方法
      * @tparam E 对象的类型
      */
-    public static <E> Resp<DewInterceptRespBody<E>> process(String category, E obj, Map<String, Object> context, DewInterceptExec<E> fun) {
+    public <E> Resp<DewInterceptRespBody<E>> process(String category, E obj, Map<String, Object> context, DewInterceptExec<E> fun) {
         logger.debug("[DewInterceptorProcessor] Process [{}]", category);
         if (!CONTAINER.containsKey(category)) {
             return fun.exec(obj, context);

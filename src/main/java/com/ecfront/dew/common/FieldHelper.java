@@ -24,7 +24,7 @@ public class FieldHelper {
      *
      * @param email 邮件
      */
-    public static boolean validateEmail(String email) {
+    public boolean validateEmail(String email) {
         return EMAIL_ADDRESS_REGEX.matcher(email).find();
     }
 
@@ -33,7 +33,7 @@ public class FieldHelper {
      *
      * @param mobile 手机号
      */
-    public static boolean validateMobile(String mobile) {
+    public boolean validateMobile(String mobile) {
         return MOBILE_REGEX.matcher(mobile).find();
     }
 
@@ -42,7 +42,7 @@ public class FieldHelper {
      *
      * @param idNumber 身份编号
      */
-    public static boolean validateIdNumber(String idNumber) {
+    public boolean validateIdNumber(String idNumber) {
         return IdcardUtils.validateCard(idNumber);
     }
 
@@ -51,7 +51,7 @@ public class FieldHelper {
      *
      * @param str 字符串
      */
-    public static boolean isChinese(String str) {
+    public boolean isChinese(String str) {
         return CHINESE_REGEX.matcher(str).find();
     }
 
@@ -61,7 +61,7 @@ public class FieldHelper {
      * @param idNumber 身份编号
      * @return 年龄
      */
-    public static int getAgeByIdCard(String idNumber) {
+    public int getAgeByIdCard(String idNumber) {
         return IdcardUtils.getAgeByIdCard(idNumber);
     }
 
@@ -71,7 +71,7 @@ public class FieldHelper {
      * @param idNumber 身份编号
      * @return 生日(yyyyMMdd)
      */
-    public static String getBirthByIdCard(String idNumber) {
+    public String getBirthByIdCard(String idNumber) {
         return IdcardUtils.getBirthByIdCard(idNumber);
     }
 
@@ -81,7 +81,7 @@ public class FieldHelper {
      * @param idNumber 身份编号
      * @return 生日(yyyy)
      */
-    public static Short getYearByIdCard(String idNumber) {
+    public Short getYearByIdCard(String idNumber) {
         return IdcardUtils.getYearByIdCard(idNumber);
     }
 
@@ -91,7 +91,7 @@ public class FieldHelper {
      * @param idNumber 身份编号
      * @return 生日(MM)
      */
-    public static Short getMonthByIdCard(String idNumber) {
+    public Short getMonthByIdCard(String idNumber) {
         return IdcardUtils.getMonthByIdCard(idNumber);
     }
 
@@ -101,7 +101,7 @@ public class FieldHelper {
      * @param idNumber 身份编号
      * @return 生日(dd)
      */
-    public static Short getDateByIdCard(String idNumber) {
+    public Short getDateByIdCard(String idNumber) {
         return IdcardUtils.getDateByIdCard(idNumber);
     }
 
@@ -111,7 +111,7 @@ public class FieldHelper {
      * @param idNumber 身份编号
      * @return 性别(M-男，F-女，N-未知)
      */
-    public static String getGenderByIdCard(String idNumber) {
+    public String getGenderByIdCard(String idNumber) {
         return IdcardUtils.getGenderByIdCard(idNumber);
     }
 
@@ -121,7 +121,7 @@ public class FieldHelper {
      * @param idNumber 身份编码
      * @return 省级编码。
      */
-    public static String getProvinceByIdCard(String idNumber) {
+    public String getProvinceByIdCard(String idNumber) {
         return IdcardUtils.getProvinceByIdCard(idNumber);
     }
 

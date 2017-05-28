@@ -29,7 +29,7 @@ public class ClassScanHelper {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static Set<Class<?>> scan(String basePackage, Set<Class<? extends Annotation>> includeAnnotations, Set<String> includeNames) throws IOException, ClassNotFoundException {
+    public Set<Class<?>> scan(String basePackage, Set<Class<? extends Annotation>> includeAnnotations, Set<String> includeNames) throws IOException, ClassNotFoundException {
         Set<Class<?>> result = new HashSet<>();
         String packageDir = basePackage.replace('.', '/');
         Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageDir);

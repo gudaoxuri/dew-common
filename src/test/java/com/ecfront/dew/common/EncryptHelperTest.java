@@ -3,7 +3,6 @@ package com.ecfront.dew.common;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Map;
@@ -14,9 +13,9 @@ public class EncryptHelperTest {
     @Test
     public void symmetric() throws Exception {
         Assert.assertEquals("70C0CC2B7BF8A8EBCD7B59C49DDDA9A1E551122BA5D7AB3B7B02141D4CE4C626".toLowerCase(),
-                EncryptHelper.Symmetric.encrypt("gudaoxuri", "SHA-256"));
-        Assert.assertTrue(EncryptHelper.Symmetric.validate("gudaoxuri", EncryptHelper.Symmetric.encrypt("gudaoxuri", "SHA-256"), "SHA-256"));
-        Assert.assertTrue(EncryptHelper.Symmetric.validate("password", EncryptHelper.Symmetric.encrypt("password", "bcrypt"), "bcrypt"));
+                DEW.encrypt.symmetric.encrypt("gudaoxuri", "SHA-256"));
+        Assert.assertTrue(DEW.encrypt.symmetric.validate("gudaoxuri", DEW.encrypt.symmetric.encrypt("gudaoxuri", "SHA-256"), "SHA-256"));
+        Assert.assertTrue(DEW.encrypt.symmetric.validate("password", DEW.encrypt.symmetric.encrypt("password", "bcrypt"), "bcrypt"));
     }
 
     @Test
@@ -26,20 +25,20 @@ public class EncryptHelperTest {
 
         String d = "Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。";
         // 生成公钥密钥
-        Map<String, String> keys = EncryptHelper.Asymmetric.generateKeys("RSA", 1024, "UTF-8");
-        PublicKey publicKey = EncryptHelper.Asymmetric.getPublicKey(publicStr, "RSA");
-        PrivateKey privateKey = EncryptHelper.Asymmetric.getPrivateKey(privateStr, "RSA");
+        Map<String, String> keys = DEW.encrypt.asymmetric.generateKeys("RSA", 1024, "UTF-8");
+        PublicKey publicKey = DEW.encrypt.asymmetric.getPublicKey(publicStr, "RSA");
+        PrivateKey privateKey = DEW.encrypt.asymmetric.getPrivateKey(privateStr, "RSA");
 
         // 公钥加密/私钥解密
-        byte[] encryptByPub = EncryptHelper.Asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
-        String result = new String(EncryptHelper.Asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
+        byte[] encryptByPub = DEW.encrypt.asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
+        String result = new String(DEW.encrypt.asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
         Assert.assertTrue(Objects.equals(result, d));
 
         // 私钥加密/公钥解密
-        byte[] encryptByPriv = EncryptHelper.Asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
-        byte[] decryptByPub = EncryptHelper.Asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
+        byte[] encryptByPriv = DEW.encrypt.asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
+        byte[] decryptByPub = DEW.encrypt.asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
         Assert.assertTrue(Objects.equals(new String(decryptByPub, "UTF-8"), d));
-        Assert.assertTrue(EncryptHelper.Asymmetric.verify(publicKey, decryptByPub, EncryptHelper.Asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"), "SHA1withRSA"));
+        Assert.assertTrue(DEW.encrypt.asymmetric.verify(publicKey, decryptByPub, DEW.encrypt.asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"), "SHA1withRSA"));
     }
 
 }

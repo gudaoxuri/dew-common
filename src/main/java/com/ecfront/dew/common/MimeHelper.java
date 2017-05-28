@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * MIME信息操作
+ */
 public class MimeHelper {
 
-    private static Map<String, List<String>> types = new HashMap<String, List<String>>() {{
+    private Map<String, List<String>> types = new HashMap<String, List<String>>() {{
         put("office", new ArrayList<String>() {{
             add(Mime.TXT.toString());
             add(Mime.DOC.toString());
@@ -60,12 +63,12 @@ public class MimeHelper {
         }});
     }};
 
-    public static final List<String> TYPE_OFFICE = types.get("office");
-    public static final List<String> TYPE_TXT = types.get("txt");
-    public static final List<String> TYPE_COMPRESS = types.get("compress");
-    public static final List<String> TYPE_IMAGE = types.get("image");
-    public static final List<String> TYPE_AUDIO = types.get("audio");
-    public static final List<String> TYPE_VIDEO = types.get("video");
+    public final List<String> TYPE_OFFICE = types.get("office");
+    public final List<String> TYPE_TXT = types.get("txt");
+    public final List<String> TYPE_COMPRESS = types.get("compress");
+    public final List<String> TYPE_IMAGE = types.get("image");
+    public final List<String> TYPE_AUDIO = types.get("audio");
+    public final List<String> TYPE_VIDEO = types.get("video");
 
     public enum Mime {
         HTML1("text/html"),
@@ -119,8 +122,9 @@ public class MimeHelper {
         RMVB("application/vnd.rn-realmedia-vbr");
 
         private String flag;
-        Mime(String flag){
-            this.flag=flag;
+
+        Mime(String flag) {
+            this.flag = flag;
         }
 
         @Override

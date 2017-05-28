@@ -7,32 +7,32 @@ public class FieldHelperTest {
 
     @Test
     public void testField() throws Exception {
-        Assert.assertTrue(FieldHelper.validateEmail("i@sunisle.org"));
-        Assert.assertTrue(FieldHelper.validateEmail("fy53.org@gmail.com"));
-        Assert.assertFalse(FieldHelper.validateEmail("i@sunisle"));
-        Assert.assertFalse(FieldHelper.validateEmail("i@sunisle..org"));
-        Assert.assertFalse(FieldHelper.validateEmail("@sunisle.org"));
-        Assert.assertFalse(FieldHelper.validateEmail("i#sunisle.org"));
+        Assert.assertTrue(DEW.field.validateEmail("i@sunisle.org"));
+        Assert.assertTrue(DEW.field.validateEmail("fy53.org@gmail.com"));
+        Assert.assertFalse(DEW.field.validateEmail("i@sunisle"));
+        Assert.assertFalse(DEW.field.validateEmail("i@sunisle..org"));
+        Assert.assertFalse(DEW.field.validateEmail("@sunisle.org"));
+        Assert.assertFalse(DEW.field.validateEmail("i#sunisle.org"));
 
-        Assert.assertTrue(FieldHelper.validateMobile("18657120000"));
-        Assert.assertTrue(FieldHelper.validateMobile("13765712000"));
-        Assert.assertTrue(FieldHelper.validateMobile("17714712000"));
-        Assert.assertFalse(FieldHelper.validateMobile("1865712000"));
-        Assert.assertFalse(FieldHelper.validateMobile("28657120000"));
-        Assert.assertFalse(FieldHelper.validateMobile("11657120000"));
+        Assert.assertTrue(DEW.field.validateMobile("18657120000"));
+        Assert.assertTrue(DEW.field.validateMobile("13765712000"));
+        Assert.assertTrue(DEW.field.validateMobile("17714712000"));
+        Assert.assertFalse(DEW.field.validateMobile("1865712000"));
+        Assert.assertFalse(DEW.field.validateMobile("28657120000"));
+        Assert.assertFalse(DEW.field.validateMobile("11657120000"));
 
-        Assert.assertTrue(FieldHelper.isChinese("孤岛旭日"));
-        Assert.assertFalse(FieldHelper.isChinese("孤岛xuri"));
-        Assert.assertFalse(FieldHelper.isChinese("gudaoxuri"));
+        Assert.assertTrue(DEW.field.isChinese("孤岛旭日"));
+        Assert.assertFalse(DEW.field.isChinese("孤岛xuri"));
+        Assert.assertFalse(DEW.field.isChinese("gudaoxuri"));
 
-        Assert.assertTrue(FieldHelper.validateIdNumber("330102199901015759"));
-        Assert.assertEquals(18, FieldHelper.getAgeByIdCard("330102199901015759"));
-        Assert.assertEquals("19990101", FieldHelper.getBirthByIdCard("330102199901015759"));
-        Assert.assertEquals("M", FieldHelper.getGenderByIdCard("330102199901015759"));
-        Assert.assertEquals("浙江", FieldHelper.getProvinceByIdCard("330102199901015759"));
-        Assert.assertTrue(1 == FieldHelper.getDateByIdCard("330102199901015759"));
-        Assert.assertTrue(1 == FieldHelper.getMonthByIdCard("330102199901015759"));
-        Assert.assertTrue(1999 == FieldHelper.getYearByIdCard("330102199901015759"));
+        Assert.assertTrue(DEW.field.validateIdNumber("330102199901015759"));
+        Assert.assertEquals(18, DEW.field.getAgeByIdCard("330102199901015759"));
+        Assert.assertEquals("19990101", DEW.field.getBirthByIdCard("330102199901015759"));
+        Assert.assertEquals("M", DEW.field.getGenderByIdCard("330102199901015759"));
+        Assert.assertEquals("浙江", DEW.field.getProvinceByIdCard("330102199901015759"));
+        Assert.assertTrue(1 == DEW.field.getDateByIdCard("330102199901015759"));
+        Assert.assertTrue(1 == DEW.field.getMonthByIdCard("330102199901015759"));
+        Assert.assertTrue(1999 == DEW.field.getYearByIdCard("330102199901015759"));
     }
 
 

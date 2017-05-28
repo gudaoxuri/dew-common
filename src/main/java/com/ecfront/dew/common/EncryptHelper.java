@@ -19,42 +19,45 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 加解密
+ * 加解密操作
  */
 public class EncryptHelper {
 
     /**
      * Base64 转 数组
      */
-    public static byte[] decodeBase64ToBytes(String str) {
+    public byte[] decodeBase64ToBytes(String str) {
         return Base64.getDecoder().decode(str);
     }
 
     /**
      * Base64 转 字符串
      */
-    public static String decodeBase64ToString(String str, String encode) throws UnsupportedEncodingException {
+    public String decodeBase64ToString(String str, String encode) throws UnsupportedEncodingException {
         return new String(Base64.getDecoder().decode(str), encode);
     }
 
     /**
      * 数组 转 Base64
      */
-    public static String encodeBytesToBase64(byte[] str, String encode) throws UnsupportedEncodingException {
+    public String encodeBytesToBase64(byte[] str, String encode) throws UnsupportedEncodingException {
         return new String(Base64.getEncoder().encode(str), encode);
     }
 
     /**
      * 字符串 转 Base64
      */
-    public static String encodeStringToBase64(String str, String encode) throws UnsupportedEncodingException {
+    public String encodeStringToBase64(String str, String encode) throws UnsupportedEncodingException {
         return new String(Base64.getEncoder().encode(str.getBytes(encode)), encode);
     }
+
+    public Symmetric symmetric = new Symmetric();
+    public Asymmetric asymmetric = new Asymmetric();
 
     /**
      * 对称加密
      */
-    public static class Symmetric {
+    class Symmetric {
 
         /**
          * 对称加密
@@ -63,7 +66,7 @@ public class EncryptHelper {
          * @param algorithm 加密算法 ，如 bcrypt SHA-256 MD5
          * @return 加密后的值
          */
-        public static String encrypt(String strSrc, String algorithm) throws NoSuchAlgorithmException {
+        public String encrypt(String strSrc, String algorithm) throws NoSuchAlgorithmException {
             String encryptStr;
             switch (algorithm.toLowerCase()) {
                 case "bcrypt":
@@ -89,7 +92,7 @@ public class EncryptHelper {
          * @param algorithm    加密算法，如 bcrypt
          * @return 是否匹配
          */
-        public static boolean validate(String strSrc, String strEncrypted, String algorithm) throws NoSuchAlgorithmException {
+        public boolean validate(String strSrc, String strEncrypted, String algorithm) throws NoSuchAlgorithmException {
             boolean result;
             switch (algorithm.toLowerCase()) {
                 case "bcrypt":
@@ -107,7 +110,7 @@ public class EncryptHelper {
     /**
      * 非对称加密
      */
-    public static class Asymmetric {
+    class Asymmetric {
 
         /**
          * 生成公钥和私钥
@@ -117,13 +120,13 @@ public class EncryptHelper {
          * @param encode    转Base64的编码
          * @return PublicKey -> Base64编码后的值  ， PrivateKey -> Base64编码后的值
          */
-        public static Map<String, String> generateKeys(String algorithm, int length, String encode) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        public Map<String, String> generateKeys(String algorithm, int length, String encode) throws NoSuchAlgorithmException, UnsupportedEncodingException {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm);
             keyPairGenerator.initialize(length);
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
             return new HashMap<String, String>() {{
-                put("PublicKey", EncryptHelper.encodeBytesToBase64(keyPair.getPublic().getEncoded(), encode));
-                put("PrivateKey", EncryptHelper.encodeBytesToBase64(keyPair.getPrivate().getEncoded(), encode));
+                put("PublicKey", encodeBytesToBase64(keyPair.getPublic().getEncoded(), encode));
+                put("PrivateKey", encodeBytesToBase64(keyPair.getPrivate().getEncoded(), encode));
             }};
         }
 
@@ -134,8 +137,8 @@ public class EncryptHelper {
          * @param algorithm 非对称算法，如 RSA
          * @return 私钥文件
          */
-        public static PrivateKey getPrivateKey(String key, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
-            byte[] privateKey = EncryptHelper.decodeBase64ToBytes(key);
+        public PrivateKey getPrivateKey(String key, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
+            byte[] privateKey = decodeBase64ToBytes(key);
             PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKey);
             return KeyFactory.getInstance(algorithm).generatePrivate(spec);
         }
@@ -147,8 +150,8 @@ public class EncryptHelper {
          * @param algorithm 非对称算法，如 RSA
          * @return 公钥文件
          */
-        public static PublicKey getPublicKey(String key, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
-            byte[] privateKey = EncryptHelper.decodeBase64ToBytes(key);
+        public PublicKey getPublicKey(String key, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
+            byte[] privateKey = decodeBase64ToBytes(key);
             X509EncodedKeySpec spec = new X509EncodedKeySpec(privateKey);
             return KeyFactory.getInstance(algorithm).generatePublic(spec);
         }
@@ -162,7 +165,7 @@ public class EncryptHelper {
          * @param algorithm 非对称算法，如 RSA
          * @return 加密后的数据
          */
-        public static byte[] encrypt(byte[] data, Key key, int keyLength, String algorithm) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
+        public byte[] encrypt(byte[] data, Key key, int keyLength, String algorithm) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return packageCipher(data, cipher, keyLength / 8 - 11, data.length);
@@ -177,13 +180,13 @@ public class EncryptHelper {
          * @param algorithm 非对称算法，如 RSA
          * @return 解密后的数据
          */
-        public static byte[] decrypt(byte[] data, Key key, int keyLength, String algorithm) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
+        public byte[] decrypt(byte[] data, Key key, int keyLength, String algorithm) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.DECRYPT_MODE, key);
             return packageCipher(data, cipher, keyLength / 8, data.length);
         }
 
-        private static byte[] packageCipher(byte[] data, Cipher cipher, int maxLength, int inputLength) throws IllegalBlockSizeException, BadPaddingException, IOException {
+        private byte[] packageCipher(byte[] data, Cipher cipher, int maxLength, int inputLength) throws IllegalBlockSizeException, BadPaddingException, IOException {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             int offSet = 0;
             byte[] cache;
@@ -211,7 +214,7 @@ public class EncryptHelper {
          * @param algorithm 签名算法（如 SHA1withRSA、MD5withRSA）
          * @return 签名数据
          */
-        public static byte[] sign(PrivateKey key, byte[] data, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        public byte[] sign(PrivateKey key, byte[] data, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
             Signature signer = Signature.getInstance(algorithm);
             signer.initSign(key);
             signer.update(data);
@@ -227,7 +230,7 @@ public class EncryptHelper {
          * @param algorithm 签名算法（如 SHA1withRSA、MD5withRSA）
          * @return 是否通过
          */
-        public static boolean verify(PublicKey key, byte[] data, byte[] signature, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        public boolean verify(PublicKey key, byte[] data, byte[] signature, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
             Signature verifier = Signature.getInstance(algorithm);
             verifier.initVerify(key);
             verifier.update(data);

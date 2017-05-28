@@ -211,7 +211,7 @@ public class Resp<E> implements Serializable {
     public static <E> Resp<E> generic(Resp resp, Class<E> bodyClazz) {
         E body = null;
         if (resp.ok() && resp.getBody() != null) {
-            body = JsonHelper.toObject(resp.getBody(), bodyClazz);
+            body = DEW.json.toObject(resp.getBody(), bodyClazz);
         }
         return new Resp<>(resp.getCode(), resp.getMessage(), body);
     }
@@ -226,7 +226,7 @@ public class Resp<E> implements Serializable {
     public static <E> Resp<List<E>> genericList(Resp resp, Class<E> bodyClazz) {
         List<E> body = null;
         if (resp.ok() && resp.getBody() != null) {
-            body = JsonHelper.toList(resp.getBody(), bodyClazz);
+            body = DEW.json.toList(resp.getBody(), bodyClazz);
         }
         return new Resp<>(resp.getCode(), resp.getMessage(), body);
     }
@@ -241,8 +241,8 @@ public class Resp<E> implements Serializable {
     public static <E> Resp<PageDTO<E>> genericPage(Resp resp, Class<E> bodyClazz) {
         PageDTO<E> body = null;
         if (resp.ok() && resp.getBody() != null) {
-            body = JsonHelper.toObject(resp.getBody(), PageDTO.class);
-            body.setObjects(body.getObjects().stream().map(i -> JsonHelper.toObject(i, bodyClazz)).collect(Collectors.toList()));
+            body = DEW.json.toObject(resp.getBody(), PageDTO.class);
+            body.setObjects(body.getObjects().stream().map(i -> DEW.json.toObject(i, bodyClazz)).collect(Collectors.toList()));
         }
         return new Resp<>(resp.getCode(), resp.getMessage(), body);
     }

@@ -18,7 +18,7 @@ public class FileHelper {
      * @param encode   编码
      * @return 文件内容
      */
-    public static String readAllByPathName(String pathName, String encode) throws IOException {
+    public String readAllByPathName(String pathName, String encode) throws IOException {
         return new String(Files.readAllBytes(Paths.get(pathName)), encode);
     }
 
@@ -29,7 +29,7 @@ public class FileHelper {
      * @param encode 编码
      * @return 文件内容
      */
-    public static String readAllByFile(File file, String encode) throws IOException {
+    public String readAllByFile(File file, String encode) throws IOException {
         return new String(Files.readAllBytes(file.toPath()), encode);
     }
 
@@ -40,7 +40,7 @@ public class FileHelper {
      * @param encode 编码
      * @return 文件内容
      */
-    public static String readAllByPath(Path path, String encode) throws IOException {
+    public String readAllByPath(Path path, String encode) throws IOException {
         return new String(Files.readAllBytes(path), encode);
     }
 
@@ -52,7 +52,7 @@ public class FileHelper {
      * @return 文件内容
      * @throws IOException
      */
-    public static String readAllByClassPath(String classpath, String encode) throws IOException {
+    public String readAllByClassPath(String classpath, String encode) throws IOException {
         File file = new File(FileHelper.class.getResource("/").getPath() + classpath);
         if (file.exists()) {
             return readAllByFile(file, encode);

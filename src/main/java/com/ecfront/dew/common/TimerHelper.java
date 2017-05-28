@@ -26,7 +26,7 @@ public class TimerHelper {
      * @param fun       执行的方法
      * @return 任务id
      */
-    public static String periodic(long delaySec, long periodSec, boolean fixedRate, Runnable fun) {
+    public String periodic(long delaySec, long periodSec, boolean fixedRate, Runnable fun) {
         String id = UUID.randomUUID().toString();
         ScheduledFuture<?> future;
         if (fixedRate) {
@@ -47,7 +47,7 @@ public class TimerHelper {
      * @param fun       执行的方法
      * @return 任务id
      */
-    public static String periodic(long periodSec, boolean fixedRate, Runnable fun) {
+    public String periodic(long periodSec, boolean fixedRate, Runnable fun) {
         return periodic(0, periodSec, fixedRate, fun);
     }
 
@@ -56,7 +56,7 @@ public class TimerHelper {
      *
      * @param taskId 任务id
      */
-    public static void cancel(String taskId) {
+    public void cancel(String taskId) {
         if (CONTAINER.containsKey(taskId)) {
             CONTAINER.get(taskId).cancel(true);
             CONTAINER.remove(taskId);
@@ -69,7 +69,7 @@ public class TimerHelper {
      * @param delaySec 延迟秒数
      * @param fun      执行的方法
      */
-    public static void timer(long delaySec, Runnable fun) {
+    public void timer(long delaySec, Runnable fun) {
         ex.schedule(fun, delaySec, TimeUnit.SECONDS);
     }
 
