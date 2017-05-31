@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
  */
 public class ClassScanHelper {
 
+    ClassScanHelper(){}
+
     /**
      * 扫描获取指定包下符合条件的class类
      *

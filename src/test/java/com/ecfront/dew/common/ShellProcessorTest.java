@@ -6,7 +6,7 @@ public class ShellProcessorTest {
 
     @Test
     public void testShell() throws Exception {
-        DEW.shell().execute(
+        $.shell().execute(
                 "/opt/test.sh", //  sh文件路径，包含参数
                 "test1", // 任务ID
                 "done!", // 成功标识，只要捕捉到此标识就视为成功，为null时不会调用ReportHandler的success方法，执行结束后会调用ReportHandler的fail方法

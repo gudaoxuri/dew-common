@@ -1,6 +1,8 @@
-package com.ecfront.dew.common.interceptor;
+package com.ecfront.dew.common;
 
-import com.ecfront.dew.common.Resp;
+import com.ecfront.dew.common.interceptor.DewInterceptExec;
+import com.ecfront.dew.common.interceptor.DewInterceptRespBody;
+import com.ecfront.dew.common.interceptor.DewInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,9 @@ public class DewInterceptorProcessor {
     private static Logger logger = LoggerFactory.getLogger(DewInterceptorProcessor.class);
 
     private static Map<String, List<DewInterceptor<?>>> CONTAINER = new HashMap<>();
+
+    DewInterceptorProcessor() {
+    }
 
     /**
      * 注册拦截器栈

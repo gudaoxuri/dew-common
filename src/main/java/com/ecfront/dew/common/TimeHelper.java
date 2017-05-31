@@ -10,6 +10,8 @@ import java.util.TimeZone;
  */
 public class TimeHelper {
 
+    TimeHelper(){}
+
     public final SimpleDateFormat msf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
     public final SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
     public final SimpleDateFormat mf = new SimpleDateFormat("yyyyMMddHHmm");

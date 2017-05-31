@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
  */
 public class FileHelper {
 
+    FileHelper(){}
+
     /**
      * 根据文件路径名读取文件所有内容
      *

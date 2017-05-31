@@ -5,19 +5,21 @@ image:https://api.codacy.com/project/badge/Grade/f2fc8d2aa9594a0bae6e2a445caa56d
 image:https://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2",link="https://www.apache.org/licenses/LICENSE-2.0.txt"]
 image:https://maven-badges.herokuapp.com/maven-central/com.ecfront.dew/common/badge.svg["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/com.ecfront.dew/common/"]
 
+Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少地引入第三方包，做到通用、易用、精简。
+
 === 功能
 
-. Json与Java对象互转
-. Java Bean操作
-. Java Class扫描操作
-. Shell脚本操作
-. 加解密操作
-. 通用拦截器栈
-. 定时器操作
-. 常用文件操作
-. 常用字段操作
-. 常用时间处理
-. 主流文件MIME整理
+. Json与Java对象互转，支持泛型
+. Java Bean操作，Bean复制、反射获取/设置注解、字段、方法等
+. Java Class扫描操作，根据注解或名称过滤
+. Shell脚本操作，Shell内容获取、成功捕获及进度报告等
+. 加解密操作，Base64、MD5/BCrypt/SHA等对称算法和RSA等非对称算法
+. 通用拦截器栈，前/后置、错误处理等
+. 定时器操作，定时和周期性任务
+. 常用文件操作，根据不同情况获取文件内容
+. 常用字段操作，各类字段验证及身份证提取
+. 常用时间处理，常规时间格式化模板
+. 主流文件MIME整理，MIME分类
 . 响应处理及分页模型
 
 === 使用
@@ -29,37 +31,37 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.1.1</version>
+        <version>1.2.0</version>
 </parent>
 ----
 
-==== Json与Java对象互转（DEW.json）
+==== Json与Java对象互转（$.json）
 
 [source,java]
 ----
 // 将Json字符串转成JsonNode
-JsonNode json = DEW.json.toJson("{'name':'gudaoxuri'}");
+JsonNode json = $.json.toJson("{'name':'gudaoxuri'}");
 // 获取json中的值
 String name = json.get("name").asText();
 
 // 将Json转成Java对象
-JavaModel java = DEW.json.toObject(json,JavaModel.class);
+JavaModel java = $.json.toObject(json,JavaModel.class);
 // 将Json字符串转成Java对象
-java = DEW.json.toObject("{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}", JavaModel.class);
+java = $.json.toObject("{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}", JavaModel.class);
 // 将Json字符串转成List对象
-List<JavaModel> javas = DEW.json.toList("[{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}]", JavaModel.class);
+List<JavaModel> javas = $.json.toList("[{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}]", JavaModel.class);
 
 // 将Java对象转成JsonNode
-json = DEW.json.toJson(java);
+json = $.json.toJson(java);
 // 将List对象转成JsonNode
-json = DEW.json.toJson(javas);
+json = $.json.toJson(javas);
 
 // 将JsonNode转成Json字符串
-String str = DEW.json.toJsonString(json);
+String str = $.json.toJsonString(json);
 // 将Java对象转成Json字符串
-str = DEW.json.toJsonString(java);
+str = $.json.toJsonString(java);
 // 将List对象转成Json字符串
-str = DEW.json.toJsonString(javas);
+str = $.json.toJsonString(javas);
 
 static class JavaModel{
     private String name;
@@ -71,7 +73,7 @@ static class JavaModel{
 
 TIP: 更多示例见`JsonHelperTest.java`
 
-==== Java Bean操作（DEW.bean）
+==== Java Bean操作（$.bean）
 
 [source,java]
 ----
@@ -79,46 +81,46 @@ TIP: 更多示例见`JsonHelperTest.java`
 User ori = new User();
 ori.setName("gudaoxuri");
 User dist = new User();
-DEW.bean.copyProperties(ori, dist);
+$.bean.copyProperties(ori, dist);
 // 获取Class的注解信息（此处为IdxController类的RPC注解）
-TestAnnotation.RPC rpc = DEW.bean.getClassAnnotation(IdxController.class, TestAnnotation.RPC.class);
+TestAnnotation.RPC rpc = $.bean.getClassAnnotation(IdxController.class, TestAnnotation.RPC.class);
 // 获取Class的字段信息（此处为IdxController类）
-Map<String, DEW.bean.FieldInfo> fieldsInfo = DEW.bean.findFieldsInfo(IdxController.class, null, null, null, null);
+Map<String, $.bean.FieldInfo> fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, null);
 // 获取Class的方法信息（此处为IdxController类）
-List<DEW.bean.MethodInfo> methodsInfo = DEW.bean.findMethodsInfo(IdxController.class, null, null, null, null);
+List<$.bean.MethodInfo> methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, null);
 // 获取字段对应的Get/Set方法（此处为User类）
-Map<String, Method[]> rel = DEW.bean.parseRelFieldAndMethod(User.class, null, null, null, null);
+Map<String, Method[]> rel = $.bean.parseRelFieldAndMethod(User.class, null, null, null, null);
 User user = new User();
 user.setName("gudaoxuri");
 // 根据字段的Get方法获取对应的值
-Map<String, Object> values = DEW.bean.findValuesByRel(user, DEW.bean.parseRelFieldAndMethod(User.class, null, null, null, null));
+Map<String, Object> values = $.bean.findValuesByRel(user, $.bean.parseRelFieldAndMethod(User.class, null, null, null, null));
 // 获取对象所有字段的值
-values = DEW.bean.findValues(user, null, null, null, null);
+values = $.bean.findValues(user, null, null, null, null);
 // 根据字段名称获取对应的值（需要有标准的Get方法）
-Object value = DEW.bean.getValue(user, "name");
+Object value = $.bean.getValue(user, "name");
 // 根据字段名称设置值（需要有标准的Set方法）
-DEW.bean.setValue(user, "name", "gudaoxuri");
+$.bean.setValue(user, "name", "gudaoxuri");
 ----
 
 TIP: 更多示例见`BeanHelperTest.java`
 
-==== Java Class扫描操作（DEW.clazz）
+==== Java Class扫描操作（$.clazz）
 
 [source,java]
 ----
 // 扫描获取指定包下符合条件的class类（此处要求包含Deprecated注解）
-Set<Class<?>> resultInFile = DEW.clazz.scan("com.ecfront.dew.common.test", new HashSet<Class<? extends Annotation>>(){{add(Deprecated.class);}},null);
+Set<Class<?>> resultInFile = $.clazz.scan("com.ecfront.$.common.test", new HashSet<Class<? extends Annotation>>(){{add(Deprecated.class);}},null);
 // 扫描获取指定包下符合条件的class类（此处要求包含Before\\w*类名）
-Set<Class<?>> resultInJar = DEW.clazz.scan("org.junit",null, new HashSet<String>(){{add("Before\\w*");}});
+Set<Class<?>> resultInJar = $.clazz.scan("org.junit",null, new HashSet<String>(){{add("Before\\w*");}});
 ----
 
 TIP: 更多示例见`ClassScanHelperTest.java`
 
-==== Shell脚本操作（DEW.shell()）
+==== Shell脚本操作（$.shell()）
 
 [source,java]
 ----
-DEW.shell().execute(
+$.shell().execute(
         "/opt/test.sh", //  sh文件路径，包含参数
         "test1", // 任务ID
         "done!", // 成功标识，只要捕捉到此标识就视为成功，为null时不会调用ReportHandler的success方法，执行结束后会调用ReportHandler的fail方法
@@ -146,70 +148,70 @@ DEW.shell().execute(
 
 TIP: 更多示例见`ShellProcessorTest.java`
 
-==== 加解密操作（DEW.encrypt）
+==== 加解密操作（$.encrypt）
 
 [source,java]
 ----
 // 字符串 转 Base64
-String base64 = DEW.encrypt.encodeStringToBase64("gudaoxuri", "UTF-8");
+String base64 = $.encrypt.encodeStringToBase64("gudaoxuri", "UTF-8");
 // 数组 转 Base64
-base64 = DEW.encrypt.encodeBytesToBase64("gudaoxuri".getBytes(), "UTF-8");
+base64 = $.encrypt.encodeBytesToBase64("gudaoxuri".getBytes(), "UTF-8");
 // Base64 转 字符串
-String str = DEW.encrypt.decodeBase64ToString(base64, "UTF-8");
+String str = $.encrypt.decodeBase64ToString(base64, "UTF-8");
 // Base64 转 字符串
-byte[] bytes = DEW.encrypt.decodeBase64ToBytes(base64);
+byte[] bytes = $.encrypt.decodeBase64ToBytes(base64);
 
 // 对称加密（此处使用SHA-256算法，支持如bcrypt SHA-256 MD5等算法）
-String encrypt = DEW.encrypt.Symmetric.encrypt("gudaoxuri", "SHA-256");
+String encrypt = $.encrypt.Symmetric.encrypt("gudaoxuri", "SHA-256");
 // 对称加密 - 验证（对于bcrypt之类默认使用随机slat的加密算法必须使用此方法验证）
-DEW.encrypt.Symmetric.validate("gudaoxuri", encrypt, "SHA-256");
+$.encrypt.Symmetric.validate("gudaoxuri", encrypt, "SHA-256");
 
 // 非对称加密 - 生成公钥和私钥
-Map<String, String> keys = DEW.encrypt.Asymmetric.generateKeys("RSA", 1024, "UTF-8");
+Map<String, String> keys = $.encrypt.Asymmetric.generateKeys("RSA", 1024, "UTF-8");
 String publicStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC47dAhLLB3xhDWccgEheqTbRimAhluN/ixNyYU/MvExN/bwytthiWViRV2H1sGrGr5JyH3qQSFa57jInbXD6lGN24aw2TfiejLWGkj0hMEXEtj4Bf9OuQhHUmy8unLygOuBlIhtfPLp9cSLBgVVHbt33buNTkL7fvdE2U9B3JVyQIDAQAB";
 // 非对称加密 - 获取公钥文件
-PublicKey publicKey = DEW.encrypt.Asymmetric.getPublicKey(publicStr, "RSA");
+PublicKey publicKey = $.encrypt.Asymmetric.getPublicKey(publicStr, "RSA");
 String privateStr = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43+LE3JhT8y8TE39vDK22GJZWJFXYfWwasavknIfepBIVrnuMidtcPqUY3bhrDZN+J6MtYaSPSEwRcS2PgF/065CEdSbLy6cvKA64GUiG188un1xIsGBVUdu3fdu41OQvt+90TZT0HclXJAgMBAAECgYEAjXFndVhHCPU3P637PGppBqW06pREeybYUkNKH1dTS4cBaYcXmke2S290OMq2xp3tm++wbUqbKKkt97AOkWNrJfq8Ecpdw9s3c7yQGWaPuwiX38Cgtq6r0utjT20YgR6etGpqafoBt93RZpEm0eEzFPUnS7qYc86HprL0RJ0/i7kCQQDaOmvO82cYIK1ESkA0GdDVQoz2A1V8HvEWOsccRGqlWuasLUccyBnx1G/LDZUxcPOraDyxI8sdl7VbweLR0H9LAkEA2O/rWXwnSYKqdpt+OhpUBHNnMs3IMvRzefJ1zObnIMyYR3KXtpQ/fL4gEquNwJgFIaPJVg5/3zHISEw3e8XOuwJAIDrGl07tZ+vTiyVoLAmwBP8KMH83jdhIBN9zbqJQGdG+Bam+Oer3ofac+CEuapni8uq3I/ZEVj+EomOVKyWe1wJAATztROd2ee7q9h5RDBfWXughsKKH//JxLkL59R9kNkW0oMPApeQWsKmNGU4tUuoLLXP31CvlAusPz4nPzz8DvQJBAJXpICPNJw84fONzS0raRqlFoZMMI0cqeGtPIiCHKaRHyzQv/FFu2KxUcCrod8PngaBFRselzrwZILmXHqrHc1M=";
 // 非对称加密 - 获取私钥文件
-PrivateKey privateKey = DEW.encrypt.Asymmetric.getPrivateKey(privateStr, "RSA");
+PrivateKey privateKey = $.encrypt.Asymmetric.getPrivateKey(privateStr, "RSA");
 
 String d = "Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。";
 // 非对称加密 - 公钥加密/私钥解密
-byte[] encryptByPub = DEW.encrypt.Asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
-String result = new String(DEW.encrypt.Asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
+byte[] encryptByPub = $.encrypt.Asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
+String result = new String($.encrypt.Asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
 
 // 非对称加密 - 私钥加密/公钥解密
-byte[] encryptByPriv = DEW.encrypt.Asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
-byte[] decryptByPub = DEW.encrypt.Asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
-DEW.encrypt.Asymmetric.verify(publicKey, decryptByPub,
-        DEW.encrypt.Asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"),
+byte[] encryptByPriv = $.encrypt.Asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
+byte[] decryptByPub = $.encrypt.Asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
+$.encrypt.Asymmetric.verify(publicKey, decryptByPub,
+        $.encrypt.Asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"),
         "SHA1withRSA");
 ----
 
 TIP: 更多示例见`EncryptHelperTest.java`
 
-==== 通用拦截器栈（DEW.interceptor）
+==== 通用拦截器栈（$.interceptor）
 
 [source,java]
 ----
 // 没有注册拦截器的情况
-Resp<DewInterceptRespBody<Obj>> resp = DEW.interceptor.process("none", new Obj("1"), new HashMap<>(), (obj, context) ->
+Resp<DewInterceptRespBody<Obj>> resp = $.interceptor.process("none", new Obj("1"), new HashMap<>(), (obj, context) ->
         Resp.success(DewInterceptRespBody.build(obj, context))
 );
 Assert.assertTrue(resp.ok());
 Assert.assertEquals("1", resp.getBody().getObj().getF());
 
 // 注册了一个拦截器A
-DEW.interceptor.register("test", new InterceptorA());
-resp = DEW.interceptor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
+$.interceptor.register("test", new InterceptorA());
+resp = $.interceptor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
         Resp.success(DewInterceptRespBody.build(obj, context))
 );
 Assert.assertTrue(resp.ok());
 Assert.assertEquals("3", resp.getBody().getObj().getF());
 
 // 注册了另一个拦截器B，假设B执行会报错
-DEW.interceptor.register("test", new InterceptorB());
-resp = DEW.interceptor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
+$.interceptor.register("test", new InterceptorB());
+resp = $.interceptor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
         Resp.success(DewInterceptRespBody.build(obj, context))
 );
 Assert.assertTrue(!resp.ok());
@@ -267,56 +269,56 @@ public class InterceptorB implements DewInterceptor<Obj> {
 
 TIP: 更多示例见`InterceptorTest.java`
 
-==== 定时器操作（DEW.timer）
+==== 定时器操作（$.timer）
 
 [source,java]
 ----
 // 延迟任务
-DEW.timer.timer(1, () -> // Do Something);
+$.timer.timer(1, () -> // Do Something);
 // 周期性任务，参数 fixedRate 为true时表示每periodSec执行，为false表示fixedDelay，表示在当前任务执行完成后过periodSec再执行
-String taskId = DEW.timer.periodic(1, true, () -> // Do Something);
+String taskId = $.timer.periodic(1, true, () -> // Do Something);
 // 取消周期性任务
-DEW.timer.cancel(taskId);
+$.timer.cancel(taskId);
 ----
 
 TIP: 更多示例见`TimerHelperTest.java`
 
-==== 常用文件操作（DEW.file）
+==== 常用文件操作（$.file）
 
 [source,java]
 ----
 // 根据classpath读取文件所有内容（jar包外路径优先），另外readAllByPath、readAllByFile、readAllByPathName等衍生方法
-String conf=DEW.file.readAllByClassPath("conf1.json","UTF-8");
+String conf=$.file.readAllByClassPath("conf1.json","UTF-8");
 ----
 
 TIP: 更多示例见`FileHelperTest.java`
 
-==== 常用字段操作（DEW.field）
+==== 常用字段操作（$.field）
 
 [source,java]
 ----
 // 验证邮箱格式是否合法
-DEW.field.validateEmail("i@sunisle.org");
+$.field.validateEmail("i@sunisle.org");
 // 验证手机号格式是否合法
-DEW.field.validateMobile("18657120000");
+$.field.validateMobile("18657120000");
 // 是否是汉字
-DEW.field.isChinese("孤岛旭日");
+$.field.isChinese("孤岛旭日");
 // 验证身份证是否合法
-DEW.field.validateIdNumber("330102199901015759");
+$.field.validateIdNumber("330102199901015759");
 // 根据身份编号获取年龄
-DEW.field.getAgeByIdCard("330102199901015759");
+$.field.getAgeByIdCard("330102199901015759");
 // 根据身份编号获取生日
-DEW.field.getBirthByIdCard("330102199901015759");
+$.field.getBirthByIdCard("330102199901015759");
 // 根据身份编号获取生日年
-DEW.field.getYearByIdCard("330102199901015759");
+$.field.getYearByIdCard("330102199901015759");
 // 根据身份编号获取生日月
-DEW.field.getMonthByIdCard("330102199901015759");
+$.field.getMonthByIdCard("330102199901015759");
 // 根据身份编号获取生日天
-DEW.field.getDateByIdCard("330102199901015759");
+$.field.getDateByIdCard("330102199901015759");
 // 根据身份编号获取性别
-DEW.field.getGenderByIdCard("330102199901015759");
+$.field.getGenderByIdCard("330102199901015759");
 // 根据身份编号获取户籍省份
-DEW.field.getProvinceByIdCard("330102199901015759");
+$.field.getProvinceByIdCard("330102199901015759");
 ----
 
 TIP: 更多示例见`FieldHelperTest.java`

@@ -19,6 +19,8 @@ public class FieldHelper {
             Pattern.compile("^[\u4e00-\u9fa5]+$");
 
 
+    FieldHelper(){}
+
     /**
      * 验证邮箱格式是否合法
      *

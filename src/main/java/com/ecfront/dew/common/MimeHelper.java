@@ -10,7 +10,9 @@ import java.util.Map;
  */
 public class MimeHelper {
 
-    private Map<String, List<String>> types = new HashMap<String, List<String>>() {{
+    MimeHelper(){}
+
+    private  static Map<String, List<String>> types = new HashMap<String, List<String>>() {{
         put("office", new ArrayList<String>() {{
             add(Mime.TXT.toString());
             add(Mime.DOC.toString());

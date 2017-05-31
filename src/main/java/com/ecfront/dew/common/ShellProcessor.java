@@ -18,6 +18,8 @@ public class ShellProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(ShellProcessor.class);
 
+    ShellProcessor(){}
+
     private volatile String taskId;
     private volatile String successFlag;
     private volatile String progressFlag;

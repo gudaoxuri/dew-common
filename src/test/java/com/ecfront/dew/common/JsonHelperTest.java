@@ -13,20 +13,20 @@ public class JsonHelperTest {
     public void toJsonString() throws Exception {
         Assert.assertEquals(
                 "{\"\":{\"a_key\":\"a_val\"}}",
-                DEW.json.toJsonString(DEW.json.createObjectNode().set("", DEW.json.createObjectNode().put("a_key", "a_val"))));
+                $.json.toJsonString($.json.createObjectNode().set("", $.json.createObjectNode().put("a_key", "a_val"))));
     }
 
     @Test
     public void toJson() throws Exception {
         Assert.assertEquals("a_val",
-                DEW.json.toJson("{'a_key':'a_val'}").get("a_key").asText());
+                $.json.toJson("{'a_key':'a_val'}").get("a_key").asText());
         Assert.assertEquals("a_val",
-                DEW.json.toJson("{\r\n'a_key':'a_val' // 注释\r\n}").get("a_key").asText());
+                $.json.toJson("{\r\n'a_key':'a_val' // 注释\r\n}").get("a_key").asText());
     }
 
     @Test
     public void toList() throws Exception {
-        TestIdModel model = DEW.json.toList("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]", TestIdModel.class).get(0);
+        TestIdModel model = $.json.toList("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]", TestIdModel.class).get(0);
         Assert.assertEquals("sunisle", model.getName());
         Assert.assertEquals("1", model.getCid());
         Assert.assertEquals("123456789", model.getCreateTime());
@@ -35,7 +35,7 @@ public class JsonHelperTest {
 
     @Test
     public void toObject() throws Exception {
-        TestIdModel model = DEW.json.toObject("{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}", TestIdModel.class);
+        TestIdModel model = $.json.toObject("{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}", TestIdModel.class);
         Assert.assertEquals("sunisle", model.getName());
         Assert.assertEquals("1", model.getCid());
         Assert.assertEquals("123456789", model.getCreateTime());

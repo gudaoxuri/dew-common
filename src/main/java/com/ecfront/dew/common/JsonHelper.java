@@ -31,6 +31,8 @@ public class JsonHelper {
         setTimeZone(Calendar.getInstance().getTimeZone());
     }
 
+    JsonHelper(){}
+
     /**
      * 设置时区
      *

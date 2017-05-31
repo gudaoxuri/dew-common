@@ -1,11 +1,9 @@
 package com.ecfront.dew.common;
 
-import com.ecfront.dew.common.interceptor.DewInterceptorProcessor;
-
 /**
  * DEW Common 操作入口
  */
-public class DEW {
+public class $ {
 
     /**
      * Json与Java对象互转

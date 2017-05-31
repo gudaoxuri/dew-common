@@ -16,6 +16,8 @@ public class TimerHelper {
 
     private static Map<String, ScheduledFuture<?>> CONTAINER = new HashMap<>();
 
+    TimerHelper(){}
+
     /**
      * 延迟执行的周期性任务
      *

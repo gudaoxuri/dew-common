@@ -7,9 +7,9 @@ public class FileHelperTest {
 
     @Test
     public void testFile() throws Exception {
-        String conf = DEW.file.readAllByClassPath("conf1.json", "UTF-8");
+        String conf = $.file.readAllByClassPath("conf1.json", "UTF-8");
         Assert.assertTrue(conf.contains("1"));
-        conf = DEW.file.readAllByClassPath("conf/conf2.json", "UTF-8");
+        conf = $.file.readAllByClassPath("conf/conf2.json", "UTF-8");
         Assert.assertTrue(conf.contains("2"));
     }
 

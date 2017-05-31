@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh_cn">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5.dev">
-<meta name="author" content="ECFront">
 <title>Dew Common — Java常用操作工具集</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -419,43 +418,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
-<body class="book toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>Dew Common — Java常用操作工具集</h1>
-<div class="details">
-<span id="author" class="author">ECFront</span><br>
-<span id="revnumber">version 1.1.1,</span>
-<span id="revdate">2017-05-28</span>
-</div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#truedew-common-java">1. Dew Common — Java常用操作工具集</a>
-<ul class="sectlevel2">
-<li><a href="#true-">1.1. 功能</a></li>
-<li><a href="#true--2">1.2. 使用</a>
-<ul class="sectlevel3">
-<li><a href="#truejson-java-jsonhelper">1.2.1. Json与Java对象互转（JsonHelper）</a></li>
-<li><a href="#truejava-bean-beanhelper">1.2.2. Java Bean操作（BeanHelper）</a></li>
-<li><a href="#truejava-class-classscanhelper">1.2.3. Java Class扫描操作（ClassScanHelper）</a></li>
-<li><a href="#trueshell-shellprocessor">1.2.4. Shell脚本操作（ShellProcessor）</a></li>
-<li><a href="#true-encrypthelper">1.2.5. 加解密操作（EncryptHelper）</a></li>
-<li><a href="#true-dewinterceptorprocessor">1.2.6. 通用拦截器栈（DewInterceptorProcessor）</a></li>
-<li><a href="#true-timerhelper">1.2.7. 定时器操作（TimerHelper）</a></li>
-<li><a href="#true-filehelper">1.2.8. 常用文件操作（FileHelper）</a></li>
-<li><a href="#true-fieldhelper">1.2.9. 常用字段操作（FieldHelper）</a></li>
-<li><a href="#true-resp">1.2.10. 响应处理模型（Resp）</a></li>
-<li><a href="#true-pagedto">1.2.11. 分页模型（PageDTO）</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="truedew-common-java"><a class="anchor" href="#truedew-common-java"></a>1. Dew Common — Java常用操作工具集</h2>
+<h2 id="truedew-common-java"><a class="anchor" href="#truedew-common-java"></a>Dew Common — Java常用操作工具集</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
@@ -467,51 +435,54 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span class="image"><a class="image" href="https://www.apache.org/licenses/LICENSE-2.0.txt"><img src="https://img.shields.io/badge/license-ASF2-blue.svg" alt="Apache License 2"></a></span>
 <span class="image"><a class="image" href="https://maven-badges.herokuapp.com/maven-central/com.ecfront.dew/common/"><img src="https://maven-badges.herokuapp.com/maven-central/com.ecfront.dew/common/badge.svg" alt="Maven Central"></a></span></p>
 </div>
+<div class="paragraph">
+<p>Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少地引入第三方包，做到通用、易用、精简。</p>
+</div>
 <div class="sect2">
-<h3 id="true-"><a class="anchor" href="#true-"></a>1.1. 功能</h3>
+<h3 id="true-"><a class="anchor" href="#true-"></a>功能</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Json与Java对象互转（JsonHelper）</p>
+<p>Json与Java对象互转，支持泛型</p>
 </li>
 <li>
-<p>Java Bean操作（BeanHelper）</p>
+<p>Java Bean操作，Bean复制、反射获取/设置注解、字段、方法等</p>
 </li>
 <li>
-<p>Java Class扫描操作（ClassScanHelper）</p>
+<p>Java Class扫描操作，根据注解或名称过滤</p>
 </li>
 <li>
-<p>Shell脚本操作（ShellProcessor）</p>
+<p>Shell脚本操作，Shell内容获取、成功捕获及进度报告等</p>
 </li>
 <li>
-<p>加解密操作（EncryptHelper）</p>
+<p>加解密操作，Base64、MD5/BCrypt/SHA等对称算法和RSA等非对称算法</p>
 </li>
 <li>
-<p>通用拦截器栈（DewInterceptorProcessor）</p>
+<p>通用拦截器栈，前/后置、错误处理等</p>
 </li>
 <li>
-<p>定时器操作（TimerHelper）</p>
+<p>定时器操作，定时和周期性任务</p>
 </li>
 <li>
-<p>常用文件操作（FileHelper）</p>
+<p>常用文件操作，根据不同情况获取文件内容</p>
 </li>
 <li>
-<p>常用字段操作（FieldHelper）</p>
+<p>常用字段操作，各类字段验证及身份证提取</p>
 </li>
 <li>
-<p>常用时间处理（TimeHelper）</p>
+<p>常用时间处理，常规时间格式化模板</p>
 </li>
 <li>
-<p>主流文件MIME整理（MimeHelper）</p>
+<p>主流文件MIME整理，MIME分类</p>
 </li>
 <li>
-<p>响应处理及分页模型（Resp &amp; PageDTO）</p>
+<p>响应处理及分页模型</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect2">
-<h3 id="true--2"><a class="anchor" href="#true--2"></a>1.2. 使用</h3>
+<h3 id="true--2"><a class="anchor" href="#true--2"></a>使用</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -529,37 +500,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;parent&gt;
         &lt;groupId&gt;com.ecfront.dew&lt;/groupId&gt;
         &lt;artifactId&gt;common&lt;/artifactId&gt;
-        &lt;version&gt;1.1.1&lt;/version&gt;
+        &lt;version&gt;1.2.0&lt;/version&gt;
 &lt;/parent&gt;</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="truejson-java-jsonhelper"><a class="anchor" href="#truejson-java-jsonhelper"></a>1.2.1. Json与Java对象互转（JsonHelper）</h4>
+<h4 id="truejson-java-json"><a class="anchor" href="#truejson-java-json"></a>Json与Java对象互转（$.json）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 将Json字符串转成JsonNode
-JsonNode json = JsonHelper.toJson("{'name':'gudaoxuri'}");
+JsonNode json = $.json.toJson("{'name':'gudaoxuri'}");
 // 获取json中的值
 String name = json.get("name").asText();
 
 // 将Json转成Java对象
-JavaModel java = JsonHelper.toObject(json,JavaModel.class);
+JavaModel java = $.json.toObject(json,JavaModel.class);
 // 将Json字符串转成Java对象
-java = JsonHelper.toObject("{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}", JavaModel.class);
+java = $.json.toObject("{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}", JavaModel.class);
 // 将Json字符串转成List对象
-List&lt;JavaModel&gt; javas = JsonHelper.toList("[{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}]", JavaModel.class);
+List&lt;JavaModel&gt; javas = $.json.toList("[{'name':'gudaoxuri','date':'2016-07-12 12:00:00'}]", JavaModel.class);
 
 // 将Java对象转成JsonNode
-json = JsonHelper.toJson(java);
+json = $.json.toJson(java);
 // 将List对象转成JsonNode
-json = JsonHelper.toJson(javas);
+json = $.json.toJson(javas);
 
 // 将JsonNode转成Json字符串
-String str = JsonHelper.toJsonString(json);
+String str = $.json.toJsonString(json);
 // 将Java对象转成Json字符串
-str = JsonHelper.toJsonString(java);
+str = $.json.toJsonString(java);
 // 将List对象转成Json字符串
-str = JsonHelper.toJsonString(javas);
+str = $.json.toJsonString(javas);
 
 static class JavaModel{
     private String name;
@@ -583,32 +554,32 @@ static class JavaModel{
 </div>
 </div>
 <div class="sect3">
-<h4 id="truejava-bean-beanhelper"><a class="anchor" href="#truejava-bean-beanhelper"></a>1.2.2. Java Bean操作（BeanHelper）</h4>
+<h4 id="truejava-bean-bean"><a class="anchor" href="#truejava-bean-bean"></a>Java Bean操作（$.bean）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// Bean Copy
 User ori = new User();
 ori.setName("gudaoxuri");
 User dist = new User();
-BeanHelper.copyProperties(ori, dist);
+$.bean.copyProperties(ori, dist);
 // 获取Class的注解信息（此处为IdxController类的RPC注解）
-TestAnnotation.RPC rpc = BeanHelper.getClassAnnotation(IdxController.class, TestAnnotation.RPC.class);
+TestAnnotation.RPC rpc = $.bean.getClassAnnotation(IdxController.class, TestAnnotation.RPC.class);
 // 获取Class的字段信息（此处为IdxController类）
-Map&lt;String, BeanHelper.FieldInfo&gt; fieldsInfo = BeanHelper.findFieldsInfo(IdxController.class, null, null, null, null);
+Map&lt;String, $.bean.FieldInfo&gt; fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, null);
 // 获取Class的方法信息（此处为IdxController类）
-List&lt;BeanHelper.MethodInfo&gt; methodsInfo = BeanHelper.findMethodsInfo(IdxController.class, null, null, null, null);
+List&lt;$.bean.MethodInfo&gt; methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, null);
 // 获取字段对应的Get/Set方法（此处为User类）
-Map&lt;String, Method[]&gt; rel = BeanHelper.parseRelFieldAndMethod(User.class, null, null, null, null);
+Map&lt;String, Method[]&gt; rel = $.bean.parseRelFieldAndMethod(User.class, null, null, null, null);
 User user = new User();
 user.setName("gudaoxuri");
 // 根据字段的Get方法获取对应的值
-Map&lt;String, Object&gt; values = BeanHelper.findValuesByRel(user, BeanHelper.parseRelFieldAndMethod(User.class, null, null, null, null));
+Map&lt;String, Object&gt; values = $.bean.findValuesByRel(user, $.bean.parseRelFieldAndMethod(User.class, null, null, null, null));
 // 获取对象所有字段的值
-values = BeanHelper.findValues(user, null, null, null, null);
+values = $.bean.findValues(user, null, null, null, null);
 // 根据字段名称获取对应的值（需要有标准的Get方法）
-Object value = BeanHelper.getValue(user, "name");
+Object value = $.bean.getValue(user, "name");
 // 根据字段名称设置值（需要有标准的Set方法）
-BeanHelper.setValue(user, "name", "gudaoxuri");</code></pre>
+$.bean.setValue(user, "name", "gudaoxuri");</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -625,13 +596,13 @@ BeanHelper.setValue(user, "name", "gudaoxuri");</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="truejava-class-classscanhelper"><a class="anchor" href="#truejava-class-classscanhelper"></a>1.2.3. Java Class扫描操作（ClassScanHelper）</h4>
+<h4 id="truejava-class-clazz"><a class="anchor" href="#truejava-class-clazz"></a>Java Class扫描操作（$.clazz）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 扫描获取指定包下符合条件的class类（此处要求包含Deprecated注解）
-Set&lt;Class&lt;?&gt;&gt; resultInFile = ClassScanHelper.scan("com.ecfront.dew.common.test", new HashSet&lt;Class&lt;? extends Annotation&gt;&gt;(){{add(Deprecated.class);}},null);
+Set&lt;Class&lt;?&gt;&gt; resultInFile = $.clazz.scan("com.ecfront.$.common.test", new HashSet&lt;Class&lt;? extends Annotation&gt;&gt;(){{add(Deprecated.class);}},null);
 // 扫描获取指定包下符合条件的class类（此处要求包含Before\\w*类名）
-Set&lt;Class&lt;?&gt;&gt; resultInJar = ClassScanHelper.scan("org.junit",null, new HashSet&lt;String&gt;(){{add("Before\\w*");}});</code></pre>
+Set&lt;Class&lt;?&gt;&gt; resultInJar = $.clazz.scan("org.junit",null, new HashSet&lt;String&gt;(){{add("Before\\w*");}});</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -648,10 +619,10 @@ Set&lt;Class&lt;?&gt;&gt; resultInJar = ClassScanHelper.scan("org.junit",null, n
 </div>
 </div>
 <div class="sect3">
-<h4 id="trueshell-shellprocessor"><a class="anchor" href="#trueshell-shellprocessor"></a>1.2.4. Shell脚本操作（ShellProcessor）</h4>
+<h4 id="trueshell-shell"><a class="anchor" href="#trueshell-shell"></a>Shell脚本操作（$.shell()）</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">new ShellProcessor().execute(
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">$.shell().execute(
         "/opt/test.sh", //  sh文件路径，包含参数
         "test1", // 任务ID
         "done!", // 成功标识，只要捕捉到此标识就视为成功，为null时不会调用ReportHandler的success方法，执行结束后会调用ReportHandler的fail方法
@@ -691,42 +662,42 @@ Set&lt;Class&lt;?&gt;&gt; resultInJar = ClassScanHelper.scan("org.junit",null, n
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-encrypthelper"><a class="anchor" href="#true-encrypthelper"></a>1.2.5. 加解密操作（EncryptHelper）</h4>
+<h4 id="true-encrypt"><a class="anchor" href="#true-encrypt"></a>加解密操作（$.encrypt）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 字符串 转 Base64
-String base64 = EncryptHelper.encodeStringToBase64("gudaoxuri", "UTF-8");
+String base64 = $.encrypt.encodeStringToBase64("gudaoxuri", "UTF-8");
 // 数组 转 Base64
-base64 = EncryptHelper.encodeBytesToBase64("gudaoxuri".getBytes(), "UTF-8");
+base64 = $.encrypt.encodeBytesToBase64("gudaoxuri".getBytes(), "UTF-8");
 // Base64 转 字符串
-String str = EncryptHelper.decodeBase64ToString(base64, "UTF-8");
+String str = $.encrypt.decodeBase64ToString(base64, "UTF-8");
 // Base64 转 字符串
-byte[] bytes = EncryptHelper.decodeBase64ToBytes(base64);
+byte[] bytes = $.encrypt.decodeBase64ToBytes(base64);
 
 // 对称加密（此处使用SHA-256算法，支持如bcrypt SHA-256 MD5等算法）
-String encrypt = EncryptHelper.Symmetric.encrypt("gudaoxuri", "SHA-256");
+String encrypt = $.encrypt.Symmetric.encrypt("gudaoxuri", "SHA-256");
 // 对称加密 - 验证（对于bcrypt之类默认使用随机slat的加密算法必须使用此方法验证）
-EncryptHelper.Symmetric.validate("gudaoxuri", encrypt, "SHA-256");
+$.encrypt.Symmetric.validate("gudaoxuri", encrypt, "SHA-256");
 
 // 非对称加密 - 生成公钥和私钥
-Map&lt;String, String&gt; keys = EncryptHelper.Asymmetric.generateKeys("RSA", 1024, "UTF-8");
+Map&lt;String, String&gt; keys = $.encrypt.Asymmetric.generateKeys("RSA", 1024, "UTF-8");
 String publicStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC47dAhLLB3xhDWccgEheqTbRimAhluN/ixNyYU/MvExN/bwytthiWViRV2H1sGrGr5JyH3qQSFa57jInbXD6lGN24aw2TfiejLWGkj0hMEXEtj4Bf9OuQhHUmy8unLygOuBlIhtfPLp9cSLBgVVHbt33buNTkL7fvdE2U9B3JVyQIDAQAB";
 // 非对称加密 - 获取公钥文件
-PublicKey publicKey = EncryptHelper.Asymmetric.getPublicKey(publicStr, "RSA");
+PublicKey publicKey = $.encrypt.Asymmetric.getPublicKey(publicStr, "RSA");
 String privateStr = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43+LE3JhT8y8TE39vDK22GJZWJFXYfWwasavknIfepBIVrnuMidtcPqUY3bhrDZN+J6MtYaSPSEwRcS2PgF/065CEdSbLy6cvKA64GUiG188un1xIsGBVUdu3fdu41OQvt+90TZT0HclXJAgMBAAECgYEAjXFndVhHCPU3P637PGppBqW06pREeybYUkNKH1dTS4cBaYcXmke2S290OMq2xp3tm++wbUqbKKkt97AOkWNrJfq8Ecpdw9s3c7yQGWaPuwiX38Cgtq6r0utjT20YgR6etGpqafoBt93RZpEm0eEzFPUnS7qYc86HprL0RJ0/i7kCQQDaOmvO82cYIK1ESkA0GdDVQoz2A1V8HvEWOsccRGqlWuasLUccyBnx1G/LDZUxcPOraDyxI8sdl7VbweLR0H9LAkEA2O/rWXwnSYKqdpt+OhpUBHNnMs3IMvRzefJ1zObnIMyYR3KXtpQ/fL4gEquNwJgFIaPJVg5/3zHISEw3e8XOuwJAIDrGl07tZ+vTiyVoLAmwBP8KMH83jdhIBN9zbqJQGdG+Bam+Oer3ofac+CEuapni8uq3I/ZEVj+EomOVKyWe1wJAATztROd2ee7q9h5RDBfWXughsKKH//JxLkL59R9kNkW0oMPApeQWsKmNGU4tUuoLLXP31CvlAusPz4nPzz8DvQJBAJXpICPNJw84fONzS0raRqlFoZMMI0cqeGtPIiCHKaRHyzQv/FFu2KxUcCrod8PngaBFRselzrwZILmXHqrHc1M=";
 // 非对称加密 - 获取私钥文件
-PrivateKey privateKey = EncryptHelper.Asymmetric.getPrivateKey(privateStr, "RSA");
+PrivateKey privateKey = $.encrypt.Asymmetric.getPrivateKey(privateStr, "RSA");
 
 String d = "Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。";
 // 非对称加密 - 公钥加密/私钥解密
-byte[] encryptByPub = EncryptHelper.Asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
-String result = new String(EncryptHelper.Asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
+byte[] encryptByPub = $.encrypt.Asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
+String result = new String($.encrypt.Asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
 
 // 非对称加密 - 私钥加密/公钥解密
-byte[] encryptByPriv = EncryptHelper.Asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
-byte[] decryptByPub = EncryptHelper.Asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
-EncryptHelper.Asymmetric.verify(publicKey, decryptByPub,
-        EncryptHelper.Asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"),
+byte[] encryptByPriv = $.encrypt.Asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
+byte[] decryptByPub = $.encrypt.Asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
+$.encrypt.Asymmetric.verify(publicKey, decryptByPub,
+        $.encrypt.Asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"),
         "SHA1withRSA");</code></pre>
 </div>
 </div>
@@ -744,27 +715,27 @@ EncryptHelper.Asymmetric.verify(publicKey, decryptByPub,
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-dewinterceptorprocessor"><a class="anchor" href="#true-dewinterceptorprocessor"></a>1.2.6. 通用拦截器栈（DewInterceptorProcessor）</h4>
+<h4 id="true-interceptor"><a class="anchor" href="#true-interceptor"></a>通用拦截器栈（$.interceptor）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 没有注册拦截器的情况
-Resp&lt;DewInterceptRespBody&lt;Obj&gt;&gt; resp = DewInterceptorProcessor.process("none", new Obj("1"), new HashMap&lt;&gt;(), (obj, context) -&gt;
+Resp&lt;DewInterceptRespBody&lt;Obj&gt;&gt; resp = $.interceptor.process("none", new Obj("1"), new HashMap&lt;&gt;(), (obj, context) -&gt;
         Resp.success(DewInterceptRespBody.build(obj, context))
 );
 Assert.assertTrue(resp.ok());
 Assert.assertEquals("1", resp.getBody().getObj().getF());
 
 // 注册了一个拦截器A
-DewInterceptorProcessor.register("test", new InterceptorA());
-resp = DewInterceptorProcessor.process("test", new Obj("1"), new HashMap&lt;&gt;(), (obj, context) -&gt;
+$.interceptor.register("test", new InterceptorA());
+resp = $.interceptor.process("test", new Obj("1"), new HashMap&lt;&gt;(), (obj, context) -&gt;
         Resp.success(DewInterceptRespBody.build(obj, context))
 );
 Assert.assertTrue(resp.ok());
 Assert.assertEquals("3", resp.getBody().getObj().getF());
 
 // 注册了另一个拦截器B，假设B执行会报错
-DewInterceptorProcessor.register("test", new InterceptorB());
-resp = DewInterceptorProcessor.process("test", new Obj("1"), new HashMap&lt;&gt;(), (obj, context) -&gt;
+$.interceptor.register("test", new InterceptorB());
+resp = $.interceptor.process("test", new Obj("1"), new HashMap&lt;&gt;(), (obj, context) -&gt;
         Resp.success(DewInterceptRespBody.build(obj, context))
 );
 Assert.assertTrue(!resp.ok());
@@ -834,15 +805,15 @@ public class InterceptorB implements DewInterceptor&lt;Obj&gt; {
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-timerhelper"><a class="anchor" href="#true-timerhelper"></a>1.2.7. 定时器操作（TimerHelper）</h4>
+<h4 id="true-timer"><a class="anchor" href="#true-timer"></a>定时器操作（$.timer）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 延迟任务
-TimerHelper.timer(1, () -&gt; // Do Something);
+$.timer.timer(1, () -&gt; // Do Something);
 // 周期性任务，参数 fixedRate 为true时表示每periodSec执行，为false表示fixedDelay，表示在当前任务执行完成后过periodSec再执行
-String taskId = TimerHelper.periodic(1, true, () -&gt; // Do Something);
+String taskId = $.timer.periodic(1, true, () -&gt; // Do Something);
 // 取消周期性任务
-TimerHelper.cancel(taskId);</code></pre>
+$.timer.cancel(taskId);</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -859,11 +830,11 @@ TimerHelper.cancel(taskId);</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-filehelper"><a class="anchor" href="#true-filehelper"></a>1.2.8. 常用文件操作（FileHelper）</h4>
+<h4 id="true-file"><a class="anchor" href="#true-file"></a>常用文件操作（$.file）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 根据classpath读取文件所有内容（jar包外路径优先），另外readAllByPath、readAllByFile、readAllByPathName等衍生方法
-String conf=FileHelper.readAllByClassPath("conf1.json","UTF-8");</code></pre>
+String conf=$.file.readAllByClassPath("conf1.json","UTF-8");</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -880,31 +851,31 @@ String conf=FileHelper.readAllByClassPath("conf1.json","UTF-8");</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-fieldhelper"><a class="anchor" href="#true-fieldhelper"></a>1.2.9. 常用字段操作（FieldHelper）</h4>
+<h4 id="true-field"><a class="anchor" href="#true-field"></a>常用字段操作（$.field）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 验证邮箱格式是否合法
-FieldHelper.validateEmail("i@sunisle.org");
+$.field.validateEmail("i@sunisle.org");
 // 验证手机号格式是否合法
-FieldHelper.validateMobile("18657120000");
+$.field.validateMobile("18657120000");
 // 是否是汉字
-FieldHelper.isChinese("孤岛旭日");
+$.field.isChinese("孤岛旭日");
 // 验证身份证是否合法
-FieldHelper.validateIdNumber("330102199901015759");
+$.field.validateIdNumber("330102199901015759");
 // 根据身份编号获取年龄
-FieldHelper.getAgeByIdCard("330102199901015759");
+$.field.getAgeByIdCard("330102199901015759");
 // 根据身份编号获取生日
-FieldHelper.getBirthByIdCard("330102199901015759");
+$.field.getBirthByIdCard("330102199901015759");
 // 根据身份编号获取生日年
-FieldHelper.getYearByIdCard("330102199901015759");
+$.field.getYearByIdCard("330102199901015759");
 // 根据身份编号获取生日月
-FieldHelper.getMonthByIdCard("330102199901015759");
+$.field.getMonthByIdCard("330102199901015759");
 // 根据身份编号获取生日天
-FieldHelper.getDateByIdCard("330102199901015759");
+$.field.getDateByIdCard("330102199901015759");
 // 根据身份编号获取性别
-FieldHelper.getGenderByIdCard("330102199901015759");
+$.field.getGenderByIdCard("330102199901015759");
 // 根据身份编号获取户籍省份
-FieldHelper.getProvinceByIdCard("330102199901015759");</code></pre>
+$.field.getProvinceByIdCard("330102199901015759");</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -921,7 +892,7 @@ FieldHelper.getProvinceByIdCard("330102199901015759");</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-resp"><a class="anchor" href="#true-resp"></a>1.2.10. 响应处理模型（Resp）</h4>
+<h4 id="true-resp"><a class="anchor" href="#true-resp"></a>响应处理模型（Resp）</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1075,7 +1046,7 @@ public static &lt;E&gt; Resp&lt;PageDTO&lt;E&gt;&gt; genericPage(Resp resp, Clas
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-pagedto"><a class="anchor" href="#true-pagedto"></a>1.2.11. 分页模型（PageDTO）</h4>
+<h4 id="true-pagedto"><a class="anchor" href="#true-pagedto"></a>分页模型（PageDTO）</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1124,8 +1095,7 @@ private List&lt;E&gt; objects;</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.1<br>
-Last updated 2017-05-28 19:36:36
+Last updated 2017-05-31 14:57:21
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

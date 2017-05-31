@@ -23,6 +23,12 @@ import java.util.Objects;
  */
 public class EncryptHelper {
 
+    EncryptHelper() {
+    }
+
+    public Symmetric symmetric = new Symmetric();
+    public Asymmetric asymmetric = new Asymmetric();
+
     /**
      * Base64 转 数组
      */
@@ -51,13 +57,10 @@ public class EncryptHelper {
         return new String(Base64.getEncoder().encode(str.getBytes(encode)), encode);
     }
 
-    public Symmetric symmetric = new Symmetric();
-    public Asymmetric asymmetric = new Asymmetric();
-
     /**
      * 对称加密
      */
-    class Symmetric {
+    public class Symmetric {
 
         /**
          * 对称加密
@@ -110,7 +113,7 @@ public class EncryptHelper {
     /**
      * 非对称加密
      */
-    class Asymmetric {
+    public class Asymmetric {
 
         /**
          * 生成公钥和私钥

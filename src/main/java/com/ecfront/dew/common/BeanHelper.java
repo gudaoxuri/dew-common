@@ -16,6 +16,8 @@ public class BeanHelper {
 
     private static NullAwareBeanUtilsBean copyPropertiesAdapter = new NullAwareBeanUtilsBean();
 
+    BeanHelper(){}
+
     /**
      * Java Bean Copy
      *
