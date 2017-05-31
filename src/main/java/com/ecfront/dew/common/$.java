@@ -60,5 +60,5 @@ public class $ {
     /**
      * 拦截器栈执行器
      */
-    public static DewInterceptorProcessor interceptor = new DewInterceptorProcessor();
+    public static InterceptorProcessor interceptor = new InterceptorProcessor();
 }

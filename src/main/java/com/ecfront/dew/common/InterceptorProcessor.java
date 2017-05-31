@@ -14,13 +14,13 @@ import java.util.Map;
 /**
  * 拦截器栈执行器
  */
-public class DewInterceptorProcessor {
+public class InterceptorProcessor {
 
-    private static Logger logger = LoggerFactory.getLogger(DewInterceptorProcessor.class);
+    private static Logger logger = LoggerFactory.getLogger(InterceptorProcessor.class);
 
     private static Map<String, List<DewInterceptor<?>>> CONTAINER = new HashMap<>();
 
-    DewInterceptorProcessor() {
+    InterceptorProcessor() {
     }
 
     /**
