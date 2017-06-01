@@ -40,8 +40,7 @@ public class HttpHelperTest {
         Assert.assertEquals("1", $.json.toJson(result).get("form").get("a").asText());
         // post - file
         result = $.http.post("https://httpbin.org/post", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
-        System.out.println(result);
-        Assert.assertEquals("{\r\n  \"a\":1\r\n}", $.json.toJson(result).get("files").get("conf1.json").asText());
+        Assert.assertEquals("1", $.json.toJson($.json.toJson(result).get("files").get("conf1.json").asText()).get("a").asText());
         // put - data
         result = $.http.put("https://httpbin.org/put", "some data");
         Assert.assertEquals("some data", $.json.toJson(result).get("data").asText());
@@ -52,10 +51,10 @@ public class HttpHelperTest {
         Assert.assertEquals("1", $.json.toJson(result).get("form").get("a").asText());
         // put - file
         result = $.http.put("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
-        Assert.assertEquals("{\r\n  \"a\":1\r\n}", $.json.toJson(result).get("files").get("conf1.json").asText());
+        Assert.assertEquals("1", $.json.toJson($.json.toJson(result).get("files").get("conf1.json").asText()).get("a").asText());
         // put with head
         HttpHelper.WrapHead wrapHead = $.http.putWithHead("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
-        Assert.assertEquals("{\r\n  \"a\":1\r\n}", $.json.toJson(wrapHead.result).get("files").get("conf1.json").asText());
+        Assert.assertEquals("1", $.json.toJson($.json.toJson(result).get("files").get("conf1.json").asText()).get("a").asText());
         Assert.assertEquals("application/json", wrapHead.head.get("Content-Type"));
         // head
         Map<String, String> head = $.http.head("https://httpbin.org/get");
