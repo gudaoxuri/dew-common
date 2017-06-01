@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh_cn">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5.dev">
+<meta name="author" content="ECFront">
 <title>Dew Common — Java常用操作工具集</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -418,12 +419,45 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
-<body class="article">
+<body class="book toc2 toc-left">
 <div id="header">
+<h1>Dew Common — Java常用操作工具集</h1>
+<div class="details">
+<span id="author" class="author">ECFront</span><br>
+<span id="revnumber">version 1.3.0,</span>
+<span id="revdate">2017-6-1</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#truedew-common-java">1. Dew Common — Java常用操作工具集</a>
+<ul class="sectlevel2">
+<li><a href="#true-">1.1. 功能</a></li>
+<li><a href="#true--2">1.2. 使用</a>
+<ul class="sectlevel3">
+<li><a href="#truejson-java-json">1.2.1. Json与Java对象互转（$.json）</a></li>
+<li><a href="#truejava-bean-bean">1.2.2. Java Bean操作（$.bean）</a></li>
+<li><a href="#truejava-class-clazz">1.2.3. Java Class扫描操作（$.clazz）</a></li>
+<li><a href="#trueshell-shell">1.2.4. Shell脚本操作（$.shell()）</a></li>
+<li><a href="#true-encrypt">1.2.5. 加解密操作（$.encrypt）</a></li>
+<li><a href="#truehttp-http">1.2.6. Http操作（$.http）</a></li>
+<li><a href="#true-interceptor">1.2.7. 通用拦截器栈（$.interceptor）</a></li>
+<li><a href="#true-timer">1.2.8. 定时器操作（$.timer）</a></li>
+<li><a href="#true-file">1.2.9. 常用文件操作（$.file）</a></li>
+<li><a href="#true-field">1.2.10. 常用字段操作（$.field）</a></li>
+<li><a href="#true-resp">1.2.11. 响应处理模型（Resp）</a></li>
+<li><a href="#true-page">1.2.12. 分页模型（Page）</a></li>
+</ul>
+</li>
+<li><a href="#true--3">1.3. 功能禁用</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="truedew-common-java"><a class="anchor" href="#truedew-common-java"></a>Dew Common — Java常用操作工具集</h2>
+<h2 id="truedew-common-java"><a class="anchor" href="#truedew-common-java"></a>1. Dew Common — Java常用操作工具集</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
@@ -439,7 +473,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少地引入第三方包，做到通用、易用、精简。</p>
 </div>
 <div class="sect2">
-<h3 id="true-"><a class="anchor" href="#true-"></a>功能</h3>
+<h3 id="true-"><a class="anchor" href="#true-"></a>1.1. 功能</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -456,6 +490,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li>
 <p>加解密操作，Base64、MD5/BCrypt/SHA等对称算法和RSA等非对称算法</p>
+</li>
+<li>
+<p>Http操作，包含Get/Post/Put/Delete/Head/Options操作</p>
 </li>
 <li>
 <p>通用拦截器栈，前/后置、错误处理等</p>
@@ -482,7 +519,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect2">
-<h3 id="true--2"><a class="anchor" href="#true--2"></a>使用</h3>
+<h3 id="true--2"><a class="anchor" href="#true--2"></a>1.2. 使用</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -500,12 +537,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;parent&gt;
         &lt;groupId&gt;com.ecfront.dew&lt;/groupId&gt;
         &lt;artifactId&gt;common&lt;/artifactId&gt;
-        &lt;version&gt;1.2.0&lt;/version&gt;
+        &lt;version&gt;1.3.0&lt;/version&gt;
 &lt;/parent&gt;</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="truejson-java-json"><a class="anchor" href="#truejson-java-json"></a>Json与Java对象互转（$.json）</h4>
+<h4 id="truejson-java-json"><a class="anchor" href="#truejson-java-json"></a>1.2.1. Json与Java对象互转（$.json）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 将Json字符串转成JsonNode
@@ -554,7 +591,7 @@ static class JavaModel{
 </div>
 </div>
 <div class="sect3">
-<h4 id="truejava-bean-bean"><a class="anchor" href="#truejava-bean-bean"></a>Java Bean操作（$.bean）</h4>
+<h4 id="truejava-bean-bean"><a class="anchor" href="#truejava-bean-bean"></a>1.2.2. Java Bean操作（$.bean）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// Bean Copy
@@ -596,7 +633,7 @@ $.bean.setValue(user, "name", "gudaoxuri");</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="truejava-class-clazz"><a class="anchor" href="#truejava-class-clazz"></a>Java Class扫描操作（$.clazz）</h4>
+<h4 id="truejava-class-clazz"><a class="anchor" href="#truejava-class-clazz"></a>1.2.3. Java Class扫描操作（$.clazz）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 扫描获取指定包下符合条件的class类（此处要求包含Deprecated注解）
@@ -619,7 +656,19 @@ Set&lt;Class&lt;?&gt;&gt; resultInJar = $.clazz.scan("org.junit",null, new HashS
 </div>
 </div>
 <div class="sect3">
-<h4 id="trueshell-shell"><a class="anchor" href="#trueshell-shell"></a>Shell脚本操作（$.shell()）</h4>
+<h4 id="trueshell-shell"><a class="anchor" href="#trueshell-shell"></a>1.2.4. Shell脚本操作（$.shell()）</h4>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+此操作每次返回新实例！
+</td>
+</tr>
+</table>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">$.shell().execute(
@@ -655,14 +704,14 @@ Set&lt;Class&lt;?&gt;&gt; resultInJar = $.clazz.scan("org.junit",null, new HashS
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-更多示例见<code>ShellProcessorTest.java</code>
+更多示例见<code>ShellHelperTest.java</code>
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-encrypt"><a class="anchor" href="#true-encrypt"></a>加解密操作（$.encrypt）</h4>
+<h4 id="true-encrypt"><a class="anchor" href="#true-encrypt"></a>1.2.5. 加解密操作（$.encrypt）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 字符串 转 Base64
@@ -715,7 +764,75 @@ $.encrypt.Asymmetric.verify(publicKey, decryptByPub,
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-interceptor"><a class="anchor" href="#true-interceptor"></a>通用拦截器栈（$.interceptor）</h4>
+<h4 id="truehttp-http"><a class="anchor" href="#truehttp-http"></a>1.2.6. Http操作（$.http）</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// get
+String result = $.http.get("https://httpbin.org/get");
+// get 带 head
+result = $.http.get("https://httpbin.org/get", new HashMap&lt;String, String&gt;() {{
+    put("Customer-A", "AAA");
+    put("Accept", "json");
+}});
+// get 包含 head、Content-Type、编码、超时等信息
+result = $.http.get("https://httpbin.org/get", new HashMap&lt;String, String&gt;() {{
+    put("Customer-A", "AAA");
+    put("Accept", "json");
+}}, "application/json; charset=utf-8", "utf-8", 5000);
+// delete
+result = $.http.delete("https://httpbin.org/delete");
+Assert.assertEquals("httpbin.org", $.json.toJson(result).get("headers").get("Host").asText());
+// post - data
+result = $.http.post("https://httpbin.org/post", "some data");
+// post - form
+result = $.http.post("https://httpbin.org/post", new HashMap&lt;String, Object&gt;() {{
+    put("a", "1");
+}}, "application/x-www-form-urlencoded");
+// post - file
+result = $.http.post("https://httpbin.org/post", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+// put - data
+result = $.http.put("https://httpbin.org/put", "some data");
+// put - form
+result = $.http.put("https://httpbin.org/put", new HashMap&lt;String, Object&gt;() {{
+    put("a", "1");
+}}, "application/x-www-form-urlencoded");
+// put - file
+result = $.http.put("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+// put 返回带 head的内容，同样还有getWithHead、postWithHead、deleteWtihHead
+HttpHelper.WrapHead wrapHead = $.http.putWithHead("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+// head
+Map&lt;String, String&gt; head = $.http.head("https://httpbin.org/get");
+// options
+head = $.http.options("https://httpbin.org/get");</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+更多示例见<code>HttpHelperTest.java</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+还有一个<code>$.http(int maxTotal, int maxPerRoute)</code>方法，用于指定<code>整个连接池最大连接数</code>及<code>每个路由（域）的默认最大连接</code>，<code>$.http</code>是<code>$.http(200,20)</code>的语法糖。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="true-interceptor"><a class="anchor" href="#true-interceptor"></a>1.2.7. 通用拦截器栈（$.interceptor）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 没有注册拦截器的情况
@@ -805,7 +922,7 @@ public class InterceptorB implements DewInterceptor&lt;Obj&gt; {
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-timer"><a class="anchor" href="#true-timer"></a>定时器操作（$.timer）</h4>
+<h4 id="true-timer"><a class="anchor" href="#true-timer"></a>1.2.8. 定时器操作（$.timer）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 延迟任务
@@ -830,7 +947,7 @@ $.timer.cancel(taskId);</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-file"><a class="anchor" href="#true-file"></a>常用文件操作（$.file）</h4>
+<h4 id="true-file"><a class="anchor" href="#true-file"></a>1.2.9. 常用文件操作（$.file）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 根据classpath读取文件所有内容（jar包外路径优先），另外readAllByPath、readAllByFile、readAllByPathName等衍生方法
@@ -851,7 +968,7 @@ String conf=$.file.readAllByClassPath("conf1.json","UTF-8");</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-field"><a class="anchor" href="#true-field"></a>常用字段操作（$.field）</h4>
+<h4 id="true-field"><a class="anchor" href="#true-field"></a>1.2.10. 常用字段操作（$.field）</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 验证邮箱格式是否合法
@@ -892,7 +1009,7 @@ $.field.getProvinceByIdCard("330102199901015759");</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-resp"><a class="anchor" href="#true-resp"></a>响应处理模型（Resp）</h4>
+<h4 id="true-resp"><a class="anchor" href="#true-resp"></a>1.2.11. 响应处理模型（Resp）</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1046,7 +1163,7 @@ public static &lt;E&gt; Resp&lt;PageDTO&lt;E&gt;&gt; genericPage(Resp resp, Clas
 </div>
 </div>
 <div class="sect3">
-<h4 id="true-pagedto"><a class="anchor" href="#true-pagedto"></a>分页模型（PageDTO）</h4>
+<h4 id="true-page"><a class="anchor" href="#true-page"></a>1.2.12. 分页模型（Page）</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1090,12 +1207,61 @@ private List&lt;E&gt; objects;</code></pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="true--3"><a class="anchor" href="#true--3"></a>1.3. 功能禁用</h3>
+<div class="paragraph">
+<p>如果不需要某些功能可以在maven中排除以减少包体积</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;!--$.json dependency begin--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+    &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+    &lt;version&gt;${jackson.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--$.json dependency end--&gt;
+ &lt;!--$.bean dependency begin--&gt;
+ &lt;dependency&gt;
+     &lt;groupId&gt;commons-beanutils&lt;/groupId&gt;
+     &lt;artifactId&gt;commons-beanutils&lt;/artifactId&gt;
+     &lt;version&gt;${beanutils.version}&lt;/version&gt;
+ &lt;/dependency&gt;
+ &lt;!--$.bean dependency end--&gt;
+ &lt;!--$.encrypt dependency begin--&gt;
+ &lt;dependency&gt;
+     &lt;groupId&gt;org.mindrot&lt;/groupId&gt;
+     &lt;artifactId&gt;jbcrypt&lt;/artifactId&gt;
+     &lt;version&gt;${jbcrypt.version}&lt;/version&gt;
+ &lt;/dependency&gt;
+ &lt;!--$.encrypt dependency end--&gt;
+ &lt;!--$.http dependency begin--&gt;
+ &lt;dependency&gt;
+     &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+     &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+     &lt;version&gt;${httpclient.version}&lt;/version&gt;
+ &lt;/dependency&gt;
+ &lt;dependency&gt;
+     &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+     &lt;artifactId&gt;httpmime&lt;/artifactId&gt;
+     &lt;version&gt;${httpclient.version}&lt;/version&gt;
+ &lt;/dependency&gt;
+ &lt;dependency&gt;
+     &lt;groupId&gt;org.jooq&lt;/groupId&gt;
+     &lt;artifactId&gt;joox&lt;/artifactId&gt;
+     &lt;version&gt;${joox.version}&lt;/version&gt;
+ &lt;/dependency&gt;
+ &lt;!--$.http dependency end--&gt;</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-05-31 14:57:21
+Version 1.3.0<br>
+Last updated 2017-06-01 13:30:50
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
