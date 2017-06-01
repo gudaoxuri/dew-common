@@ -238,10 +238,10 @@ public class Resp<E> implements Serializable {
      * @param bodyClazz 目标body类型
      * @return 目标响应
      */
-    public static <E> Resp<PageDTO<E>> genericPage(Resp resp, Class<E> bodyClazz) {
-        PageDTO<E> body = null;
+    public static <E> Resp<Page<E>> genericPage(Resp resp, Class<E> bodyClazz) {
+        Page<E> body = null;
         if (resp.ok() && resp.getBody() != null) {
-            body = $.json.toObject(resp.getBody(), PageDTO.class);
+            body = $.json.toObject(resp.getBody(), Page.class);
             body.setObjects(body.getObjects().stream().map(i -> $.json.toObject(i, bodyClazz)).collect(Collectors.toList()));
         }
         return new Resp<>(resp.getCode(), resp.getMessage(), body);

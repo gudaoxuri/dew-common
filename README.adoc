@@ -14,6 +14,7 @@ Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少
 . Java Class扫描操作，根据注解或名称过滤
 . Shell脚本操作，Shell内容获取、成功捕获及进度报告等
 . 加解密操作，Base64、MD5/BCrypt/SHA等对称算法和RSA等非对称算法
+. Http操作，包含Get/Post/Put/Delete/Head/Options操作
 . 通用拦截器栈，前/后置、错误处理等
 . 定时器操作，定时和周期性任务
 . 常用文件操作，根据不同情况获取文件内容
@@ -31,7 +32,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.2.0</version>
+        <version>1.3.0</version>
 </parent>
 ----
 
@@ -118,6 +119,8 @@ TIP: 更多示例见`ClassScanHelperTest.java`
 
 ==== Shell脚本操作（$.shell()）
 
+IMPORTANT: 此操作每次返回新实例！
+
 [source,java]
 ----
 $.shell().execute(
@@ -146,7 +149,7 @@ $.shell().execute(
 );
 ----
 
-TIP: 更多示例见`ShellProcessorTest.java`
+TIP: 更多示例见`ShellHelperTest.java`
 
 ==== 加解密操作（$.encrypt）
 
@@ -189,6 +192,53 @@ $.encrypt.Asymmetric.verify(publicKey, decryptByPub,
 ----
 
 TIP: 更多示例见`EncryptHelperTest.java`
+
+==== Http操作（$.http）
+
+[source,java]
+----
+// get
+String result = $.http.get("https://httpbin.org/get");
+// get 带 head
+result = $.http.get("https://httpbin.org/get", new HashMap<String, String>() {{
+    put("Customer-A", "AAA");
+    put("Accept", "json");
+}});
+// get 包含 head、Content-Type、编码、超时等信息
+result = $.http.get("https://httpbin.org/get", new HashMap<String, String>() {{
+    put("Customer-A", "AAA");
+    put("Accept", "json");
+}}, "application/json; charset=utf-8", "utf-8", 5000);
+// delete
+result = $.http.delete("https://httpbin.org/delete");
+Assert.assertEquals("httpbin.org", $.json.toJson(result).get("headers").get("Host").asText());
+// post - data
+result = $.http.post("https://httpbin.org/post", "some data");
+// post - form
+result = $.http.post("https://httpbin.org/post", new HashMap<String, Object>() {{
+    put("a", "1");
+}}, "application/x-www-form-urlencoded");
+// post - file
+result = $.http.post("https://httpbin.org/post", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+// put - data
+result = $.http.put("https://httpbin.org/put", "some data");
+// put - form
+result = $.http.put("https://httpbin.org/put", new HashMap<String, Object>() {{
+    put("a", "1");
+}}, "application/x-www-form-urlencoded");
+// put - file
+result = $.http.put("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+// put 返回带 head的内容，同样还有getWithHead、postWithHead、deleteWtihHead
+HttpHelper.WrapHead wrapHead = $.http.putWithHead("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+// head
+Map<String, String> head = $.http.head("https://httpbin.org/get");
+// options
+head = $.http.options("https://httpbin.org/get");
+----
+
+TIP: 更多示例见`HttpHelperTest.java`
+
+NOTE: 还有一个`$.http(int maxTotal, int maxPerRoute)`方法，用于指定`整个连接池最大连接数`及`每个路由（域）的默认最大连接`，`$.http`是`$.http(200,20)`的语法糖。
 
 ==== 通用拦截器栈（$.interceptor）
 
@@ -467,7 +517,7 @@ public static <E> Resp<List<E>> genericList(Resp resp, Class<E> bodyClazz);
 public static <E> Resp<PageDTO<E>> genericPage(Resp resp, Class<E> bodyClazz);
 ----
 
-==== 分页模型（PageDTO）
+==== 分页模型（Page）
 
 [NOTE]
 ====
@@ -499,4 +549,50 @@ private long recordTotal;
  * 实际对象
  */
 private List<E> objects;
+----
+
+=== 功能禁用
+
+如果不需要某些功能可以在maven中排除以减少包体积
+
+[source,xml]
+----
+<!--$.json dependency begin-->
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>${jackson.version}</version>
+</dependency>
+<!--$.json dependency end-->
+ <!--$.bean dependency begin-->
+ <dependency>
+     <groupId>commons-beanutils</groupId>
+     <artifactId>commons-beanutils</artifactId>
+     <version>${beanutils.version}</version>
+ </dependency>
+ <!--$.bean dependency end-->
+ <!--$.encrypt dependency begin-->
+ <dependency>
+     <groupId>org.mindrot</groupId>
+     <artifactId>jbcrypt</artifactId>
+     <version>${jbcrypt.version}</version>
+ </dependency>
+ <!--$.encrypt dependency end-->
+ <!--$.http dependency begin-->
+ <dependency>
+     <groupId>org.apache.httpcomponents</groupId>
+     <artifactId>httpclient</artifactId>
+     <version>${httpclient.version}</version>
+ </dependency>
+ <dependency>
+     <groupId>org.apache.httpcomponents</groupId>
+     <artifactId>httpmime</artifactId>
+     <version>${httpclient.version}</version>
+ </dependency>
+ <dependency>
+     <groupId>org.jooq</groupId>
+     <artifactId>joox</artifactId>
+     <version>${joox.version}</version>
+ </dependency>
+ <!--$.http dependency end-->
 ----

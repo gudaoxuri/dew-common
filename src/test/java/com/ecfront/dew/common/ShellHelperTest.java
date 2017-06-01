@@ -2,7 +2,7 @@ package com.ecfront.dew.common;
 
 import org.junit.Test;
 
-public class ShellProcessorTest {
+public class ShellHelperTest {
 
     @Test
     public void testShell() throws Exception {

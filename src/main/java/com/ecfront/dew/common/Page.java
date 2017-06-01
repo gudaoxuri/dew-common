@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 分页对象
  */
-public class PageDTO<E> implements Serializable {
+public class Page<E> implements Serializable {
 
     /**
      * 当前页，从1开始
@@ -29,8 +29,8 @@ public class PageDTO<E> implements Serializable {
      */
     private List<E> objects;
 
-    public static <S> PageDTO<S> build(long pageNumber, long pageSize, long recordTotal, List<S> objects) {
-        PageDTO<S> dto = new PageDTO<>();
+    public static <S> Page<S> build(long pageNumber, long pageSize, long recordTotal, List<S> objects) {
+        Page<S> dto = new Page<>();
         dto.pageNumber = pageNumber;
         dto.pageSize = pageSize;
         dto.recordTotal = recordTotal;

@@ -53,12 +53,28 @@ public class $ {
     /**
      * Shell脚本操作
      */
-    public static ShellProcessor shell() {
-        return new ShellProcessor();
+    public static ShellHelper shell() {
+        return new ShellHelper();
     }
 
     /**
      * 拦截器栈执行器
      */
-    public static InterceptorProcessor interceptor = new InterceptorProcessor();
+    public static InterceptorHelper interceptor = new InterceptorHelper();
+
+    /**
+     * Http操作
+     */
+    public static HttpHelper http = new HttpHelper();
+
+    /**
+     * Http操作
+     *
+     * @param maxTotal    整个连接池最大连接数
+     * @param maxPerRoute 每个路由（域）的默认最大连接
+     */
+    public static HttpHelper http(int maxTotal, int maxPerRoute) {
+        return new HttpHelper(maxTotal, maxPerRoute);
+    }
+
 }

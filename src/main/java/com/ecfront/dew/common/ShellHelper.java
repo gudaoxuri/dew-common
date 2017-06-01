@@ -14,11 +14,11 @@ import java.util.concurrent.Future;
 /**
  * Shell脚本操作
  */
-public class ShellProcessor {
+public class ShellHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShellProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(ShellHelper.class);
 
-    ShellProcessor(){}
+    ShellHelper(){}
 
     private volatile String taskId;
     private volatile String successFlag;
