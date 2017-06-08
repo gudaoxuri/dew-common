@@ -2,14 +2,13 @@ package com.ecfront.dew.common.interceptor;
 
 import com.ecfront.dew.common.Resp;
 
-import java.util.Map;
-
 /**
  * 拦截器栈定义
  *
- * @param <E> 对象的类型
+ * @param <I> 输入对象的类型
+ * @param <O> 输出对象的类型
  */
-public interface DewInterceptor<E> {
+public interface DewInterceptor<I, O> {
 
     /**
      * 获取拦截器所属类型，用于区别不同的栈
@@ -24,28 +23,25 @@ public interface DewInterceptor<E> {
     /**
      * 前置执行
      *
-     * @param obj     对象
-     * @param context 参数
+     * @param context 操作上下文
      * @return 执行后结果
      */
-    Resp<DewInterceptRespBody<E>> before(E obj, Map<String, Object> context);
+    Resp<DewInterceptContext<I, O>> before(DewInterceptContext<I, O> context);
 
     /**
      * 后置执行
      *
-     * @param obj     对象
-     * @param context 参数
+     * @param context 操作上下文
      * @return 执行后结果
      */
-    Resp<DewInterceptRespBody<E>> after(E obj, Map<String, Object> context);
+    Resp<DewInterceptContext<I, O>> after(DewInterceptContext<I, O> context);
 
     /**
      * 错误处理，在前置/后置执行错误时触发，多用于资源回收
      *
-     * @param obj     对象
-     * @param context 参数
+     * @param context 操作上下文
      */
-    default void error(E obj, Map<String, Object> context) {
+    default void error(DewInterceptContext<I, O> context) {
         // Do Nothing.
     }
 

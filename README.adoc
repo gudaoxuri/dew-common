@@ -32,7 +32,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.3.2</version>
+        <version>1.3.3</version>
 </parent>
 ----
 
@@ -245,76 +245,33 @@ NOTE: 还有一个`$.http(int maxTotal, int maxPerRoute)`方法，用于指定`�
 [source,java]
 ----
 // 没有注册拦截器的情况
-Resp<DewInterceptRespBody<Obj>> resp = $.interceptor.process("none", new Obj("1"), new HashMap<>(), (obj, context) ->
-        Resp.success(DewInterceptRespBody.build(obj, context))
-);
+Resp<DewInterceptContext<Obj, Obj>> resp =
+        $.interceptor.process("none", new Obj("1"), new HashMap<>(), context -> {
+            try {
+                // 业务逻辑，只做简单将input对象copy到output对象
+                context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
+                return Resp.success(context);
+            } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+                return Resp.serverError("");
+            }
+        });
 Assert.assertTrue(resp.ok());
-Assert.assertEquals("1", resp.getBody().getObj().getF());
-
+Assert.assertEquals("1", resp.getBody().getOutput().getF());
 // 注册了一个拦截器A
 $.interceptor.register("test", new InterceptorA());
-resp = $.interceptor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
-        Resp.success(DewInterceptRespBody.build(obj, context))
-);
+resp = $.interceptor.process("test", new Obj("1"), new HashMap<>(), context -> {
+    ... 同上，只做简单将input对象copy到output对象
+});
 Assert.assertTrue(resp.ok());
-Assert.assertEquals("3", resp.getBody().getObj().getF());
-
+Assert.assertEquals("2", resp.getBody().getInput().getF());
+Assert.assertEquals("3", resp.getBody().getOutput().getF());
 // 注册了另一个拦截器B，假设B执行会报错
 $.interceptor.register("test", new InterceptorB());
-resp = $.interceptor.process("test", new Obj("1"), new HashMap<>(), (obj, context) ->
-        Resp.success(DewInterceptRespBody.build(obj, context))
-);
+resp = $.interceptor.process("test", new Obj("11"), new HashMap<>(), context -> {
+    ... 同上，只做简单将input对象copy到output对象
+});
 Assert.assertTrue(!resp.ok());
-
-// 定义拦截器A
-public class InterceptorA implements DewInterceptor<Obj> {
-    @Override
-    public String getCategory() {
-        return "test";
-    }
-    @Override
-    public String getName() {
-        return "A";
-    }
-    @Override
-    public Resp<DewInterceptRespBody<Obj>> before(Obj obj, Map context) {
-        // 前置拦截方法把值修改成2
-        obj.setF("2");
-        return Resp.success(DewInterceptRespBody.build(obj, context));
-    }
-    @Override
-    public Resp<DewInterceptRespBody<Obj>> after(Obj obj, Map context) {
-        // 后置拦截方法把值修改成3
-        obj.setF("3");
-        return Resp.success(DewInterceptRespBody.build(obj, context));
-    }
-}
-
-// 定义拦截器B
-public class InterceptorB implements DewInterceptor<Obj> {
-    @Override
-    public String getCategory() {
-        return "test";
-    }
-    @Override
-    public String getName() {
-        return "B";
-    }
-    @Override
-    public Resp<DewInterceptRespBody<Obj>> before(Obj obj, Map context) {
-        // 前置拦截方法报错
-        return Resp.badRequest("some error");
-    }
-    @Override
-    public Resp<DewInterceptRespBody<Obj>> after(Obj obj, Map context) {
-        return Resp.success(DewInterceptRespBody.build(obj, context));
-    }
-    @Override
-    public void error(Obj obj, Map<String, Object> context) {
-        // 报错后会统一调用此方法
-        obj.setF("error");
-    }
-}
 ----
 
 TIP: 更多示例见`InterceptorTest.java`
