@@ -197,8 +197,19 @@ public class Resp<E> implements Serializable {
      * @param resp 原响应对象
      * @return 转换后的响应对象
      */
-    public static Resp<Void> error(Resp<?> resp) {
+    public static <E> Resp<E> error(Resp<?> resp) {
         return new Resp<>(resp.getCode(), resp.getMessage(), null);
+    }
+
+    /**
+     * 响应body转换，将body类型A转换成类型B
+     *
+     * @param resp      源响应
+     * @param bodyClazz 目标body类型
+     * @return 目标响应
+     */
+    public static <E> Resp<E> generic(String resp, Class<E> bodyClazz) {
+        return generic($.json.toObject(resp, Resp.class), bodyClazz);
     }
 
     /**
@@ -223,12 +234,34 @@ public class Resp<E> implements Serializable {
      * @param bodyClazz 目标body类型
      * @return 目标响应
      */
+    public static <E> Resp<List<E>> genericList(String resp, Class<E> bodyClazz) {
+        return genericList($.json.toObject(resp, Resp.class), bodyClazz);
+    }
+
+    /**
+     * 响应body转换(列表)，将body类型A转换成类型B
+     *
+     * @param resp      源响应
+     * @param bodyClazz 目标body类型
+     * @return 目标响应
+     */
     public static <E> Resp<List<E>> genericList(Resp resp, Class<E> bodyClazz) {
         List<E> body = null;
         if (resp.ok() && resp.getBody() != null) {
             body = $.json.toList(resp.getBody(), bodyClazz);
         }
         return new Resp<>(resp.getCode(), resp.getMessage(), body);
+    }
+
+    /**
+     * 响应body转换(分页)，将body类型A转换成类型B
+     *
+     * @param resp      源响应
+     * @param bodyClazz 目标body类型
+     * @return 目标响应
+     */
+    public static <E> Resp<Page<E>> genericPage(String resp, Class<E> bodyClazz) {
+        return genericPage($.json.toObject(resp, Resp.class), bodyClazz);
     }
 
     /**

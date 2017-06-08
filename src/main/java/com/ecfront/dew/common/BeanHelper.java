@@ -16,18 +16,29 @@ public class BeanHelper {
 
     private static NullAwareBeanUtilsBean copyPropertiesAdapter = new NullAwareBeanUtilsBean();
 
-    BeanHelper(){}
+    BeanHelper() {
+    }
 
     /**
      * Java Bean Copy
      *
      * @param dest 目标Bean
      * @param ori  源Bean
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
      */
     public void copyProperties(Object dest, Object ori) throws InvocationTargetException, IllegalAccessException {
         copyPropertiesAdapter.copyProperties(dest, ori);
+    }
+
+    /**
+     * Java Bean Copy
+     *
+     * @param ori       源Bean
+     * @param destClazz 目标Bean类型
+     */
+    public <T> T copyProperties(Object ori, Class<T> destClazz) throws InvocationTargetException, IllegalAccessException, InstantiationException {
+        T dest = destClazz.newInstance();
+        copyProperties(dest, ori);
+        return dest;
     }
 
     /**

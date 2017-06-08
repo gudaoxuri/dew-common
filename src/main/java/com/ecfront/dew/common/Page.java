@@ -2,6 +2,8 @@ package com.ecfront.dew.common;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 分页对象
@@ -37,6 +39,18 @@ public class Page<E> implements Serializable {
         dto.pageTotal = (recordTotal + pageSize - 1) / pageSize;
         dto.objects = objects;
         return dto;
+    }
+
+    public <T> Page<T> convert(Function<E, T> converter) {
+        Page<T> page = new Page<>();
+        page.setPageNumber(this.getPageNumber());
+        page.setPageSize(this.getPageSize());
+        page.setPageTotal(this.getPageTotal());
+        page.setRecordTotal(this.getRecordTotal());
+        page.setObjects(this.getObjects().stream()
+                .map(converter)
+                .collect(Collectors.toList()));
+        return page;
     }
 
     public long getPageNumber() {

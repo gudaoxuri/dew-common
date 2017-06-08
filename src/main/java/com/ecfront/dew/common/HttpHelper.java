@@ -30,8 +30,11 @@ import org.w3c.dom.Document;
 
 import javax.net.ssl.SSLContext;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.SocketException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -76,15 +79,15 @@ public class HttpHelper {
 
     private CloseableHttpClient httpClient = null;
 
-    public String get(String url) throws Exception {
+    public String get(String url) throws IOException {
         return get(url, null, null, null, 0);
     }
 
-    public String get(String url, Map<String, String> header) throws Exception {
+    public String get(String url, Map<String, String> header) throws IOException {
         return get(url, header, null, null, 0);
     }
 
-    public String get(String url, String contentType) throws Exception {
+    public String get(String url, String contentType) throws IOException {
         return get(url, null, contentType, null, 0);
     }
 
@@ -97,19 +100,19 @@ public class HttpHelper {
      * @param charset     请求与返回内容编码
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      */
-    public String get(String url, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public String get(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("GET", url, null, header, contentType, charset, timeout, 0).result;
     }
 
-    public WrapHead getWithHead(String url) throws Exception {
+    public WrapHead getWithHead(String url) throws IOException {
         return getWithHead(url, null, null, null, 0);
     }
 
-    public WrapHead getWithHead(String url, Map<String, String> header) throws Exception {
+    public WrapHead getWithHead(String url, Map<String, String> header) throws IOException {
         return getWithHead(url, header, null, null, 0);
     }
 
-    public WrapHead getWithHead(String url, String contentType) throws Exception {
+    public WrapHead getWithHead(String url, String contentType) throws IOException {
         return getWithHead(url, null, contentType, null, 0);
     }
 
@@ -122,19 +125,19 @@ public class HttpHelper {
      * @param charset     请求与返回内容编码
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      */
-    public WrapHead getWithHead(String url, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public WrapHead getWithHead(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("GET", url, null, header, contentType, charset, timeout, 0);
     }
 
-    public String post(String url, Object body) throws Exception {
+    public String post(String url, Object body) throws IOException {
         return post(url, body, null, null, null, 0);
     }
 
-    public String post(String url, Object body, Map<String, String> header) throws Exception {
+    public String post(String url, Object body, Map<String, String> header) throws IOException {
         return post(url, body, header, null, null, 0);
     }
 
-    public String post(String url, Object body, String contentType) throws Exception {
+    public String post(String url, Object body, String contentType) throws IOException {
         return post(url, body, null, contentType, null, 0);
     }
 
@@ -153,19 +156,19 @@ public class HttpHelper {
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      * @return 返回结果
      */
-    public String post(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public String post(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("POST", url, body, header, contentType, charset, timeout, 0).result;
     }
 
-    public WrapHead postWithHead(String url, Object body) throws Exception {
+    public WrapHead postWithHead(String url, Object body) throws IOException {
         return postWithHead(url, body, null, null, null, 0);
     }
 
-    public WrapHead postWithHead(String url, Object body, Map<String, String> header) throws Exception {
+    public WrapHead postWithHead(String url, Object body, Map<String, String> header) throws IOException {
         return postWithHead(url, body, header, null, null, 0);
     }
 
-    public WrapHead postWithHead(String url, Object body, String contentType) throws Exception {
+    public WrapHead postWithHead(String url, Object body, String contentType) throws IOException {
         return postWithHead(url, body, null, contentType, null, 0);
     }
 
@@ -184,19 +187,19 @@ public class HttpHelper {
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      * @return 返回结果
      */
-    public WrapHead postWithHead(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public WrapHead postWithHead(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("POST", url, body, header, contentType, charset, timeout, 0);
     }
 
-    public String put(String url, Object body) throws Exception {
+    public String put(String url, Object body) throws IOException {
         return put(url, body, null, null, null, 0);
     }
 
-    public String put(String url, Object body, Map<String, String> header) throws Exception {
+    public String put(String url, Object body, Map<String, String> header) throws IOException {
         return put(url, body, header, null, null, 0);
     }
 
-    public String put(String url, Object body, String contentType) throws Exception {
+    public String put(String url, Object body, String contentType) throws IOException {
         return put(url, body, null, contentType, null, 0);
     }
 
@@ -215,19 +218,19 @@ public class HttpHelper {
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      * @return 返回结果
      */
-    public String put(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public String put(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("PUT", url, body, header, contentType, charset, timeout, 0).result;
     }
 
-    public WrapHead putWithHead(String url, Object body) throws Exception {
+    public WrapHead putWithHead(String url, Object body) throws IOException {
         return putWithHead(url, body, null, null, null, 0);
     }
 
-    public WrapHead putWithHead(String url, Object body, Map<String, String> header) throws Exception {
+    public WrapHead putWithHead(String url, Object body, Map<String, String> header) throws IOException {
         return putWithHead(url, body, header, null, null, 0);
     }
 
-    public WrapHead putWithHead(String url, Object body, String contentType) throws Exception {
+    public WrapHead putWithHead(String url, Object body, String contentType) throws IOException {
         return putWithHead(url, body, null, contentType, null, 0);
     }
 
@@ -246,19 +249,19 @@ public class HttpHelper {
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      * @return 返回结果
      */
-    public WrapHead putWithHead(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public WrapHead putWithHead(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("PUT", url, body, header, contentType, charset, timeout, 0);
     }
 
-    public String delete(String url) throws Exception {
+    public String delete(String url) throws IOException {
         return delete(url, null, null, null, 0);
     }
 
-    public String delete(String url, Map<String, String> header) throws Exception {
+    public String delete(String url, Map<String, String> header) throws IOException {
         return delete(url, header, null, null, 0);
     }
 
-    public String delete(String url, String contentType) throws Exception {
+    public String delete(String url, String contentType) throws IOException {
         return delete(url, null, contentType, null, 0);
     }
 
@@ -271,19 +274,19 @@ public class HttpHelper {
      * @param charset     请求与返回内容编码
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      */
-    public String delete(String url, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public String delete(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("DELETE", url, null, header, contentType, charset, timeout, 0).result;
     }
 
-    public WrapHead deleteWithHead(String url) throws Exception {
+    public WrapHead deleteWithHead(String url) throws IOException {
         return deleteWithHead(url, null, null, null, 0);
     }
 
-    public WrapHead deleteWithHead(String url, Map<String, String> header) throws Exception {
+    public WrapHead deleteWithHead(String url, Map<String, String> header) throws IOException {
         return deleteWithHead(url, header, null, null, 0);
     }
 
-    public WrapHead deleteWithHead(String url, String contentType) throws Exception {
+    public WrapHead deleteWithHead(String url, String contentType) throws IOException {
         return deleteWithHead(url, null, contentType, null, 0);
     }
 
@@ -296,19 +299,19 @@ public class HttpHelper {
      * @param charset     请求与返回内容编码
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      */
-    public WrapHead deleteWithHead(String url, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public WrapHead deleteWithHead(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("DELETE", url, null, header, contentType, charset, timeout, 0);
     }
 
-    public Map<String, String> head(String url) throws Exception {
+    public Map<String, String> head(String url) throws IOException {
         return head(url, null, null, null, 0);
     }
 
-    public Map<String, String> head(String url, Map<String, String> header) throws Exception {
+    public Map<String, String> head(String url, Map<String, String> header) throws IOException {
         return head(url, header, null, null, 0);
     }
 
-    public Map<String, String> head(String url, String contentType) throws Exception {
+    public Map<String, String> head(String url, String contentType) throws IOException {
         return head(url, null, contentType, null, 0);
     }
 
@@ -321,19 +324,19 @@ public class HttpHelper {
      * @param charset     请求与返回内容编码
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      */
-    public Map<String, String> head(String url, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public Map<String, String> head(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("HEAD", url, null, header, contentType, charset, timeout, 0).head;
     }
 
-    public Map<String, String> options(String url) throws Exception {
+    public Map<String, String> options(String url) throws IOException {
         return options(url, null, null, null, 0);
     }
 
-    public Map<String, String> options(String url, Map<String, String> header) throws Exception {
+    public Map<String, String> options(String url, Map<String, String> header) throws IOException {
         return options(url, header, null, null, 0);
     }
 
-    public Map<String, String> options(String url, String contentType) throws Exception {
+    public Map<String, String> options(String url, String contentType) throws IOException {
         return options(url, null, contentType, null, 0);
     }
 
@@ -346,7 +349,7 @@ public class HttpHelper {
      * @param charset     请求与返回内容编码
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      */
-    public Map<String, String> options(String url, Map<String, String> header, String contentType, String charset, int timeout) throws Exception {
+    public Map<String, String> options(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("OPTIONS", url, null, header, contentType, charset, timeout, 0).head;
     }
 
@@ -367,7 +370,7 @@ public class HttpHelper {
      * @param retry       重试次数
      * @return 返回结果
      */
-    WrapHead request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout, int retry) throws Exception {
+    WrapHead request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout, int retry) throws IOException {
         if (header == null) {
             header = new HashMap<>();
         }
@@ -403,11 +406,13 @@ public class HttpHelper {
         if (timeout != 0) {
             httpMethod.setConfig(RequestConfig.custom().setSocketTimeout(timeout).setConnectTimeout(timeout).build());
         }
-        header.forEach(httpMethod::addHeader);
+        for (Map.Entry<String, String> entry : header.entrySet()) {
+            httpMethod.addHeader(entry.getKey(), URLEncoder.encode(entry.getValue(), charset));
+        }
         if (contentType != null) {
             httpMethod.addHeader("Content-Type", contentType);
         }
-        logger.debug("HTTP [" + method + "]" + url);
+        logger.trace("HTTP [" + method + "]" + url);
         if (body != null) {
             HttpEntity entity;
             switch (contentType.toLowerCase()) {
@@ -458,18 +463,25 @@ public class HttpHelper {
                 wrapHead.result = "";
             }
             wrapHead.head = Arrays.stream(response.getAllHeaders()).collect(Collectors.toMap(Header::getName, Header::getValue));
+            for (Map.Entry<String, String> entry : wrapHead.head.entrySet()) {
+                entry.setValue(URLDecoder.decode(entry.getValue(), charset));
+            }
             return wrapHead;
         } catch (SocketException | ConnectTimeoutException | NoHttpResponseException e) {
             // 同络错误重试5次
             if (retry <= 5) {
-                Thread.sleep(1000 * retry);
+                try {
+                    Thread.sleep(1000 * retry);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
                 logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + retry + 1 + ".");
                 return request(method, url, body, header, contentType, charset, timeout, retry + 1);
             } else {
                 logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + retry + 1 + ".");
                 throw e;
             }
-        } catch (Throwable e) {
+        } catch (IOException e) {
             logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + retry + 1 + ".");
             throw e;
         }
