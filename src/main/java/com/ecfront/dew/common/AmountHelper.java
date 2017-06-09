@@ -1,6 +1,5 @@
 package com.ecfront.dew.common;
 
-import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +42,7 @@ public class AmountHelper {
         }
         String integer = matcher.group(1); // 整数部分
         String fraction = matcher.group(2); // 小数部分
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         if (!integer.equals("0")) {
             sb.append(integer2rmb(integer)).append(UNITS[0]); // 整数部分
         }
@@ -54,13 +53,7 @@ public class AmountHelper {
         } else {
             sb.append(fraction2rmb(fraction)); // 小数部分
         }
-        String result = "";
-        try {
-            result = new String(sb.toString().getBytes(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return result;
+        return sb.toString();
     }
 
     // 将金额小数部分转换为中文大写

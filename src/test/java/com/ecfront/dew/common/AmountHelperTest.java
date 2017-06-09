@@ -7,11 +7,11 @@ public class AmountHelperTest {
 
     @Test
     public void testConvert() throws Exception {
+        Assert.assertEquals("零元整", $.amount.convert("0.00"));
         Assert.assertEquals("壹仟元整", $.amount.convert("1000"));
         Assert.assertEquals("壹仟元整", $.amount.convert("1000.0"));
         Assert.assertEquals("壹仟元壹角", $.amount.convert("1000.1"));
         Assert.assertEquals("壹仟元整", $.amount.convert("1000.00"));
-        Assert.assertEquals("零元整", $.amount.convert("0.00"));
 
         Assert.assertEquals("壹万陆仟肆佰零玖元零贰分", $.amount.convert("16,409.02"));
         Assert.assertEquals("壹仟肆佰零玖元伍角", $.amount.convert("1,409.50"));
