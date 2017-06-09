@@ -77,4 +77,9 @@ public class $ {
         return new HttpHelper(maxTotal, maxPerRoute);
     }
 
+    /**
+     * 金额操作
+     */
+    public static AmountHelper amount = new AmountHelper();
+
 }

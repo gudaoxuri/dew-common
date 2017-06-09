@@ -15,6 +15,7 @@ Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少
 . Shell脚本操作，Shell内容获取、成功捕获及进度报告等
 . 加解密操作，Base64、MD5/BCrypt/SHA等对称算法和RSA等非对称算法
 . Http操作，包含Get/Post/Put/Delete/Head/Options操作
+. 金额操作，金额转大写操作
 . 通用拦截器栈，前/后置、错误处理等
 . 定时器操作，定时和周期性任务
 . 常用文件操作，根据不同情况获取文件内容
@@ -299,6 +300,16 @@ String conf=$.file.readAllByClassPath("conf1.json","UTF-8");
 ----
 
 TIP: 更多示例见`FileHelperTest.java`
+
+==== 常用字段操作（$.amount）
+
+[source,java]
+----
+// 转换成中文大写:壹仟贰佰叁拾肆亿伍仟陆佰柒拾捌万玖仟零壹拾贰元叁角肆分
+$.amount.convert("1234,5678,9012.34");
+----
+
+TIP: 更多示例见`AmountHelperTest.java`
 
 ==== 常用字段操作（$.field）
 
