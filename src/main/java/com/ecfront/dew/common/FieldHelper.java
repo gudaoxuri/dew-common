@@ -10,15 +10,26 @@ import java.util.regex.Pattern;
  */
 public class FieldHelper {
 
-    private static final Pattern EMAIL_ADDRESS_REGEX =
+    private static final Pattern EMAIL_ADDRESS_PATTERN =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]*[A-Z0-9]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern MOBILE_REGEX =
+    private static final Pattern MOBILE_PATTERN =
             Pattern.compile("^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
 
-    private static final Pattern CHINESE_REGEX =
+    private static final Pattern CHINESE_PATTERN =
             Pattern.compile("^[\u4e00-\u9fa5]+$");
 
+    private static final Pattern IPV4_PATTERN =
+            Pattern.compile(
+                    "^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
+
+    private static final Pattern IPV6_STD_PATTERN =
+            Pattern.compile(
+                    "^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
+
+    private static final Pattern IPV6_HEX_COMPRESSED_PATTERN =
+            Pattern.compile(
+                    "^((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)$");
 
     FieldHelper() {
     }
@@ -29,7 +40,7 @@ public class FieldHelper {
      * @param email 邮件
      */
     public boolean validateEmail(String email) {
-        return EMAIL_ADDRESS_REGEX.matcher(email).find();
+        return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
     /**
@@ -38,7 +49,7 @@ public class FieldHelper {
      * @param mobile 手机号
      */
     public boolean validateMobile(String mobile) {
-        return MOBILE_REGEX.matcher(mobile).find();
+        return MOBILE_PATTERN.matcher(mobile).matches();
     }
 
     /**
@@ -50,13 +61,40 @@ public class FieldHelper {
         return IdcardUtils.validateCard(idNumber);
     }
 
+
+    /**
+     * 验证是否是IPv4
+     *
+     * @param str 待校验字符串
+     */
+    public boolean isIPv4Address(String str) {
+        return IPV4_PATTERN.matcher(str).matches();
+    }
+
+    /**
+     * 验证是否是IPv6
+     *
+     * @param str 待校验字符串
+     */
+    public boolean isIPv6Address(String str) {
+        return isIPv6StdAddress(str) || isIPv6HexCompressedAddress(str);
+    }
+
+    private boolean isIPv6StdAddress(String str) {
+        return IPV6_STD_PATTERN.matcher(str).matches();
+    }
+
+    private boolean isIPv6HexCompressedAddress(String str) {
+        return IPV6_HEX_COMPRESSED_PATTERN.matcher(str).matches();
+    }
+
     /**
      * 是否是汉字
      *
-     * @param str 字符串
+     * @param str 待校验字符串
      */
     public boolean isChinese(String str) {
-        return CHINESE_REGEX.matcher(str).find();
+        return CHINESE_PATTERN.matcher(str).matches();
     }
 
     /**
