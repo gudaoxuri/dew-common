@@ -46,8 +46,8 @@ public class EncryptHelper {
     /**
      * 数组 转 Base64
      */
-    public String encodeBytesToBase64(byte[] str, String encode) throws UnsupportedEncodingException {
-        return new String(Base64.getEncoder().encode(str), encode);
+    public String encodeBytesToBase64(byte[] str) throws UnsupportedEncodingException {
+        return new String(Base64.getEncoder().encode(str));
     }
 
     /**
@@ -120,16 +120,15 @@ public class EncryptHelper {
          *
          * @param algorithm 非对称算法，如 RSA
          * @param length    密钥长度
-         * @param encode    转Base64的编码
          * @return PublicKey -> Base64编码后的值  ， PrivateKey -> Base64编码后的值
          */
-        public Map<String, String> generateKeys(String algorithm, int length, String encode) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        public Map<String, String> generateKeys(String algorithm, int length) throws NoSuchAlgorithmException, UnsupportedEncodingException {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm);
             keyPairGenerator.initialize(length);
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
             return new HashMap<String, String>() {{
-                put("PublicKey", encodeBytesToBase64(keyPair.getPublic().getEncoded(), encode));
-                put("PrivateKey", encodeBytesToBase64(keyPair.getPrivate().getEncoded(), encode));
+                put("PublicKey", encodeBytesToBase64(keyPair.getPublic().getEncoded()));
+                put("PrivateKey", encodeBytesToBase64(keyPair.getPrivate().getEncoded()));
             }};
         }
 

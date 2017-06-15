@@ -25,7 +25,7 @@ public class EncryptHelperTest {
 
         String d = "Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。";
         // 生成公钥密钥
-        Map<String, String> keys = $.encrypt.asymmetric.generateKeys("RSA", 1024, "UTF-8");
+        Map<String, String> keys = $.encrypt.asymmetric.generateKeys("RSA", 1024);
         PublicKey publicKey = $.encrypt.asymmetric.getPublicKey(publicStr, "RSA");
         PrivateKey privateKey = $.encrypt.asymmetric.getPrivateKey(privateStr, "RSA");
 

@@ -113,11 +113,14 @@ public class BeanHelperTest {
         User user = new User();
         user.setName("张三");
         Assert.assertEquals("张三", $.bean.getValue(user, "name"));
+        user.setName("李四");
+        Assert.assertEquals("李四", $.bean.getValue(user, "name"));
     }
 
     @Test
     public void setValue() throws Exception {
         User user = new User();
+        $.bean.setValue(user, "name", "李四");
         $.bean.setValue(user, "name", "张三");
         Assert.assertEquals("张三", user.getName());
     }

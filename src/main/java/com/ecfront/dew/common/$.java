@@ -16,6 +16,17 @@ public class $ {
     public static BeanHelper bean = new BeanHelper();
 
     /**
+     * Java Bean操作
+     *
+     * @param useCache 是否启用缓存，启用后会缓存获取过的字段和方法列表，默认启用
+     */
+    public static BeanHelper bean(boolean useCache) {
+        return new BeanHelper(useCache);
+    }
+
+    ;
+
+    /**
      * Java Class扫描操作
      */
     public static ClassScanHelper clazz = new ClassScanHelper();
