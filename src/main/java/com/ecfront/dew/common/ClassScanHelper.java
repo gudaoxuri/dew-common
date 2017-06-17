@@ -19,7 +19,8 @@ import java.util.regex.Pattern;
  */
 public class ClassScanHelper {
 
-    ClassScanHelper(){}
+    ClassScanHelper() {
+    }
 
     /**
      * 扫描获取指定包下符合条件的class类
@@ -60,9 +61,13 @@ public class ClassScanHelper {
                     result.addAll(findAndAddClassesByFile(currentPackage + "." + file.getName(), file, annotations, classNames));
                 } else {
                     String className = file.getName().substring(0, file.getName().length() - 6);
-                    Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(currentPackage + '.' + className);
-                    if (isMatch(clazz, annotations, classNames)) {
-                        result.add(clazz);
+                    try {
+                        Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(currentPackage + '.' + className);
+                        if (isMatch(clazz, annotations, classNames)) {
+                            result.add(clazz);
+                        }
+                    } catch (Throwable e) {
+                        // Ignore NoClassDefFoundError when class extends/implements some not import class.
                     }
                 }
             }
