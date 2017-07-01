@@ -495,14 +495,14 @@ public class HttpHelper {
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
-                logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + retry + 1 + ".");
+                logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + (retry + 1) + ".");
                 return request(method, url, body, header, contentType, charset, timeout, retry + 1);
             } else {
-                logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + retry + 1 + ".");
+                logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + (retry + 1) + ".");
                 throw e;
             }
         } catch (IOException e) {
-            logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + retry + 1 + ".");
+            logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " +(retry + 1) + ".");
             throw e;
         }
     }
