@@ -76,7 +76,7 @@ public class $ {
     /**
      * Http操作
      */
-    public static HttpHelper http = new HttpHelper();
+    public static HttpHelper http = HttpHelperFactory.choose();
 
     /**
      * Http操作
@@ -85,7 +85,7 @@ public class $ {
      * @param maxPerRoute 每个路由（域）的默认最大连接
      */
     public static HttpHelper http(int maxTotal, int maxPerRoute) {
-        return new HttpHelper(maxTotal, maxPerRoute);
+        return HttpHelperFactory.choose(maxTotal, maxPerRoute);
     }
 
     /**

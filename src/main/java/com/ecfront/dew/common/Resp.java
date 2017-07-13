@@ -275,7 +275,11 @@ public class Resp<E> implements Serializable {
         Page<E> body = null;
         if (resp.ok() && resp.getBody() != null) {
             body = $.json.toObject(resp.getBody(), Page.class);
-            body.setObjects(body.getObjects().stream().map(i -> $.json.toObject(i, bodyClazz)).collect(Collectors.toList()));
+            if (body.getObjects() != null) {
+                body.setObjects(body.getObjects().stream().map(i -> $.json.toObject(i, bodyClazz)).collect(Collectors.toList()));
+            } else {
+                body.setObjects(null);
+            }
         }
         return new Resp<>(resp.getCode(), resp.getMessage(), body);
     }

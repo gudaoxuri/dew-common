@@ -33,7 +33,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.3.7</version>
+        <version>1.3.8</version>
 </parent>
 ----
 
@@ -528,41 +528,35 @@ private List<E> objects;
 [source,xml]
 ----
 <!--$.json dependency begin-->
-<dependency>
+<exclusion>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-databind</artifactId>
-    <version>${jackson.version}</version>
-</dependency>
+</exclusion>
 <!--$.json dependency end-->
- <!--$.bean dependency begin-->
- <dependency>
-     <groupId>commons-beanutils</groupId>
-     <artifactId>commons-beanutils</artifactId>
-     <version>${beanutils.version}</version>
- </dependency>
- <!--$.bean dependency end-->
- <!--$.encrypt dependency begin-->
- <dependency>
-     <groupId>org.mindrot</groupId>
-     <artifactId>jbcrypt</artifactId>
-     <version>${jbcrypt.version}</version>
- </dependency>
- <!--$.encrypt dependency end-->
- <!--$.http dependency begin-->
- <dependency>
-     <groupId>org.apache.httpcomponents</groupId>
-     <artifactId>httpclient</artifactId>
-     <version>${httpclient.version}</version>
- </dependency>
- <dependency>
-     <groupId>org.apache.httpcomponents</groupId>
-     <artifactId>httpmime</artifactId>
-     <version>${httpclient.version}</version>
- </dependency>
- <dependency>
-     <groupId>org.jooq</groupId>
-     <artifactId>joox</artifactId>
-     <version>${joox.version}</version>
- </dependency>
- <!--$.http dependency end-->
+<!--$.bean dependency begin-->
+<exclusion>
+    <groupId>commons-beanutils</groupId>
+    <artifactId>commons-beanutils</artifactId>
+</exclusion>
+<!--$.bean dependency end-->
+<!--$.encrypt dependency begin-->
+<exclusion>
+    <groupId>org.mindrot</groupId>
+    <artifactId>jbcrypt</artifactId>
+</exclusion>
+<!--$.encrypt dependency end-->
+<!--$.http dependency begin-->
+<exclusion>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpclient</artifactId>
+</exclusion>
+<exclusion>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpmime</artifactId>
+</exclusion>
+<exclusion>
+    <groupId>org.jooq</groupId>
+    <artifactId>joox</artifactId>
+</exclusion>
+<!--$.http dependency end-->
 ----

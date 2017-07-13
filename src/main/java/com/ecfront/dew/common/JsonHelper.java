@@ -1,7 +1,6 @@
 package com.ecfront.dew.common;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,17 +20,18 @@ import java.util.TimeZone;
  */
 public class JsonHelper {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private ObjectMapper mapper;
 
-    {
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        MAPPER.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-        MAPPER.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        MAPPER.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        setTimeZone(Calendar.getInstance().getTimeZone());
+    JsonHelper() {
+        if (dependencyHelper.hasDependency("com.fasterxml.jackson.core.JsonProcessingException")) {
+            mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+            mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+            mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+            setTimeZone(Calendar.getInstance().getTimeZone());
+        }
     }
-
-    JsonHelper(){}
 
     /**
      * 设置时区
@@ -39,7 +39,7 @@ public class JsonHelper {
      * @param tz 时区
      */
     public void setTimeZone(TimeZone tz) {
-        MAPPER.setTimeZone(tz);
+        mapper.setTimeZone(tz);
     }
 
     /**
@@ -54,8 +54,8 @@ public class JsonHelper {
             return (String) obj;
         } else {
             try {
-                return MAPPER.writeValueAsString(obj);
-            } catch (JsonProcessingException e) {
+                return mapper.writeValueAsString(obj);
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
@@ -71,12 +71,12 @@ public class JsonHelper {
     public JsonNode toJson(Object obj) throws RuntimeException {
         if (obj instanceof String) {
             try {
-                return MAPPER.readTree((String) obj);
+                return mapper.readTree((String) obj);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            return MAPPER.valueToTree(obj);
+            return mapper.valueToTree(obj);
         }
     }
 
@@ -89,14 +89,14 @@ public class JsonHelper {
      * @throws RuntimeException
      */
     public <E> List<E> toList(Object obj, Class<E> clazz) throws RuntimeException {
-        JavaType type = MAPPER.getTypeFactory().constructParametricType(List.class, clazz);
+        JavaType type = mapper.getTypeFactory().constructParametricType(List.class, clazz);
         try {
             if (obj instanceof String) {
-                return MAPPER.readValue((String) obj, type);
+                return mapper.readValue((String) obj, type);
             } else if (obj instanceof JsonNode) {
-                return MAPPER.readValue(obj.toString(), type);
+                return mapper.readValue(obj.toString(), type);
             } else {
-                return MAPPER.readValue(MAPPER.writeValueAsString(obj), type);
+                return mapper.readValue(mapper.writeValueAsString(obj), type);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -117,12 +117,12 @@ public class JsonHelper {
                 if (clazz == String.class) {
                     return (E) obj;
                 } else {
-                    return MAPPER.readValue((String) obj, clazz);
+                    return mapper.readValue((String) obj, clazz);
                 }
             } else if (obj instanceof JsonNode) {
-                return MAPPER.readValue(obj.toString(), clazz);
+                return mapper.readValue(obj.toString(), clazz);
             } else {
-                return MAPPER.readValue(MAPPER.writeValueAsString(obj), clazz);
+                return mapper.readValue(mapper.writeValueAsString(obj), clazz);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -135,7 +135,7 @@ public class JsonHelper {
      * @return objectNode
      */
     public ObjectNode createObjectNode() {
-        return MAPPER.createObjectNode();
+        return mapper.createObjectNode();
     }
 
     /**
@@ -144,7 +144,7 @@ public class JsonHelper {
      * @return arrayNode
      */
     public ArrayNode createArrayNode() {
-        return MAPPER.createArrayNode();
+        return mapper.createArrayNode();
     }
 
     /**
@@ -153,7 +153,7 @@ public class JsonHelper {
      * @return Jackson ObjectMapper
      */
     public ObjectMapper getMapper() {
-        return MAPPER;
+        return mapper;
     }
 
 }

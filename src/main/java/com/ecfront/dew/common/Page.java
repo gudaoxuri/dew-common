@@ -47,9 +47,13 @@ public class Page<E> implements Serializable {
         page.setPageSize(this.getPageSize());
         page.setPageTotal(this.getPageTotal());
         page.setRecordTotal(this.getRecordTotal());
-        page.setObjects(this.getObjects().stream()
-                .map(converter)
-                .collect(Collectors.toList()));
+        if (this.getObjects() != null) {
+            page.setObjects(this.getObjects().stream()
+                    .map(converter)
+                    .collect(Collectors.toList()));
+        } else {
+            page.setObjects(null);
+        }
         return page;
     }
 

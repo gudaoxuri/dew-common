@@ -14,14 +14,17 @@ import java.util.stream.Collectors;
  */
 public class BeanHelper {
 
-    private static NullAwareBeanUtilsBean copyPropertiesAdapter = new NullAwareBeanUtilsBean();
+    private NullAwareBeanUtilsBean copyPropertiesAdapter;
 
     private boolean useCache = true;
     private static final Map<String, Map<String, Field>> FIELDS = new WeakHashMap<>();
     private static final Map<String, List<Method>> METHODS = new WeakHashMap<>();
 
     BeanHelper() {
-        this.useCache = true;
+        if (dependencyHelper.hasDependency("org.apache.commons.beanutils.BeanUtilsBean")) {
+            this.useCache = true;
+            copyPropertiesAdapter = new NullAwareBeanUtilsBean();
+        }
     }
 
     /**
