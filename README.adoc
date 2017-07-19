@@ -33,7 +33,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.3.8</version>
+        <version>1.3.9</version>
 </parent>
 ----
 

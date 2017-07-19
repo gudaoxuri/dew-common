@@ -14,7 +14,7 @@ public class FieldHelper {
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]*[A-Z0-9]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern MOBILE_PATTERN =
-            Pattern.compile("^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
+            Pattern.compile("^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,2-9]))\\d{8}$");
 
     private static final Pattern CHINESE_PATTERN =
             Pattern.compile("^[\u4e00-\u9fa5]+$");

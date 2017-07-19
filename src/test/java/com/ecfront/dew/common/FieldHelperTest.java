@@ -14,6 +14,7 @@ public class FieldHelperTest {
         Assert.assertFalse($.field.validateEmail("@sunisle.org"));
         Assert.assertFalse($.field.validateEmail("i#sunisle.org"));
 
+        Assert.assertTrue($.field.validateMobile("14726847687"));
         Assert.assertTrue($.field.validateMobile("18657120000"));
         Assert.assertTrue($.field.validateMobile("13765712000"));
         Assert.assertTrue($.field.validateMobile("17714712000"));
