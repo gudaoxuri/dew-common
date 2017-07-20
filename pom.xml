@@ -147,9 +147,7 @@
                     </archive>
                     <finalName>${project.artifactId}</finalName>
                 </configuration>
-
             </plugin>
-
         </plugins>
     </build>
 
