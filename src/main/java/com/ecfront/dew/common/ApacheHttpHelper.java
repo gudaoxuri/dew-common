@@ -338,7 +338,7 @@ public class ApacheHttpHelper implements HttpHelper {
             httpMethod.setConfig(RequestConfig.custom().setSocketTimeout(timeout).setConnectTimeout(timeout).build());
         }
         for (Map.Entry<String, String> entry : header.entrySet()) {
-            httpMethod.addHeader(entry.getKey(), URLEncoder.encode(entry.getValue(), charset));
+            httpMethod.addHeader(entry.getKey(), entry.getValue());
         }
         if (contentType != null) {
             httpMethod.addHeader("Content-Type", contentType);
