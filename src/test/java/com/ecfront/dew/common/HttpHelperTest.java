@@ -53,9 +53,9 @@ public class HttpHelperTest {
         result = $.http.put("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
         Assert.assertEquals("1", $.json.toJson($.json.toJson(result).get("files").get("conf1.json").asText()).get("a").asText());
         // put with head
-        ApacheHttpHelper.WrapHead wrapHead = $.http.putWithHead("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+        HttpHelper.ResponseWrap responseWrap = $.http.putWrap("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
         Assert.assertEquals("1", $.json.toJson($.json.toJson(result).get("files").get("conf1.json").asText()).get("a").asText());
-        Assert.assertEquals("application/json", wrapHead.head.get("Content-Type"));
+        Assert.assertEquals("application/json", responseWrap.head.get("Content-Type"));
         // head
         Map<String, String> head = $.http.head("https://httpbin.org/get");
         Assert.assertEquals("application/json", head.get("Content-Type"));

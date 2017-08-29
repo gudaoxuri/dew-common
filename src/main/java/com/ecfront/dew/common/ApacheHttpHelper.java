@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.SocketException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -100,22 +99,22 @@ public class ApacheHttpHelper implements HttpHelper {
     }
 
     @Override
-    public WrapHead getWithHead(String url) throws IOException {
-        return getWithHead(url, null, null, null, 0);
+    public ResponseWrap getWrap(String url) throws IOException {
+        return getWrap(url, null, null, null, 0);
     }
 
     @Override
-    public WrapHead getWithHead(String url, Map<String, String> header) throws IOException {
-        return getWithHead(url, header, null, null, 0);
+    public ResponseWrap getWrap(String url, Map<String, String> header) throws IOException {
+        return getWrap(url, header, null, null, 0);
     }
 
     @Override
-    public WrapHead getWithHead(String url, String contentType) throws IOException {
-        return getWithHead(url, null, contentType, null, 0);
+    public ResponseWrap getWrap(String url, String contentType) throws IOException {
+        return getWrap(url, null, contentType, null, 0);
     }
 
     @Override
-    public WrapHead getWithHead(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
+    public ResponseWrap getWrap(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("GET", url, null, header, contentType, charset, timeout);
     }
 
@@ -140,22 +139,22 @@ public class ApacheHttpHelper implements HttpHelper {
     }
 
     @Override
-    public WrapHead postWithHead(String url, Object body) throws IOException {
-        return postWithHead(url, body, null, null, null, 0);
+    public ResponseWrap postWrap(String url, Object body) throws IOException {
+        return postWrap(url, body, null, null, null, 0);
     }
 
     @Override
-    public WrapHead postWithHead(String url, Object body, Map<String, String> header) throws IOException {
-        return postWithHead(url, body, header, null, null, 0);
+    public ResponseWrap postWrap(String url, Object body, Map<String, String> header) throws IOException {
+        return postWrap(url, body, header, null, null, 0);
     }
 
     @Override
-    public WrapHead postWithHead(String url, Object body, String contentType) throws IOException {
-        return postWithHead(url, body, null, contentType, null, 0);
+    public ResponseWrap postWrap(String url, Object body, String contentType) throws IOException {
+        return postWrap(url, body, null, contentType, null, 0);
     }
 
     @Override
-    public WrapHead postWithHead(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
+    public ResponseWrap postWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("POST", url, body, header, contentType, charset, timeout);
     }
 
@@ -180,22 +179,22 @@ public class ApacheHttpHelper implements HttpHelper {
     }
 
     @Override
-    public WrapHead putWithHead(String url, Object body) throws IOException {
-        return putWithHead(url, body, null, null, null, 0);
+    public ResponseWrap putWrap(String url, Object body) throws IOException {
+        return putWrap(url, body, null, null, null, 0);
     }
 
     @Override
-    public WrapHead putWithHead(String url, Object body, Map<String, String> header) throws IOException {
-        return putWithHead(url, body, header, null, null, 0);
+    public ResponseWrap putWrap(String url, Object body, Map<String, String> header) throws IOException {
+        return putWrap(url, body, header, null, null, 0);
     }
 
     @Override
-    public WrapHead putWithHead(String url, Object body, String contentType) throws IOException {
-        return putWithHead(url, body, null, contentType, null, 0);
+    public ResponseWrap putWrap(String url, Object body, String contentType) throws IOException {
+        return putWrap(url, body, null, contentType, null, 0);
     }
 
     @Override
-    public WrapHead putWithHead(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
+    public ResponseWrap putWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("PUT", url, body, header, contentType, charset, timeout);
     }
 
@@ -220,22 +219,22 @@ public class ApacheHttpHelper implements HttpHelper {
     }
 
     @Override
-    public WrapHead deleteWithHead(String url) throws IOException {
-        return deleteWithHead(url, null, null, null, 0);
+    public ResponseWrap deleteWrap(String url) throws IOException {
+        return deleteWrap(url, null, null, null, 0);
     }
 
     @Override
-    public WrapHead deleteWithHead(String url, Map<String, String> header) throws IOException {
-        return deleteWithHead(url, header, null, null, 0);
+    public ResponseWrap deleteWrap(String url, Map<String, String> header) throws IOException {
+        return deleteWrap(url, header, null, null, 0);
     }
 
     @Override
-    public WrapHead deleteWithHead(String url, String contentType) throws IOException {
-        return deleteWithHead(url, null, contentType, null, 0);
+    public ResponseWrap deleteWrap(String url, String contentType) throws IOException {
+        return deleteWrap(url, null, contentType, null, 0);
     }
 
     @Override
-    public WrapHead deleteWithHead(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
+    public ResponseWrap deleteWrap(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request("DELETE", url, null, header, contentType, charset, timeout);
     }
 
@@ -280,7 +279,7 @@ public class ApacheHttpHelper implements HttpHelper {
     }
 
     @Override
-    public WrapHead request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
+    public ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
         return request(method, url, body, header, contentType, charset, timeout, 0);
     }
 
@@ -301,7 +300,7 @@ public class ApacheHttpHelper implements HttpHelper {
      * @param retry       重试次数
      * @return 返回结果
      */
-    private WrapHead request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout, int retry) throws IOException {
+    private ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout, int retry) throws IOException {
         if (header == null) {
             header = new HashMap<>();
         }
@@ -387,17 +386,18 @@ public class ApacheHttpHelper implements HttpHelper {
             ((HttpEntityEnclosingRequestBase) httpMethod).setEntity(entity);
         }
         try (CloseableHttpResponse response = httpClient.execute(httpMethod)) {
-            WrapHead wrapHead = new WrapHead();
+            ResponseWrap responseWrap = new ResponseWrap();
             if (!(httpMethod instanceof HttpHead || httpMethod instanceof HttpOptions)) {
-                wrapHead.result = EntityUtils.toString(response.getEntity(), charset);
+                responseWrap.result = EntityUtils.toString(response.getEntity(), charset);
             } else {
-                wrapHead.result = "";
+                responseWrap.result = "";
             }
-            wrapHead.head = Arrays.stream(response.getAllHeaders()).collect(Collectors.toMap(Header::getName, Header::getValue));
-            for (Map.Entry<String, String> entry : wrapHead.head.entrySet()) {
+            responseWrap.statusCode = response.getStatusLine().getStatusCode();
+            responseWrap.head = Arrays.stream(response.getAllHeaders()).collect(Collectors.toMap(Header::getName, Header::getValue));
+            for (Map.Entry<String, String> entry : responseWrap.head.entrySet()) {
                 entry.setValue(URLDecoder.decode(entry.getValue(), charset));
             }
-            return wrapHead;
+            return responseWrap;
         } catch (SocketException | ConnectTimeoutException | NoHttpResponseException e) {
             // 同络错误重试5次
             if (retry <= 5) {

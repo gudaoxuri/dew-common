@@ -33,7 +33,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.3.10</version>
+        <version>1.3.11</version>
 </parent>
 ----
 
@@ -232,7 +232,7 @@ result = $.http.put("https://httpbin.org/put", new HashMap<String, Object>() {{
 // put - file
 result = $.http.put("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
 // put 返回带 head的内容，同样还有getWithHead、postWithHead、deleteWtihHead
-HttpHelper.WrapHead wrapHead = $.http.putWithHead("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+HttpHelper.WrapHead responseWrap = $.http.putWithHead("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
 // head
 Map<String, String> head = $.http.head("https://httpbin.org/get");
 // options
@@ -240,6 +240,8 @@ head = $.http.options("https://httpbin.org/get");
 ----
 
 TIP: 更多示例见`HttpHelperTest.java`
+
+NOTE: GET POST PUT DELETE 都带 `Wrap`方法，返回包含扩展信息的数据，比如 `getWrap`
 
 NOTE: 还有一个`$.http(int maxTotal, int maxPerRoute)`方法，用于指定`整个连接池最大连接数`及`每个路由（域）的默认最大连接`，`$.http`是`$.http(200,20)`的语法糖。
 

@@ -22,14 +22,14 @@ public interface HttpHelper {
      */
     String get(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
 
-    WrapHead getWithHead(String url) throws IOException;
+    ResponseWrap getWrap(String url) throws IOException;
 
-    WrapHead getWithHead(String url, Map<String, String> header) throws IOException;
+    ResponseWrap getWrap(String url, Map<String, String> header) throws IOException;
 
-    WrapHead getWithHead(String url, String contentType) throws IOException;
+    ResponseWrap getWrap(String url, String contentType) throws IOException;
 
     /**
-     * 包含返回Head的Get请求
+     * 包含返回扩展信息的Get请求
      *
      * @param url         请求url
      * @param header      请求头
@@ -37,7 +37,7 @@ public interface HttpHelper {
      * @param charset     请求与返回内容编码
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      */
-    WrapHead getWithHead(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
+    ResponseWrap getWrap(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
 
     String post(String url, Object body) throws IOException;
 
@@ -62,14 +62,14 @@ public interface HttpHelper {
      */
     String post(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
 
-    WrapHead postWithHead(String url, Object body) throws IOException;
+    ResponseWrap postWrap(String url, Object body) throws IOException;
 
-    WrapHead postWithHead(String url, Object body, Map<String, String> header) throws IOException;
+    ResponseWrap postWrap(String url, Object body, Map<String, String> header) throws IOException;
 
-    WrapHead postWithHead(String url, Object body, String contentType) throws IOException;
+    ResponseWrap postWrap(String url, Object body, String contentType) throws IOException;
 
     /**
-     * 包含返回Head的Post请求
+     * 包含返回扩展信息的Post请求
      *
      * @param url         请求url
      * @param body        请求体，用于post、put
@@ -83,7 +83,7 @@ public interface HttpHelper {
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      * @return 返回结果
      */
-    WrapHead postWithHead(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
+    ResponseWrap postWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
 
     String put(String url, Object body) throws IOException;
 
@@ -108,14 +108,14 @@ public interface HttpHelper {
      */
     String put(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
 
-    WrapHead putWithHead(String url, Object body) throws IOException;
+    ResponseWrap putWrap(String url, Object body) throws IOException;
 
-    WrapHead putWithHead(String url, Object body, Map<String, String> header) throws IOException;
+    ResponseWrap putWrap(String url, Object body, Map<String, String> header) throws IOException;
 
-    WrapHead putWithHead(String url, Object body, String contentType) throws IOException;
+    ResponseWrap putWrap(String url, Object body, String contentType) throws IOException;
 
     /**
-     * 包含返回Head的Put请求
+     * 包含返回扩展信息的Put请求
      *
      * @param url         请求url
      * @param body        请求体，用于post、put
@@ -129,7 +129,7 @@ public interface HttpHelper {
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      * @return 返回结果
      */
-    WrapHead putWithHead(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
+    ResponseWrap putWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
 
     String delete(String url) throws IOException;
 
@@ -148,14 +148,14 @@ public interface HttpHelper {
      */
     String delete(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
 
-    WrapHead deleteWithHead(String url) throws IOException;
+    ResponseWrap deleteWrap(String url) throws IOException;
 
-    WrapHead deleteWithHead(String url, Map<String, String> header) throws IOException;
+    ResponseWrap deleteWrap(String url, Map<String, String> header) throws IOException;
 
-    WrapHead deleteWithHead(String url, String contentType) throws IOException;
+    ResponseWrap deleteWrap(String url, String contentType) throws IOException;
 
     /**
-     * 包含返回Head的Delete请求
+     * 包含返回扩展信息的Delete请求
      *
      * @param url         请求url
      * @param header      请求头
@@ -163,7 +163,7 @@ public interface HttpHelper {
      * @param charset     请求与返回内容编码
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      */
-    WrapHead deleteWithHead(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
+    ResponseWrap deleteWrap(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
 
     Map<String, String> head(String url) throws IOException;
 
@@ -215,9 +215,10 @@ public interface HttpHelper {
      * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
      * @return 返回结果
      */
-    WrapHead request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
+    ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException;
 
-    class WrapHead {
+    class ResponseWrap {
+        public int statusCode;
         public String result;
         public Map<String, String> head;
     }

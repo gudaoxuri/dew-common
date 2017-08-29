@@ -768,7 +768,7 @@ result = $.http.put("https://httpbin.org/put", new HashMap&lt;String, Object&gt;
 // put - file
 result = $.http.put("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
 // put 返回带 head的内容，同样还有getWithHead、postWithHead、deleteWtihHead
-HttpHelper.WrapHead wrapHead = $.http.putWithHead("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+HttpHelper.WrapHead responseWrap = $.http.putWithHead("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
 // head
 Map&lt;String, String&gt; head = $.http.head("https://httpbin.org/get");
 // options
