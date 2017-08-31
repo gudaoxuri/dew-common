@@ -49,7 +49,7 @@ public class JsonHelper {
      * @return Json字符串
      * @throws RuntimeException
      */
-    public String toJsonString(Object obj) throws RuntimeException {
+    public String toJsonString(Object obj) {
         if (obj instanceof String) {
             return (String) obj;
         } else {
@@ -68,7 +68,7 @@ public class JsonHelper {
      * @return JsonNode
      * @throws RuntimeException
      */
-    public JsonNode toJson(Object obj) throws RuntimeException {
+    public JsonNode toJson(Object obj) {
         if (obj instanceof String) {
             try {
                 return mapper.readTree((String) obj);
@@ -88,7 +88,7 @@ public class JsonHelper {
      * @return 目标对象
      * @throws RuntimeException
      */
-    public <E> List<E> toList(Object obj, Class<E> clazz) throws RuntimeException {
+    public <E> List<E> toList(Object obj, Class<E> clazz) {
         JavaType type = mapper.getTypeFactory().constructParametricType(List.class, clazz);
         try {
             if (obj instanceof String) {
@@ -111,7 +111,7 @@ public class JsonHelper {
      * @return 目标对象
      * @throws RuntimeException
      */
-    public <E> E toObject(Object obj, Class<E> clazz) throws RuntimeException {
+    public <E> E toObject(Object obj, Class<E> clazz) {
         try {
             if (obj instanceof String) {
                 if (clazz == String.class) {
