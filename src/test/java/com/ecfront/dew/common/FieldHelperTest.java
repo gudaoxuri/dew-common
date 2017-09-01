@@ -18,6 +18,9 @@ public class FieldHelperTest {
         Assert.assertTrue($.field.validateMobile("18657120000"));
         Assert.assertTrue($.field.validateMobile("13765712000"));
         Assert.assertTrue($.field.validateMobile("17714712000"));
+        Assert.assertTrue($.field.validateMobile("16614712000"));
+        Assert.assertTrue($.field.validateMobile("19914712000"));
+        Assert.assertTrue($.field.validateMobile("19814712000"));
         Assert.assertFalse($.field.validateMobile("1865712000"));
         Assert.assertFalse($.field.validateMobile("28657120000"));
         Assert.assertFalse($.field.validateMobile("11657120000"));
