@@ -54,7 +54,9 @@ public class $ {
     /**
      * 时间操作
      */
-    public static TimeHelper time = new TimeHelper();
+    public static TimeHelper time() {
+        return new TimeHelper();
+    }
 
     /**
      * 定时器操作

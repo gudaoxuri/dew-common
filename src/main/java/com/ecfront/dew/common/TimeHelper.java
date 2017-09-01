@@ -24,7 +24,7 @@ public class TimeHelper {
     public final SimpleDateFormat yyyy_MM_dd_HH_mm_ss = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public final SimpleDateFormat yyyy_MM_dd = new SimpleDateFormat("yyyy-MM-dd");
 
-    public String utc2Local(String utcTime, String localTimeFormat) {
+    public static String utc2Local(String utcTime, String localTimeFormat) {
         Date utcDate = Date.from(ZonedDateTime.parse(utcTime).toInstant());
         SimpleDateFormat localF = new SimpleDateFormat(localTimeFormat);
         localF.setTimeZone(TimeZone.getDefault());
