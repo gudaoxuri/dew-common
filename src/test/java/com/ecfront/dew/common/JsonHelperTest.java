@@ -4,6 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class JsonHelperTest {
 
@@ -40,6 +43,18 @@ public class JsonHelperTest {
         Assert.assertEquals("1", model.getCid());
         Assert.assertEquals("123456789", model.getCreateTime());
         Assert.assertEquals("2016-07-12 12:00:00", df.format(model.getDate()));
+    }
+
+    @Test
+    public void testLocalDateTime(){
+        TestIdModel model=new TestIdModel();
+        model.setLocalDateTime(LocalDateTime.now());
+        model.setLocalDate(LocalDate.now());
+        model.setLocalTime(LocalTime.now());
+        TestIdModel model2 = $.json.toObject($.json.toJsonString(model),TestIdModel.class);
+        Assert.assertTrue(model.getLocalDateTime().isEqual(model2.getLocalDateTime()));
+        Assert.assertTrue(model.getLocalDate().isEqual(model2.getLocalDate()));
+        Assert.assertEquals(model.getLocalTime().toString(),model2.getLocalTime().toString());
     }
 
 }
