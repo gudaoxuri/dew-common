@@ -50,16 +50,21 @@ public class ApacheHttpHelper implements HttpHelper {
     private static final Logger logger = LoggerFactory.getLogger(ApacheHttpHelper.class);
 
     private CloseableHttpClient httpClient = null;
-
-    ApacheHttpHelper() {
-        this(200, 20);
-    }
+    private boolean retryAble = true;
+    private int defaultConnectTimeoutMS = -1;
+    private int defaultSocketTimeoutMS = -1;
 
     /**
-     * @param maxTotal    整个连接池最大连接数
-     * @param maxPerRoute 每个路由（域）的默认最大连接
+     * @param maxTotal                整个连接池最大连接数
+     * @param maxPerRoute             每个路由（域）的默认最大连接
+     * @param defaultConnectTimeoutMS 默认连接超时时间
+     * @param defaultSocketTimeoutMS  默认读取超时时间
+     * @param retryAble               是否重试
      */
-    ApacheHttpHelper(int maxTotal, int maxPerRoute) {
+    ApacheHttpHelper(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean retryAble) {
+        this.defaultConnectTimeoutMS = defaultConnectTimeoutMS;
+        this.defaultSocketTimeoutMS = defaultSocketTimeoutMS;
+        this.retryAble = retryAble;
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
         SSLContext sslContext = null;
         try {
@@ -80,227 +85,228 @@ public class ApacheHttpHelper implements HttpHelper {
 
     @Override
     public String get(String url) throws IOException {
-        return get(url, null, null, null, 0);
+        return get(url, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public String get(String url, Map<String, String> header) throws IOException {
-        return get(url, header, null, null, 0);
+        return get(url, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public String get(String url, String contentType) throws IOException {
-        return get(url, null, contentType, null, 0);
+        return get(url, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public String get(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("GET", url, null, header, contentType, charset, timeout).result;
+    public String get(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("GET", url, null, header, contentType, charset, connectTimeoutMS, socketTimeoutMS).result;
     }
 
     @Override
     public ResponseWrap getWrap(String url) throws IOException {
-        return getWrap(url, null, null, null, 0);
+        return getWrap(url, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public ResponseWrap getWrap(String url, Map<String, String> header) throws IOException {
-        return getWrap(url, header, null, null, 0);
+        return getWrap(url, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public ResponseWrap getWrap(String url, String contentType) throws IOException {
-        return getWrap(url, null, contentType, null, 0);
+        return getWrap(url, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public ResponseWrap getWrap(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("GET", url, null, header, contentType, charset, timeout);
+    public ResponseWrap getWrap(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("GET", url, null, header, contentType, charset, connectTimeoutMS, socketTimeoutMS);
     }
 
     @Override
     public String post(String url, Object body) throws IOException {
-        return post(url, body, null, null, null, 0);
+        return post(url, body, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public String post(String url, Object body, Map<String, String> header) throws IOException {
-        return post(url, body, header, null, null, 0);
+        return post(url, body, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public String post(String url, Object body, String contentType) throws IOException {
-        return post(url, body, null, contentType, null, 0);
+        return post(url, body, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public String post(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("POST", url, body, header, contentType, charset, timeout).result;
+    public String post(String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("POST", url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS).result;
     }
 
     @Override
     public ResponseWrap postWrap(String url, Object body) throws IOException {
-        return postWrap(url, body, null, null, null, 0);
+        return postWrap(url, body, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public ResponseWrap postWrap(String url, Object body, Map<String, String> header) throws IOException {
-        return postWrap(url, body, header, null, null, 0);
+        return postWrap(url, body, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public ResponseWrap postWrap(String url, Object body, String contentType) throws IOException {
-        return postWrap(url, body, null, contentType, null, 0);
+        return postWrap(url, body, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public ResponseWrap postWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("POST", url, body, header, contentType, charset, timeout);
+    public ResponseWrap postWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("POST", url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS);
     }
 
     @Override
     public String put(String url, Object body) throws IOException {
-        return put(url, body, null, null, null, 0);
+        return put(url, body, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public String put(String url, Object body, Map<String, String> header) throws IOException {
-        return put(url, body, header, null, null, 0);
+        return put(url, body, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public String put(String url, Object body, String contentType) throws IOException {
-        return put(url, body, null, contentType, null, 0);
+        return put(url, body, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public String put(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("PUT", url, body, header, contentType, charset, timeout).result;
+    public String put(String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("PUT", url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS).result;
     }
 
     @Override
     public ResponseWrap putWrap(String url, Object body) throws IOException {
-        return putWrap(url, body, null, null, null, 0);
+        return putWrap(url, body, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public ResponseWrap putWrap(String url, Object body, Map<String, String> header) throws IOException {
-        return putWrap(url, body, header, null, null, 0);
+        return putWrap(url, body, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public ResponseWrap putWrap(String url, Object body, String contentType) throws IOException {
-        return putWrap(url, body, null, contentType, null, 0);
+        return putWrap(url, body, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public ResponseWrap putWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("PUT", url, body, header, contentType, charset, timeout);
+    public ResponseWrap putWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("PUT", url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS);
     }
 
     @Override
     public String delete(String url) throws IOException {
-        return delete(url, null, null, null, 0);
+        return delete(url, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public String delete(String url, Map<String, String> header) throws IOException {
-        return delete(url, header, null, null, 0);
+        return delete(url, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public String delete(String url, String contentType) throws IOException {
-        return delete(url, null, contentType, null, 0);
+        return delete(url, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public String delete(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("DELETE", url, null, header, contentType, charset, timeout).result;
+    public String delete(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("DELETE", url, null, header, contentType, charset, connectTimeoutMS, socketTimeoutMS).result;
     }
 
     @Override
     public ResponseWrap deleteWrap(String url) throws IOException {
-        return deleteWrap(url, null, null, null, 0);
+        return deleteWrap(url, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public ResponseWrap deleteWrap(String url, Map<String, String> header) throws IOException {
-        return deleteWrap(url, header, null, null, 0);
+        return deleteWrap(url, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public ResponseWrap deleteWrap(String url, String contentType) throws IOException {
-        return deleteWrap(url, null, contentType, null, 0);
+        return deleteWrap(url, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public ResponseWrap deleteWrap(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("DELETE", url, null, header, contentType, charset, timeout);
+    public ResponseWrap deleteWrap(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("DELETE", url, null, header, contentType, charset, connectTimeoutMS, socketTimeoutMS);
     }
 
     @Override
     public Map<String, String> head(String url) throws IOException {
-        return head(url, null, null, null, 0);
+        return head(url, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public Map<String, String> head(String url, Map<String, String> header) throws IOException {
-        return head(url, header, null, null, 0);
+        return head(url, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public Map<String, String> head(String url, String contentType) throws IOException {
-        return head(url, null, contentType, null, 0);
+        return head(url, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public Map<String, String> head(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("HEAD", url, null, header, contentType, charset, timeout).head;
+    public Map<String, String> head(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("HEAD", url, null, header, contentType, charset, connectTimeoutMS, socketTimeoutMS).head;
     }
 
     @Override
     public Map<String, String> options(String url) throws IOException {
-        return options(url, null, null, null, 0);
+        return options(url, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public Map<String, String> options(String url, Map<String, String> header) throws IOException {
-        return options(url, header, null, null, 0);
+        return options(url, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
     public Map<String, String> options(String url, String contentType) throws IOException {
-        return options(url, null, contentType, null, 0);
+        return options(url, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public Map<String, String> options(String url, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request("OPTIONS", url, null, header, contentType, charset, timeout).head;
+    public Map<String, String> options(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("OPTIONS", url, null, header, contentType, charset, connectTimeoutMS, socketTimeoutMS).head;
     }
 
     @Override
-    public ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout) throws IOException {
-        return request(method, url, body, header, contentType, charset, timeout, 0);
+    public ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request(method, url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS, 0);
     }
 
     /**
      * 发起请求
      *
-     * @param method      http方法
-     * @param url         请求url
-     * @param body        请求体，用于post、put
-     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
-     *                    如果content-type是xml时，body只能是Document或Xml的String格式
-     *                    如果content-type是multipart/form-data时，body只能是File格式
-     *                    其它情况下，body可以是任意格式
-     * @param header      请求头
-     * @param contentType content-type
-     * @param charset     请求与返回内容编码
-     * @param timeout     connectTimeout和socketTimeout超时毫秒数，默认不超时
-     * @param retry       重试次数
+     * @param method           http方法
+     * @param url              请求url
+     * @param body             请求体，用于post、put
+     *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                         如果content-type是xml时，body只能是Document或Xml的String格式
+     *                         如果content-type是multipart/form-data时，body只能是File格式
+     *                         其它情况下，body可以是任意格式
+     * @param header           请求头
+     * @param contentType      content-type
+     * @param charset          请求与返回内容编码
+     * @param connectTimeoutMS 连接超时时间
+     * @param socketTimeoutMS  读取超时时间
+     * @param retry            重试次数
      * @return 返回结果
      */
-    private ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int timeout, int retry) throws IOException {
+    private ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS, int retry) throws IOException {
         if (header == null) {
             header = new HashMap<>();
         }
@@ -333,9 +339,7 @@ public class ApacheHttpHelper implements HttpHelper {
                 httpMethod = new HttpOptions(url);
                 break;
         }
-        if (timeout != 0) {
-            httpMethod.setConfig(RequestConfig.custom().setSocketTimeout(timeout).setConnectTimeout(timeout).build());
-        }
+        httpMethod.setConfig(RequestConfig.custom().setSocketTimeout(socketTimeoutMS).setConnectTimeout(connectTimeoutMS).build());
         for (Map.Entry<String, String> entry : header.entrySet()) {
             httpMethod.addHeader(entry.getKey(), entry.getValue());
         }
@@ -400,14 +404,14 @@ public class ApacheHttpHelper implements HttpHelper {
             return responseWrap;
         } catch (SocketException | ConnectTimeoutException | NoHttpResponseException e) {
             // 同络错误重试5次
-            if (retry <= 5) {
+            if (retryAble && retry <= 5) {
                 try {
                     Thread.sleep(1000 * retry);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
                 logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + (retry + 1) + ".");
-                return request(method, url, body, header, contentType, charset, timeout, retry + 1);
+                return request(method, url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS, retry + 1);
             } else {
                 logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + (retry + 1) + ".");
                 throw e;

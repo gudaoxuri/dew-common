@@ -23,7 +23,7 @@ public class HttpHelperTest {
         result = $.http.get("https://httpbin.org/get", new HashMap<String, String>() {{
             put("Customer-A", "AAA");
             put("Accept", "json");
-        }}, "application/json; charset=utf-8", "utf-8", 5000);
+        }}, "application/json; charset=utf-8", "utf-8", 5000,5000);
         Assert.assertEquals("AAA", $.json.toJson(result).get("headers").get("Customer-A").asText());
         Assert.assertEquals("json", $.json.toJson(result).get("headers").get("Accept").asText());
         Assert.assertEquals("application/json; charset=utf-8", $.json.toJson(result).get("headers").get("Content-Type").asText());

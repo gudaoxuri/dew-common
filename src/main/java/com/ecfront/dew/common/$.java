@@ -83,11 +83,14 @@ public class $ {
     /**
      * Http操作
      *
-     * @param maxTotal    整个连接池最大连接数
-     * @param maxPerRoute 每个路由（域）的默认最大连接
+     * @param maxTotal                整个连接池最大连接数
+     * @param maxPerRoute             每个路由（域）的默认最大连接
+     * @param defaultConnectTimeoutMS 默认连接超时时间
+     * @param defaultSocketTimeoutMS  默认读取超时时间
+     * @param retryAble               是否重试
      */
-    public static HttpHelper http(int maxTotal, int maxPerRoute) {
-        return HttpHelperFactory.choose(maxTotal, maxPerRoute);
+    public static HttpHelper http(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean retryAble) {
+        return HttpHelperFactory.choose(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, retryAble);
     }
 
     /**

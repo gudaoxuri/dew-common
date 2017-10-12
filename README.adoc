@@ -33,7 +33,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.3.13</version>
+        <version>1.3.14</version>
 </parent>
 ----
 
@@ -211,7 +211,7 @@ result = $.http.get("https://httpbin.org/get", new HashMap<String, String>() {{
 result = $.http.get("https://httpbin.org/get", new HashMap<String, String>() {{
     put("Customer-A", "AAA");
     put("Accept", "json");
-}}, "application/json; charset=utf-8", "utf-8", 5000);
+}}, "application/json; charset=utf-8", "utf-8", 5000, 5000);
 // delete
 result = $.http.delete("https://httpbin.org/delete");
 Assert.assertEquals("httpbin.org", $.json.toJson(result).get("headers").get("Host").asText());
@@ -243,7 +243,7 @@ TIP: 更多示例见`HttpHelperTest.java`
 
 NOTE: GET POST PUT DELETE 都带 `Wrap`方法，返回包含扩展信息的数据，比如 `getWrap`
 
-NOTE: 还有一个`$.http(int maxTotal, int maxPerRoute)`方法，用于指定`整个连接池最大连接数`及`每个路由（域）的默认最大连接`，`$.http`是`$.http(200,20)`的语法糖。
+NOTE: 还有一个`$.http(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean retryAble)`方法，用于指定`整个连接池最大连接数`及`每个路由（域）的默认最大连接`，`$.http`是`$.http(200,20)`的语法糖。
 
 ==== 通用拦截器栈（$.interceptor）
 
