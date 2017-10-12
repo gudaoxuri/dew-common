@@ -11,9 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Json与Java对象互转<br/>
@@ -95,7 +93,49 @@ public class JsonHelper {
      * @throws RuntimeException
      */
     public <E> List<E> toList(Object obj, Class<E> clazz) {
-        JavaType type = mapper.getTypeFactory().constructParametricType(List.class, clazz);
+        return (List<E>) toGeneric(obj,List.class, clazz);
+    }
+
+    /**
+     * 转成Set泛型对象
+     *
+     * @param obj   源数据，可以是Json字符串、JsonNode或其它Java对象
+     * @param clazz 目标对象类型
+     * @return 目标对象
+     * @throws RuntimeException
+     */
+    public <E> Set<E> toSet(Object obj, Class<E> clazz) {
+        return (Set<E>) toGeneric(obj,Set.class, clazz);
+    }
+
+    /**
+     * 转成Map泛型对象
+     *
+     * @param obj   源数据，可以是Json字符串、JsonNode或其它Java对象
+     * @param keyClazz 目标对象类型Key
+     * @param valueClazz 目标对象类型Value
+     * @return 目标对象
+     * @throws RuntimeException
+     */
+    public <K,V> Map<K,V> toMap(Object obj, Class<K> keyClazz, Class<V> valueClazz) {
+        return (Map<K,V>) toGeneric(obj,Map.class, keyClazz,valueClazz);
+    }
+
+    /**
+     * 转成泛型对象
+     *
+     * @param obj   源数据，可以是Json字符串、JsonNode或其它Java对象
+     * @param parametrized 目标对象类型
+     * @param parameterClasses 目标对象泛型类型
+     * @return 目标对象
+     * @throws RuntimeException
+     */
+    public Object toGeneric(Object obj, Class<?> parametrized, Class... parameterClasses) {
+        JavaType type = mapper.getTypeFactory().constructParametricType(parametrized, parameterClasses);
+        return toGeneric(obj,type);
+    }
+
+    private Object toGeneric(Object obj, JavaType type) {
         try {
             if (obj instanceof String) {
                 return mapper.readValue((String) obj, type);

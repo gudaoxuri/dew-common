@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Map;
 
 public class JsonHelperTest {
 
@@ -34,6 +35,25 @@ public class JsonHelperTest {
         Assert.assertEquals("1", model.getCid());
         Assert.assertEquals("123456789", model.getCreateTime());
         Assert.assertEquals("2016-07-12 12:00:00", df.format(model.getDate()));
+    }
+
+    @Test
+    public void toSet() throws Exception {
+        TestIdModel model = $.json.toSet("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]", TestIdModel.class).iterator().next();
+        Assert.assertEquals("sunisle", model.getName());
+        Assert.assertEquals("1", model.getCid());
+        Assert.assertEquals("123456789", model.getCreateTime());
+        Assert.assertEquals("2016-07-12 12:00:00", df.format(model.getDate()));
+    }
+
+    @Test
+    public void toMap() throws Exception {
+        Map<String,TestIdModel> model = $.json.toMap("{'sunisle':{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}}",String.class, TestIdModel.class);
+        Assert.assertEquals("sunisle", model.keySet().iterator().next());
+        TestIdModel val=model.get("sunisle");
+        Assert.assertEquals("1", val.getCid());
+        Assert.assertEquals("123456789", val.getCreateTime());
+        Assert.assertEquals("2016-07-12 12:00:00", df.format(val.getDate()));
     }
 
     @Test
