@@ -319,7 +319,7 @@ public class ApacheHttpHelper implements HttpHelper {
             charset = "UTF-8";
         }
         HttpRequestBase httpMethod = null;
-        switch (method) {
+        switch (method.toUpperCase()) {
             case "GET":
                 httpMethod = new HttpGet(url);
                 break;

@@ -66,7 +66,7 @@ public class ClassScanHelper {
                         if (isMatch(clazz, annotations, classNames)) {
                             result.add(clazz);
                         }
-                    } catch (Throwable e) {
+                    } catch (NoClassDefFoundError e) {
                         // Ignore NoClassDefFoundError when class extends/implements some not import class.
                     }
                 }
@@ -92,9 +92,13 @@ public class ClassScanHelper {
                         && !jarEntry.isDirectory()) {
                     String className = jarName.substring(jarName.lastIndexOf('/') + 1,
                             jarName.length() - 6);
-                    Class<?> clazz = Class.forName(jarName.substring(0, idx).replace('/', '.') + '.' + className);
-                    if (isMatch(clazz, annotations, classNames)) {
-                        result.add(clazz);
+                    try {
+                        Class<?> clazz = Class.forName(jarName.substring(0, idx).replace('/', '.') + '.' + className);
+                        if (isMatch(clazz, annotations, classNames)) {
+                            result.add(clazz);
+                        }
+                    } catch (NoClassDefFoundError e) {
+                        // Ignore NoClassDefFoundError when class extends/implements some not import class.
                     }
                 }
             }
