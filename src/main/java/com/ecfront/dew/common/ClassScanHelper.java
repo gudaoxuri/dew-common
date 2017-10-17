@@ -66,7 +66,7 @@ public class ClassScanHelper {
                         if (isMatch(clazz, annotations, classNames)) {
                             result.add(clazz);
                         }
-                    } catch (NoClassDefFoundError e) {
+                    } catch (Throwable e) {
                         // Ignore NoClassDefFoundError when class extends/implements some not import class.
                     }
                 }
@@ -97,7 +97,7 @@ public class ClassScanHelper {
                         if (isMatch(clazz, annotations, classNames)) {
                             result.add(clazz);
                         }
-                    } catch (NoClassDefFoundError e) {
+                    } catch (Throwable e) {
                         // Ignore NoClassDefFoundError when class extends/implements some not import class.
                     }
                 }
