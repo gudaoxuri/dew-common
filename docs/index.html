@@ -424,8 +424,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Dew Common — Java常用操作工具集</h1>
 <div class="details">
 <span id="author" class="author">ECFront</span><br>
-<span id="revnumber">version 1.3.0,</span>
-<span id="revdate">2017-6-1</span>
+<span id="revnumber">version 1.3.18,</span>
+<span id="revdate">2017-10-19</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -490,7 +490,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Shell脚本操作，Shell内容获取、成功捕获及进度报告等</p>
 </li>
 <li>
-<p>加解密操作，Base64、MD5/BCrypt/SHA等对称算法和RSA等非对称算法</p>
+<p>加解密操作，Base64、MD5/BCrypt/AES/SHA等对称算法和RSA等非对称算法</p>
 </li>
 <li>
 <p>Http操作，包含Get/Post/Put/Delete/Head/Options操作</p>
@@ -541,7 +541,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;parent&gt;
         &lt;groupId&gt;com.ecfront.dew&lt;/groupId&gt;
         &lt;artifactId&gt;common&lt;/artifactId&gt;
-        &lt;version&gt;1.3.12&lt;/version&gt;
+        &lt;version&gt;1.3.18&lt;/version&gt;
 &lt;/parent&gt;</code></pre>
 </div>
 </div>
@@ -739,10 +739,15 @@ String str = $.encrypt.decodeBase64ToString(base64, "UTF-8");
 // Base64 转 字符串
 byte[] bytes = $.encrypt.decodeBase64ToBytes(base64);
 
-// 对称加密（此处使用SHA-256算法，支持如bcrypt SHA-256 MD5等算法）
+// 对称加密（此处使用SHA-256算法，支持如bcrypt SHA-256 MD5 AES等算法）
 String encrypt = $.encrypt.Symmetric.encrypt("gudaoxuri", "SHA-256");
 // 对称加密 - 验证（对于bcrypt之类默认使用随机slat的加密算法必须使用此方法验证）
 $.encrypt.Symmetric.validate("gudaoxuri", encrypt, "SHA-256");
+
+// 对称加密（此处使用AES算法，需要提供密码）
+String encrypt = $.encrypt.Symmetric.encrypt("gudaoxuri", "pwd", "AES");
+// 对称解密（此处使用AES算法，需要提供密码）, BadPaddingException 异常表示密码错误
+$.encrypt.Symmetric.decrypt(encrypt, "pwd", "AES");
 
 // 非对称加密 - 生成公钥和私钥
 Map&lt;String, String&gt; keys = $.encrypt.Asymmetric.generateKeys("RSA", 1024);
@@ -794,7 +799,7 @@ result = $.http.get("https://httpbin.org/get", new HashMap&lt;String, String&gt;
 result = $.http.get("https://httpbin.org/get", new HashMap&lt;String, String&gt;() {{
     put("Customer-A", "AAA");
     put("Accept", "json");
-}}, "application/json; charset=utf-8", "utf-8", 5000);
+}}, "application/json; charset=utf-8", "utf-8", 5000, 5000);
 // delete
 result = $.http.delete("https://httpbin.org/delete");
 Assert.assertEquals("httpbin.org", $.json.toJson(result).get("headers").get("Host").asText());
@@ -853,7 +858,7 @@ GET POST PUT DELETE 都带 <code>Wrap</code>方法，返回包含扩展信息的
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-还有一个<code>$.http(int maxTotal, int maxPerRoute)</code>方法，用于指定<code>整个连接池最大连接数</code>及<code>每个路由（域）的默认最大连接</code>，<code>$.http</code>是<code>$.http(200,20)</code>的语法糖。
+还有一个<code>$.http(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean retryAble)</code>方法，用于指定<code>整个连接池最大连接数</code>及<code>每个路由（域）的默认最大连接</code>，<code>$.http</code>是<code>$.http(200,20)</code>的语法糖。
 </td>
 </tr>
 </table>
@@ -1260,8 +1265,8 @@ private List&lt;E&gt; objects;</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.3.0<br>
-Last updated 2017-09-14 15:48:57 CST
+Version 1.3.18<br>
+Last updated 2017-10-19 22:27:59 CST
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

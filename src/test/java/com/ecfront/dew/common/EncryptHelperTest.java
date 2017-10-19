@@ -3,6 +3,7 @@ package com.ecfront.dew.common;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.crypto.BadPaddingException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Map;
@@ -16,6 +17,27 @@ public class EncryptHelperTest {
                 $.encrypt.symmetric.encrypt("gudaoxuri", "SHA-256"));
         Assert.assertTrue($.encrypt.symmetric.validate("gudaoxuri", $.encrypt.symmetric.encrypt("gudaoxuri", "SHA-256"), "SHA-256"));
         Assert.assertTrue($.encrypt.symmetric.validate("password", $.encrypt.symmetric.encrypt("password", "bcrypt"), "bcrypt"));
+
+        try {
+            Assert.assertNotEquals("gudaoxuri", $.encrypt.symmetric.decrypt(
+                    $.encrypt.symmetric.encrypt("gudaoxuri", "pwd", "aes"), "pwd2", "aes"));
+            Assert.assertTrue(1 == 2);
+        } catch (BadPaddingException exception) {
+            Assert.assertTrue(1 == 1);
+        }
+        Assert.assertEquals("gudaoxuri", $.encrypt.symmetric.decrypt(
+                $.encrypt.symmetric.encrypt("gudaoxuri", "pwd", "aes"), "pwd", "aes"));
+        String d = "Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。";
+        try {
+            Assert.assertNotEquals(d, $.encrypt.symmetric.decrypt(
+                    $.encrypt.symmetric.encrypt(d, "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"), "pwd2", "aes"));
+            Assert.assertTrue(1 == 2);
+        } catch (BadPaddingException exception) {
+            Assert.assertTrue(1 == 1);
+        }
+        Assert.assertEquals(d, $.encrypt.symmetric.decrypt(
+                $.encrypt.symmetric.encrypt(d, "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"), "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"));
+
     }
 
     @Test
