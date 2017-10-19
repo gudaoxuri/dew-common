@@ -3,6 +3,7 @@ package com.ecfront.dew.common;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -249,6 +250,32 @@ public class Resp<E> implements Serializable {
         List<E> body = null;
         if (resp.ok() && resp.getBody() != null) {
             body = $.json.toList(resp.getBody(), bodyClazz);
+        }
+        return new Resp<>(resp.getCode(), resp.getMessage(), body);
+    }
+
+    /**
+     * 响应body转换(Set)，将body类型A转换成类型B
+     *
+     * @param resp      源响应
+     * @param bodyClazz 目标body类型
+     * @return 目标响应
+     */
+    public static <E> Resp<Set<E>> genericSet(String resp, Class<E> bodyClazz) {
+        return genericSet($.json.toObject(resp, Resp.class), bodyClazz);
+    }
+
+    /**
+     * 响应body转换(Set)，将body类型A转换成类型B
+     *
+     * @param resp      源响应
+     * @param bodyClazz 目标body类型
+     * @return 目标响应
+     */
+    public static <E> Resp<Set<E>> genericSet(Resp resp, Class<E> bodyClazz) {
+        Set<E> body = null;
+        if (resp.ok() && resp.getBody() != null) {
+            body = $.json.toSet(resp.getBody(), bodyClazz);
         }
         return new Resp<>(resp.getCode(), resp.getMessage(), body);
     }

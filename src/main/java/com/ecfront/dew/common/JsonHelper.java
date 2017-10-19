@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
@@ -23,7 +22,7 @@ public class JsonHelper {
     private ObjectMapper mapper;
 
     JsonHelper() {
-        if (dependencyHelper.hasDependency("com.fasterxml.jackson.core.JsonProcessingException")) {
+        if (DependencyHelper.hasDependency("com.fasterxml.jackson.core.JsonProcessingException")) {
             mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);

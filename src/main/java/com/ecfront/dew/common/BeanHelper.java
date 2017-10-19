@@ -21,7 +21,7 @@ public class BeanHelper {
     private static final Map<String, List<Method>> METHODS = new WeakHashMap<>();
 
     BeanHelper() {
-        if (dependencyHelper.hasDependency("org.apache.commons.beanutils.BeanUtilsBean")) {
+        if (DependencyHelper.hasDependency("org.apache.commons.beanutils.BeanUtilsBean")) {
             this.useCache = true;
             copyPropertiesAdapter = new NullAwareBeanUtilsBean();
         }

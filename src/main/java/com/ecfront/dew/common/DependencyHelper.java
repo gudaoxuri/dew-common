@@ -1,6 +1,6 @@
 package com.ecfront.dew.common;
 
-public class dependencyHelper {
+public class DependencyHelper {
 
     public static boolean hasDependency(String clazz) {
         try {

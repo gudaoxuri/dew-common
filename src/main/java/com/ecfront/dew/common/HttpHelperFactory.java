@@ -15,7 +15,7 @@ public class HttpHelperFactory {
      * @param retryAble 是否重试
      */
     static HttpHelper choose(int maxTotal, int maxPerRoute,int defaultConnectTimeoutMS,int defaultSocketTimeoutMS,boolean retryAble) {
-        if (dependencyHelper.hasDependency("org.apache.http.impl.client.CloseableHttpClient")) {
+        if (DependencyHelper.hasDependency("org.apache.http.impl.client.CloseableHttpClient")) {
             return new ApacheHttpHelper(maxTotal, maxPerRoute,defaultConnectTimeoutMS,defaultSocketTimeoutMS,retryAble);
         }
         return null;
