@@ -56,20 +56,20 @@ public class SecurityHelper {
         return new String(Base64.getEncoder().encode(str.getBytes(encode)), encode);
     }
 
-    public class Digest{
+    public class Digest {
 
         /**
          * 摘要
          *
-         * @param strSrc         原始值
-         * @param algorithm      加密算法 ，如 bcrypt SHA-x MD5
+         * @param strSrc    原始值
+         * @param algorithm 加密算法 ，如 bcrypt SHA-x MD5
          * @return 摘要后的值
          */
         public String digest(String strSrc, String algorithm) throws NoSuchAlgorithmException {
             String encryptStr;
             switch (algorithm.toLowerCase()) {
                 case "bcrypt":
-                    encryptStr = BCrypt.hashpw(strSrc,BCrypt.gensalt());
+                    encryptStr = BCrypt.hashpw(strSrc, BCrypt.gensalt());
                     break;
                 default:
                     MessageDigest md = MessageDigest.getInstance(algorithm);
@@ -115,9 +115,9 @@ public class SecurityHelper {
         /**
          * 对称加密
          *
-         * @param strSrc         原始值
-         * @param password 密码
-         * @param algorithm      加密算法 ，如 AES DES
+         * @param strSrc    原始值
+         * @param password  密码
+         * @param algorithm 加密算法 ，如 AES DES
          * @return 加密后的值
          */
         public String encrypt(String strSrc, String password, String algorithm) throws GeneralSecurityException {
@@ -125,15 +125,17 @@ public class SecurityHelper {
                 throw new RuntimeException(String.format("%s must input password", algorithm));
             }
             KeyGenerator kgen = KeyGenerator.getInstance(algorithm);
-            kgen.init(128, new SecureRandom(password.getBytes()));
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            secureRandom.setSeed(password.getBytes());
+            kgen.init(128, secureRandom);
             SecretKeySpec key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             try {
-                return  byte2HexStr(cipher.doFinal(strSrc.getBytes("utf-8")));
+                return byte2HexStr(cipher.doFinal(strSrc.getBytes("utf-8")));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
-               return null;
+                return null;
             }
         }
 
@@ -149,7 +151,9 @@ public class SecurityHelper {
          */
         public String decrypt(String strEncrypted, String password, String algorithm) throws GeneralSecurityException {
             KeyGenerator kgen = KeyGenerator.getInstance(algorithm);
-            kgen.init(128, new SecureRandom(password.getBytes()));
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            secureRandom.setSeed(password.getBytes());
+            kgen.init(128, secureRandom);
             SecretKeySpec key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.DECRYPT_MODE, key);

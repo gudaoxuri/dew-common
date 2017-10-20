@@ -41,7 +41,6 @@ public class SecurityHelperTest {
         }
         Assert.assertEquals(d, $.security.symmetric.decrypt(
                 $.security.symmetric.encrypt(d, "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"), "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"));
-
     }
 
     @Test
