@@ -32,9 +32,9 @@ public class $ {
     public static ClassScanHelper clazz = new ClassScanHelper();
 
     /**
-     * 加解密操作
+     * 安全（加解密、信息摘要等）操作
      */
-    public static EncryptHelper encrypt = new EncryptHelper();
+    public static SecurityHelper security = new SecurityHelper();
 
     /**
      * 常用字段操作

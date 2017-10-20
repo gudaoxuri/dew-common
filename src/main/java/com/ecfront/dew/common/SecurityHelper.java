@@ -19,13 +19,14 @@ import java.util.Objects;
 /**
  * 加解密操作
  */
-public class EncryptHelper {
+public class SecurityHelper {
 
-    EncryptHelper() {
+    SecurityHelper() {
     }
 
     public Symmetric symmetric = new Symmetric();
     public Asymmetric asymmetric = new Asymmetric();
+    public Digest digest = new Digest();
 
     /**
      * Base64 转 数组
@@ -55,55 +56,20 @@ public class EncryptHelper {
         return new String(Base64.getEncoder().encode(str.getBytes(encode)), encode);
     }
 
-
-    /**
-     * 对称加密
-     */
-    public class Symmetric {
+    public class Digest{
 
         /**
-         * 对称加密
-         *
-         * @param strSrc    原始值
-         * @param algorithm 加密算法 ，如 bcrypt SHA-256 MD5
-         * @return 加密后的值
-         */
-        public String encrypt(String strSrc, String algorithm) throws GeneralSecurityException {
-            return encrypt(strSrc, null, algorithm);
-        }
-
-        /**
-         * 对称加密
+         * 摘要
          *
          * @param strSrc         原始值
-         * @param passwordOrSalt 密码或盐值， AES DES等加密算法必须要密码，bcrypt可以自定义盐值
-         * @param algorithm      加密算法 ，如 bcrypt SHA-256 MD5 AES DES
-         * @return 加密后的值
+         * @param algorithm      加密算法 ，如 bcrypt SHA-x MD5
+         * @return 摘要后的值
          */
-        public String encrypt(String strSrc, String passwordOrSalt, String algorithm) throws GeneralSecurityException {
+        public String digest(String strSrc, String algorithm) throws NoSuchAlgorithmException {
             String encryptStr;
             switch (algorithm.toLowerCase()) {
                 case "bcrypt":
-                    encryptStr = BCrypt.hashpw(strSrc,
-                            passwordOrSalt != null ?
-                                    BCrypt.gensalt(10, new SecureRandom(passwordOrSalt.getBytes())) : BCrypt.gensalt());
-                    break;
-                case "des":
-                case "aes":
-                    if (passwordOrSalt == null) {
-                        throw new RuntimeException(String.format("%s must input password", algorithm));
-                    }
-                    KeyGenerator kgen = KeyGenerator.getInstance(algorithm);
-                    kgen.init(128, new SecureRandom(passwordOrSalt.getBytes()));
-                    SecretKeySpec key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
-                    Cipher cipher = Cipher.getInstance(algorithm);
-                    cipher.init(Cipher.ENCRYPT_MODE, key);
-                    try {
-                        encryptStr = byte2HexStr(cipher.doFinal(strSrc.getBytes("utf-8")));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                        encryptStr = null;
-                    }
+                    encryptStr = BCrypt.hashpw(strSrc,BCrypt.gensalt());
                     break;
                 default:
                     MessageDigest md = MessageDigest.getInstance(algorithm);
@@ -113,6 +79,62 @@ public class EncryptHelper {
                     break;
             }
             return encryptStr;
+        }
+
+        /**
+         * 验证
+         * <p>
+         * 对于bcrypt之类默认使用随机slat的加密算法必须使用此方法验证
+         *
+         * @param strSrc       原始值
+         * @param strEncrypted 加密后的值
+         * @param algorithm    加密算法，如 bcrypt SHA-256
+         * @return 是否匹配
+         */
+        public boolean validate(String strSrc, String strEncrypted, String algorithm) throws GeneralSecurityException {
+            boolean result;
+            switch (algorithm.toLowerCase()) {
+                case "bcrypt":
+                    result = BCrypt.checkpw(strSrc, strEncrypted);
+                    break;
+                default:
+                    result = Objects.equals(digest(strSrc, algorithm), strEncrypted);
+                    break;
+            }
+            return result;
+        }
+
+    }
+
+
+    /**
+     * 对称加密
+     */
+    public class Symmetric {
+
+        /**
+         * 对称加密
+         *
+         * @param strSrc         原始值
+         * @param password 密码
+         * @param algorithm      加密算法 ，如 AES DES
+         * @return 加密后的值
+         */
+        public String encrypt(String strSrc, String password, String algorithm) throws GeneralSecurityException {
+            if (password == null) {
+                throw new RuntimeException(String.format("%s must input password", algorithm));
+            }
+            KeyGenerator kgen = KeyGenerator.getInstance(algorithm);
+            kgen.init(128, new SecureRandom(password.getBytes()));
+            SecretKeySpec key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
+            Cipher cipher = Cipher.getInstance(algorithm);
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            try {
+                return  byte2HexStr(cipher.doFinal(strSrc.getBytes("utf-8")));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+               return null;
+            }
         }
 
         /**
@@ -137,29 +159,6 @@ public class EncryptHelper {
                 e.printStackTrace();
                 return null;
             }
-        }
-
-        /**
-         * 验证
-         * <p>
-         * 对于bcrypt之类默认使用随机slat的加密算法必须使用此方法验证
-         *
-         * @param strSrc       原始值
-         * @param strEncrypted 加密后的值
-         * @param algorithm    加密算法，如 bcrypt SHA-256
-         * @return 是否匹配
-         */
-        public boolean validate(String strSrc, String strEncrypted, String algorithm) throws GeneralSecurityException {
-            boolean result;
-            switch (algorithm.toLowerCase()) {
-                case "bcrypt":
-                    result = BCrypt.checkpw(strSrc, strEncrypted);
-                    break;
-                default:
-                    result = Objects.equals(encrypt(strSrc, algorithm), strEncrypted);
-                    break;
-            }
-            return result;
         }
 
         private String byte2HexStr(byte buf[]) {

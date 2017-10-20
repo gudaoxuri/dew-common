@@ -9,34 +9,38 @@ import java.security.PublicKey;
 import java.util.Map;
 import java.util.Objects;
 
-public class EncryptHelperTest {
+public class SecurityHelperTest {
+
+    @Test
+    public void digest() throws Exception {
+        Assert.assertEquals("70C0CC2B7BF8A8EBCD7B59C49DDDA9A1E551122BA5D7AB3B7B02141D4CE4C626".toLowerCase(),
+                $.security.digest.digest("gudaoxuri", "SHA-256"));
+        Assert.assertTrue($.security.digest.validate("gudaoxuri", $.security.digest.digest("gudaoxuri", "SHA-256"), "SHA-256"));
+        Assert.assertTrue($.security.digest.validate("password", $.security.digest.digest("password", "SHA-512"), "SHA-512"));
+        Assert.assertTrue($.security.digest.validate("password", $.security.digest.digest("password", "bcrypt"), "bcrypt"));
+    }
 
     @Test
     public void symmetric() throws Exception {
-        Assert.assertEquals("70C0CC2B7BF8A8EBCD7B59C49DDDA9A1E551122BA5D7AB3B7B02141D4CE4C626".toLowerCase(),
-                $.encrypt.symmetric.encrypt("gudaoxuri", "SHA-256"));
-        Assert.assertTrue($.encrypt.symmetric.validate("gudaoxuri", $.encrypt.symmetric.encrypt("gudaoxuri", "SHA-256"), "SHA-256"));
-        Assert.assertTrue($.encrypt.symmetric.validate("password", $.encrypt.symmetric.encrypt("password", "bcrypt"), "bcrypt"));
-
         try {
-            Assert.assertNotEquals("gudaoxuri", $.encrypt.symmetric.decrypt(
-                    $.encrypt.symmetric.encrypt("gudaoxuri", "pwd", "aes"), "pwd2", "aes"));
+            Assert.assertNotEquals("gudaoxuri", $.security.symmetric.decrypt(
+                    $.security.symmetric.encrypt("gudaoxuri", "pwd", "aes"), "pwd2", "aes"));
             Assert.assertTrue(1 == 2);
         } catch (BadPaddingException exception) {
             Assert.assertTrue(1 == 1);
         }
-        Assert.assertEquals("gudaoxuri", $.encrypt.symmetric.decrypt(
-                $.encrypt.symmetric.encrypt("gudaoxuri", "pwd", "aes"), "pwd", "aes"));
+        Assert.assertEquals("gudaoxuri", $.security.symmetric.decrypt(
+                $.security.symmetric.encrypt("gudaoxuri", "pwd", "aes"), "pwd", "aes"));
         String d = "Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。";
         try {
-            Assert.assertNotEquals(d, $.encrypt.symmetric.decrypt(
-                    $.encrypt.symmetric.encrypt(d, "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"), "pwd2", "aes"));
+            Assert.assertNotEquals(d, $.security.symmetric.decrypt(
+                    $.security.symmetric.encrypt(d, "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"), "pwd2", "aes"));
             Assert.assertTrue(1 == 2);
         } catch (BadPaddingException exception) {
             Assert.assertTrue(1 == 1);
         }
-        Assert.assertEquals(d, $.encrypt.symmetric.decrypt(
-                $.encrypt.symmetric.encrypt(d, "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"), "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"));
+        Assert.assertEquals(d, $.security.symmetric.decrypt(
+                $.security.symmetric.encrypt(d, "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"), "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43", "aes"));
 
     }
 
@@ -47,20 +51,20 @@ public class EncryptHelperTest {
 
         String d = "Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。";
         // 生成公钥密钥
-        Map<String, String> keys = $.encrypt.asymmetric.generateKeys("RSA", 1024);
-        PublicKey publicKey = $.encrypt.asymmetric.getPublicKey(publicStr, "RSA");
-        PrivateKey privateKey = $.encrypt.asymmetric.getPrivateKey(privateStr, "RSA");
+        Map<String, String> keys = $.security.asymmetric.generateKeys("RSA", 1024);
+        PublicKey publicKey = $.security.asymmetric.getPublicKey(publicStr, "RSA");
+        PrivateKey privateKey = $.security.asymmetric.getPrivateKey(privateStr, "RSA");
 
         // 公钥加密/私钥解密
-        byte[] encryptByPub = $.encrypt.asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
-        String result = new String($.encrypt.asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
+        byte[] encryptByPub = $.security.asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
+        String result = new String($.security.asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
         Assert.assertTrue(Objects.equals(result, d));
 
         // 私钥加密/公钥解密
-        byte[] encryptByPriv = $.encrypt.asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
-        byte[] decryptByPub = $.encrypt.asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
+        byte[] encryptByPriv = $.security.asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
+        byte[] decryptByPub = $.security.asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
         Assert.assertTrue(Objects.equals(new String(decryptByPub, "UTF-8"), d));
-        Assert.assertTrue($.encrypt.asymmetric.verify(publicKey, decryptByPub, $.encrypt.asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"), "SHA1withRSA"));
+        Assert.assertTrue($.security.asymmetric.verify(publicKey, decryptByPub, $.security.asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"), "SHA1withRSA"));
     }
 
 }

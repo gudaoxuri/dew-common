@@ -13,7 +13,7 @@ Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少
 . Java Bean操作，Bean复制、反射获取/设置注解、字段、方法等
 . Java Class扫描操作，根据注解或名称过滤
 . Shell脚本操作，Shell内容获取、成功捕获及进度报告等
-. 加解密操作，Base64、MD5/BCrypt/AES/SHA等对称算法和RSA等非对称算法
+. 安全（加解密、信息摘要等）操作，Base64、MD5/BCrypt/AES/SHA等对称算法和RSA等非对称算法
 . Http操作，包含Get/Post/Put/Delete/Head/Options操作
 . 金额操作，金额转大写操作
 . 通用拦截器栈，前/后置、错误处理等
@@ -33,7 +33,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.3.18</version>
+        <version>1.4.0</version>
 </parent>
 ----
 
@@ -154,52 +154,52 @@ $.shell().execute(
 
 TIP: 更多示例见`ShellHelperTest.java`
 
-==== 加解密操作（$.encrypt）
+==== 加解密操作（$.security）
 
 [source,java]
 ----
 // 字符串 转 Base64
-String base64 = $.encrypt.encodeStringToBase64("gudaoxuri", "UTF-8");
+String base64 = $.security.encodeStringToBase64("gudaoxuri", "UTF-8");
 // 数组 转 Base64
-base64 = $.encrypt.encodeBytesToBase64("gudaoxuri".getBytes());
+base64 = $.security.encodeBytesToBase64("gudaoxuri".getBytes());
 // Base64 转 字符串
-String str = $.encrypt.decodeBase64ToString(base64, "UTF-8");
+String str = $.security.decodeBase64ToString(base64, "UTF-8");
 // Base64 转 字符串
-byte[] bytes = $.encrypt.decodeBase64ToBytes(base64);
+byte[] bytes = $.security.decodeBase64ToBytes(base64);
 
-// 对称加密（此处使用SHA-256算法，支持如bcrypt SHA-256 MD5 AES等算法）
-String encrypt = $.encrypt.Symmetric.encrypt("gudaoxuri", "SHA-256");
-// 对称加密 - 验证（对于bcrypt之类默认使用随机slat的加密算法必须使用此方法验证）
-$.encrypt.Symmetric.validate("gudaoxuri", encrypt, "SHA-256");
+// 摘要（此处使用SHA-256算法，支持如bcrypt SHA-X等算法）
+String digestContent = $.security.digest.digest("gudaoxuri", "SHA-256");
+// 验证（对于bcrypt之类默认使用随机slat的加密算法必须使用此方法验证）
+$.security.digest.validate("gudaoxuri", digestContent, "SHA-256");
 
 // 对称加密（此处使用AES算法，需要提供密码）
-String encrypt = $.encrypt.Symmetric.encrypt("gudaoxuri", "pwd", "AES");
+String encryptContent = $.security.symmetric.encrypt("gudaoxuri", "pwd", "AES");
 // 对称解密（此处使用AES算法，需要提供密码）, BadPaddingException 异常表示密码错误
-$.encrypt.Symmetric.decrypt(encrypt, "pwd", "AES");
+$.security.symmetric.decrypt(encryptContent, "pwd", "AES");
 
 // 非对称加密 - 生成公钥和私钥
-Map<String, String> keys = $.encrypt.Asymmetric.generateKeys("RSA", 1024);
+Map<String, String> keys = $.security.asymmetric.generateKeys("RSA", 1024);
 String publicStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC47dAhLLB3xhDWccgEheqTbRimAhluN/ixNyYU/MvExN/bwytthiWViRV2H1sGrGr5JyH3qQSFa57jInbXD6lGN24aw2TfiejLWGkj0hMEXEtj4Bf9OuQhHUmy8unLygOuBlIhtfPLp9cSLBgVVHbt33buNTkL7fvdE2U9B3JVyQIDAQAB";
 // 非对称加密 - 获取公钥文件
-PublicKey publicKey = $.encrypt.Asymmetric.getPublicKey(publicStr, "RSA");
+PublicKey publicKey = $.security.asymmetric.getPublicKey(publicStr, "RSA");
 String privateStr = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALjt0CEssHfGENZxyASF6pNtGKYCGW43+LE3JhT8y8TE39vDK22GJZWJFXYfWwasavknIfepBIVrnuMidtcPqUY3bhrDZN+J6MtYaSPSEwRcS2PgF/065CEdSbLy6cvKA64GUiG188un1xIsGBVUdu3fdu41OQvt+90TZT0HclXJAgMBAAECgYEAjXFndVhHCPU3P637PGppBqW06pREeybYUkNKH1dTS4cBaYcXmke2S290OMq2xp3tm++wbUqbKKkt97AOkWNrJfq8Ecpdw9s3c7yQGWaPuwiX38Cgtq6r0utjT20YgR6etGpqafoBt93RZpEm0eEzFPUnS7qYc86HprL0RJ0/i7kCQQDaOmvO82cYIK1ESkA0GdDVQoz2A1V8HvEWOsccRGqlWuasLUccyBnx1G/LDZUxcPOraDyxI8sdl7VbweLR0H9LAkEA2O/rWXwnSYKqdpt+OhpUBHNnMs3IMvRzefJ1zObnIMyYR3KXtpQ/fL4gEquNwJgFIaPJVg5/3zHISEw3e8XOuwJAIDrGl07tZ+vTiyVoLAmwBP8KMH83jdhIBN9zbqJQGdG+Bam+Oer3ofac+CEuapni8uq3I/ZEVj+EomOVKyWe1wJAATztROd2ee7q9h5RDBfWXughsKKH//JxLkL59R9kNkW0oMPApeQWsKmNGU4tUuoLLXP31CvlAusPz4nPzz8DvQJBAJXpICPNJw84fONzS0raRqlFoZMMI0cqeGtPIiCHKaRHyzQv/FFu2KxUcCrod8PngaBFRselzrwZILmXHqrHc1M=";
 // 非对称加密 - 获取私钥文件
-PrivateKey privateKey = $.encrypt.Asymmetric.getPrivateKey(privateStr, "RSA");
+PrivateKey privateKey = $.security.asymmetric.getPrivateKey(privateStr, "RSA");
 
 String d = "Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。Scala是一门多范式的编程语言，一种类似java的编程语言[1]  ，设计初衷是实现可伸缩的语言[2]  、并集成面向对象编程和函数式编程的各种特性。";
 // 非对称加密 - 公钥加密/私钥解密
-byte[] encryptByPub = $.encrypt.Asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
-String result = new String($.encrypt.Asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
+byte[] encryptByPub = $.security.asymmetric.encrypt(d.getBytes("UTF-8"), publicKey, 1024, "RSA");
+String result = new String($.security.asymmetric.decrypt(encryptByPub, privateKey, 1024, "RSA"), "UTF-8");
 
 // 非对称加密 - 私钥加密/公钥解密
-byte[] encryptByPriv = $.encrypt.Asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
-byte[] decryptByPub = $.encrypt.Asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
-$.encrypt.Asymmetric.verify(publicKey, decryptByPub,
-        $.encrypt.Asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"),
+byte[] encryptByPriv = $.security.asymmetric.encrypt(d.getBytes("UTF-8"), privateKey, 1024, "RSA");
+byte[] decryptByPub = $.security.asymmetric.decrypt(encryptByPriv, publicKey, 1024, "RSA");
+$.security.asymmetric.verify(publicKey, decryptByPub,
+        $.security.asymmetric.sign(privateKey, d.getBytes("UTF-8"), "SHA1withRSA"),
         "SHA1withRSA");
 ----
 
-TIP: 更多示例见`EncryptHelperTest.java`
+TIP: 更多示例见`SecurityHelperTest.java`
 
 ==== Http操作（$.http）
 
@@ -484,6 +484,15 @@ public static <E> Resp<E> generic(Resp resp, Class<E> bodyClazz);
  */
 public static <E> Resp<List<E>> genericList(Resp resp, Class<E> bodyClazz);
 
+    /**
+     * 响应body转换(Set)，将body类型A转换成类型B
+     *
+     * @param resp      源响应
+     * @param bodyClazz 目标body类型
+     * @return 目标响应
+     */
+    public static <E> Resp<Set<E>> genericSet(String resp, Class<E> bodyClazz);
+
 /**
  * 响应body转换(分页)，将body类型A转换成类型B
  *
@@ -546,12 +555,12 @@ private List<E> objects;
     <artifactId>commons-beanutils</artifactId>
 </exclusion>
 <!--$.bean dependency end-->
-<!--$.encrypt dependency begin-->
+<!--$.security dependency begin-->
 <exclusion>
     <groupId>org.mindrot</groupId>
     <artifactId>jbcrypt</artifactId>
 </exclusion>
-<!--$.encrypt dependency end-->
+<!--$.security dependency end-->
 <!--$.http dependency begin-->
 <exclusion>
     <groupId>org.apache.httpcomponents</groupId>
