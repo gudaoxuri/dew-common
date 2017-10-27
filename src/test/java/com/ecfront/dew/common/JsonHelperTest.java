@@ -66,6 +66,16 @@ public class JsonHelperTest {
     }
 
     @Test
+    public void toGenericObject() throws Exception {
+        GenericModel model = $.json.toObject("{'strs':['sunisle'],'exts':[{'createTime':'123456789','cid':'1'}],'extMap':{'a':{'createTime':'123456789','cid':'1'}}}", GenericModel.class);
+        Assert.assertEquals("sunisle", model.getStrs().get(0));
+        Assert.assertEquals("1", model.getExts().get(0).getCid());
+        Assert.assertEquals("123456789", model.getExts().get(0).getCreateTime());
+        Assert.assertEquals("1", model.getExtMap().get("a").getCid());
+        Assert.assertEquals("123456789", model.getExtMap().get("a").getCreateTime());
+    }
+
+    @Test
     public void testLocalDateTime(){
         TestIdModel model=new TestIdModel();
         model.setLocalDateTime(LocalDateTime.now());

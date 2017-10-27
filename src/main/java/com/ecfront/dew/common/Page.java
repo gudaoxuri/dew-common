@@ -57,6 +57,18 @@ public class Page<E> implements Serializable {
         return page;
     }
 
+    public boolean isFirstPage() {
+        return pageNumber == 1;
+    }
+
+    public boolean isLastPage() {
+        return pageNumber == pageTotal;
+    }
+
+    public boolean hasNextPage() {
+        return pageNumber < pageTotal;
+    }
+
     public long getPageNumber() {
         return pageNumber;
     }

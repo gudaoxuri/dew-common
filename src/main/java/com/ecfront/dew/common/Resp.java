@@ -203,6 +203,18 @@ public class Resp<E> implements Serializable {
     }
 
     /**
+     * 声明返回需要降级
+     *
+     */
+    public Resp fallback(){
+        if(true) {
+            throw new FallbackException(this);
+        }
+        // 使用返回值是为了保持结构统一
+        return this;
+    }
+
+    /**
      * 响应body转换，将body类型A转换成类型B
      *
      * @param resp      源响应
@@ -309,6 +321,14 @@ public class Resp<E> implements Serializable {
             }
         }
         return new Resp<>(resp.getCode(), resp.getMessage(), body);
+    }
+
+    public static class FallbackException extends RuntimeException{
+
+        public FallbackException(Resp<?> resp){
+            super($.json.toJsonString(resp));
+        }
+
     }
 
 }
