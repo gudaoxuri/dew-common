@@ -15,6 +15,8 @@ public class FieldHelperTest {
         Assert.assertFalse($.field.validateEmail("i#sunisle.org"));
 
         Assert.assertTrue($.field.validateMobile("14726847687"));
+        Assert.assertTrue($.field.validateMobile("15326847687"));
+        Assert.assertTrue($.field.validateMobile("15526847687"));
         Assert.assertTrue($.field.validateMobile("18657120000"));
         Assert.assertTrue($.field.validateMobile("13765712000"));
         Assert.assertTrue($.field.validateMobile("17714712000"));
@@ -24,6 +26,8 @@ public class FieldHelperTest {
         Assert.assertFalse($.field.validateMobile("1865712000"));
         Assert.assertFalse($.field.validateMobile("28657120000"));
         Assert.assertFalse($.field.validateMobile("11657120000"));
+        Assert.assertFalse($.field.validateMobile("15426847687"));
+        Assert.assertFalse($.field.validateMobile("15?26847687"));
 
         Assert.assertTrue($.field.isChinese("孤岛旭日"));
         Assert.assertFalse($.field.isChinese("孤岛xuri"));
