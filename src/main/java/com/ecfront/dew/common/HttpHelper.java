@@ -51,7 +51,7 @@ public interface HttpHelper {
      * Post请求
      *
      * @param url              请求url
-     * @param body             请求体，用于post、put
+     * @param body             请求体，用于post、put、patch
      *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
      *                         如果content-type是xml时，body只能是Document或Xml的String格式
      *                         如果content-type是multipart/form-data时，body只能是File格式
@@ -75,7 +75,7 @@ public interface HttpHelper {
      * 包含返回扩展信息的Post请求
      *
      * @param url              请求url
-     * @param body             请求体，用于post、put
+     * @param body             请求体，用于post、put、patch
      *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
      *                         如果content-type是xml时，body只能是Document或Xml的String格式
      *                         如果content-type是multipart/form-data时，body只能是File格式
@@ -99,7 +99,7 @@ public interface HttpHelper {
      * Put请求
      *
      * @param url              请求url
-     * @param body             请求体，用于post、put
+     * @param body             请求体，用于post、put、patch
      *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
      *                         如果content-type是xml时，body只能是Document或Xml的String格式
      *                         如果content-type是multipart/form-data时，body只能是File格式
@@ -123,7 +123,7 @@ public interface HttpHelper {
      * 包含返回扩展信息的Put请求
      *
      * @param url              请求url
-     * @param body             请求体，用于post、put
+     * @param body             请求体，用于post、put、patch
      *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
      *                         如果content-type是xml时，body只能是Document或Xml的String格式
      *                         如果content-type是multipart/form-data时，body只能是File格式
@@ -136,6 +136,55 @@ public interface HttpHelper {
      * @return 返回结果
      */
     ResponseWrap putWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
+
+    String patch(String url, Object body) throws IOException;
+
+    String patch(String url, Object body, Map<String, String> header) throws IOException;
+
+    String patch(String url, Object body, String contentType) throws IOException;
+
+    /**
+     * Patch请求
+     *
+     * @param url              请求url
+     * @param body             请求体，用于post、put、patch
+     *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                         如果content-type是xml时，body只能是Document或Xml的String格式
+     *                         如果content-type是multipart/form-data时，body只能是File格式
+     *                         其它情况下，body可以是任意格式
+     * @param header           请求头
+     * @param contentType      content-type
+     * @param charset          请求与返回内容编码
+     * @param connectTimeoutMS 连接超时时间
+     * @param socketTimeoutMS  读取超时时间
+     * @return 返回结果
+     */
+    String patch(String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
+
+    ResponseWrap patchWrap(String url, Object body) throws IOException;
+
+    ResponseWrap patchWrap(String url, Object body, Map<String, String> header) throws IOException;
+
+    ResponseWrap patchWrap(String url, Object body, String contentType) throws IOException;
+
+    /**
+     * 包含返回扩展信息的Patch请求
+     *
+     * @param url              请求url
+     * @param body             请求体，用于post、put、patch
+     *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                         如果content-type是xml时，body只能是Document或Xml的String格式
+     *                         如果content-type是multipart/form-data时，body只能是File格式
+     *                         其它情况下，body可以是任意格式
+     * @param header           请求头
+     * @param contentType      content-type
+     * @param charset          请求与返回内容编码
+     * @param connectTimeoutMS 连接超时时间
+     * @param socketTimeoutMS  读取超时时间
+     * @return 返回结果
+     */
+    ResponseWrap patchWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
+
 
     String delete(String url) throws IOException;
 
@@ -214,7 +263,7 @@ public interface HttpHelper {
      *
      * @param method           http方法
      * @param url              请求url
-     * @param body             请求体，用于post、put
+     * @param body             请求体，用于post、put、patch
      *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
      *                         如果content-type是xml时，body只能是Document或Xml的String格式
      *                         如果content-type是multipart/form-data时，body只能是File格式

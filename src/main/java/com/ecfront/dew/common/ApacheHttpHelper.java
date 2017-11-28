@@ -3,7 +3,6 @@ package com.ecfront.dew.common;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.*;
@@ -32,8 +31,9 @@ import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.SocketException;
+import java.net.ConnectException;
 import java.net.URLDecoder;
+import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -204,6 +204,46 @@ public class ApacheHttpHelper implements HttpHelper {
     }
 
     @Override
+    public String patch(String url, Object body) throws IOException {
+        return patch(url, body, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
+    }
+
+    @Override
+    public String patch(String url, Object body, Map<String, String> header) throws IOException {
+        return patch(url, body, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
+    }
+
+    @Override
+    public String patch(String url, Object body, String contentType) throws IOException {
+        return patch(url, body, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
+    }
+
+    @Override
+    public String patch(String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("PATCH", url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS).result;
+    }
+
+    @Override
+    public ResponseWrap patchWrap(String url, Object body) throws IOException {
+        return patchWrap(url, body, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
+    }
+
+    @Override
+    public ResponseWrap patchWrap(String url, Object body, Map<String, String> header) throws IOException {
+        return patchWrap(url, body, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
+    }
+
+    @Override
+    public ResponseWrap patchWrap(String url, Object body, String contentType) throws IOException {
+        return patchWrap(url, body, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
+    }
+
+    @Override
+    public ResponseWrap patchWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request("PATCH", url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS);
+    }
+
+    @Override
     public String delete(String url) throws IOException {
         return delete(url, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
@@ -293,7 +333,7 @@ public class ApacheHttpHelper implements HttpHelper {
      *
      * @param method           http方法
      * @param url              请求url
-     * @param body             请求体，用于post、put
+     * @param body             请求体，用于post、put、patch
      *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
      *                         如果content-type是xml时，body只能是Document或Xml的String格式
      *                         如果content-type是multipart/form-data时，body只能是File格式
@@ -318,7 +358,7 @@ public class ApacheHttpHelper implements HttpHelper {
         if (charset == null) {
             charset = "UTF-8";
         }
-        HttpRequestBase httpMethod = null;
+        HttpRequestBase httpMethod;
         switch (method.toUpperCase()) {
             case "GET":
                 httpMethod = new HttpGet(url);
@@ -338,6 +378,14 @@ public class ApacheHttpHelper implements HttpHelper {
             case "OPTIONS":
                 httpMethod = new HttpOptions(url);
                 break;
+            case "TRACE":
+                httpMethod = new HttpTrace(url);
+                break;
+            case "PATCH":
+                httpMethod = new HttpPatch(url);
+                break;
+            default:
+                throw new RuntimeException("The method [" + method + "] is NOT exist.");
         }
         httpMethod.setConfig(RequestConfig.custom().setSocketTimeout(socketTimeoutMS).setConnectTimeout(connectTimeoutMS).build());
         for (Map.Entry<String, String> entry : header.entrySet()) {
@@ -402,12 +450,13 @@ public class ApacheHttpHelper implements HttpHelper {
                 entry.setValue(URLDecoder.decode(entry.getValue(), charset));
             }
             return responseWrap;
-        } catch (SocketException | ConnectTimeoutException | NoHttpResponseException e) {
+        } catch (UnknownHostException | ConnectException | ConnectTimeoutException e) {
             // 同络错误重试5次
             if (retryAble && retry <= 5) {
                 try {
                     Thread.sleep(1000 * retry);
                 } catch (InterruptedException e1) {
+                    Thread.currentThread().interrupt();
                     e1.printStackTrace();
                 }
                 logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + (retry + 1) + ".");

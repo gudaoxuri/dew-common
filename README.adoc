@@ -21,7 +21,7 @@ Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少
 . Java Class扫描操作，根据注解或名称过滤
 . Shell脚本操作，Shell内容获取、成功捕获及进度报告等
 . 安全（加解密、信息摘要等）操作，Base64、MD5/BCrypt/AES/SHA等对称算法和RSA等非对称算法
-. Http操作，包含Get/Post/Put/Delete/Head/Options操作
+. Http操作，包含Get/Post/Put/Delete/Head/Options/Patch操作
 . 金额操作，金额转大写操作
 . 通用拦截器栈，前/后置、错误处理等
 . 定时器操作，定时和周期性任务
@@ -40,7 +40,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.4.3</version>
+        <version>1.4.4</version>
 </parent>
 ----
 

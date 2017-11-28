@@ -3,6 +3,7 @@ package com.ecfront.dew.common;
 import com.ecfront.dew.common.test.bean.IdxController;
 import com.ecfront.dew.common.test.bean.TestAnnotation;
 import com.ecfront.dew.common.test.bean.User;
+import com.ecfront.dew.common.test.bean.UserDTO;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,6 +26,19 @@ public class BeanHelperTest {
         dest.setWorkAge(11);
         $.bean.copyProperties(dest, ori);
         Assert.assertTrue(Objects.equals(dest.getName(), "张三") && dest.getAge() == 0 && dest.getWorkAge() == 11);
+
+        UserDTO userDTO=new UserDTO();
+        userDTO.setName("张三");
+        userDTO.setAge(11);
+        User user=new User();
+        $.bean.copyProperties(user,userDTO);
+        Assert.assertEquals("张三",user.getName());
+        Assert.assertEquals(11,user.getAge());
+
+        userDTO=new UserDTO();
+        $.bean.copyProperties(userDTO,user);
+        Assert.assertEquals("张三",userDTO.getName());
+        Assert.assertEquals(11,userDTO.getAge());
     }
 
     @Test
