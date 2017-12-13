@@ -29,6 +29,7 @@ Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少
 . 常用字段操作，各类字段验证、身份证提取、UUID创建等
 . 常用时间处理，常规时间格式化模板
 . 主流文件MIME整理，MIME分类
+. 服务降级处理
 . 响应处理及分页模型
 
 === 使用
@@ -40,7 +41,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.4.4</version>
+        <version>1.4.5</version>
 </parent>
 ----
 
@@ -356,6 +357,86 @@ $.field.getProvinceByIdCard("330102199901015759");
 ----
 
 TIP: 更多示例见`FieldHelperTest.java`
+
+==== 服务降级处理（$.fallback）
+
+[source,java]
+----
+
+// ===========================================
+// =============== 降级核心方法 ===============
+// ===========================================
+
+/**
+* 根据组名获取降级信息
+*
+* @param groupName 组名，全局唯一
+* @return 降级信息
+*/
+$.fallback.getFallbackInfo(String groupName)
+
+/**
+ * 带降级的处理方法
+ *
+ * @param groupName       组名，全局唯一
+ * @param normalProcessor 正常方法，抛异常时进入失败方法
+ * @param errorProcessor  失败方法
+ */
+$.fallback.execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor)
+
+/**
+ * 带降级的处理方法
+ *
+ * @param groupName        组名，全局唯一
+ * @param normalProcessor  正常方法，抛异常时进入失败方法
+ * @param errorProcessor   失败方法
+ * @param fallbackStrategy 降级策略
+ */
+$.fallback.execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
+                     FallbackStrategy fallbackStrategy)
+
+/**
+ * 带降级的处理方法
+ *
+ * @param groupName             组名，全局唯一
+ * @param normalProcessor       正常方法，抛异常时进入失败方法
+ * @param errorProcessor        失败方法
+ * @param excludeFallbackErrors 不做降级处理的异常集合（视为业务上正常的错误）
+ */
+$.fallback.execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
+                     Class<? extends Throwable>... excludeFallbackErrors)
+
+/**
+ * 带降级的处理方法
+ *
+ * @param groupName             组名，全局唯一
+ * @param normalProcessor       正常方法，抛异常时进入失败方法
+ * @param errorProcessor        失败方法
+ * @param fallbackStrategy      降级策略
+ * @param excludeFallbackErrors 不做降级处理的异常集合（视为业务上正常的错误）
+ */
+$.fallback.execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
+                         FallbackStrategy fallbackStrategy, Class<? extends Throwable>... excludeFallbackErrors)
+
+// ===========================================
+// ================= 使用示例 =================
+// ===========================================
+$.fallback.execute("testGetUser",
+                this::getUserNormal,
+                this::getUserError);
+
+String getUserNormal() throws Exception {
+    // 正常处理方法，或抛出异常
+    throw new NotFoundException("Not Found xxx");
+}
+
+String getUserError(Throwable e, FallbackHelper.FallbackInfo fallbackInfo) {
+    // 错误处理方法，降级处理
+    return "-1";
+}
+----
+
+TIP: 更多示例见`FallbackHelperTest.java`
 
 ==== 响应处理模型（Resp）
 

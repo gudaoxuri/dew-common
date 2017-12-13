@@ -3,7 +3,6 @@ package com.ecfront.dew.common;
 import com.ecfront.dew.common.test.bean.IdxController;
 import com.ecfront.dew.common.test.bean.TestAnnotation;
 import com.ecfront.dew.common.test.bean.User;
-import com.ecfront.dew.common.test.bean.UserDTO;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,29 +25,16 @@ public class BeanHelperTest {
         dest.setWorkAge(11);
         $.bean.copyProperties(dest, ori);
         Assert.assertTrue(Objects.equals(dest.getName(), "张三") && dest.getAge() == 0 && dest.getWorkAge() == 11);
-
-        UserDTO userDTO=new UserDTO();
-        userDTO.setName("张三");
-        userDTO.setAge(11);
-        User user=new User();
-        $.bean.copyProperties(user,userDTO);
-        Assert.assertEquals("张三",user.getName());
-        Assert.assertEquals(11,user.getAge());
-
-        userDTO=new UserDTO();
-        $.bean.copyProperties(userDTO,user);
-        Assert.assertEquals("张三",userDTO.getName());
-        Assert.assertEquals(11,userDTO.getAge());
     }
 
     @Test
-    public void findClassAnnotation() throws Exception {
+    public void findClassAnnotation() {
         TestAnnotation.RPC ann = $.bean.getClassAnnotation(IdxController.class, TestAnnotation.RPC.class);
         Assert.assertEquals("/idx/", ann.path());
     }
 
     @Test
-    public void findFieldInfo() throws Exception {
+    public void findFieldInfo() {
         Map<String, BeanHelper.FieldInfo> fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, null);
         Assert.assertEquals(2, fieldsInfo.size());
         fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, new HashSet<Class<? extends Annotation>>() {{
@@ -74,7 +60,7 @@ public class BeanHelperTest {
     }
 
     @Test
-    public void findMethodInfo() throws Exception {
+    public void findMethodInfo() {
         List<BeanHelper.MethodInfo> methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, null);
         Assert.assertEquals(methodsInfo.size(), 7);
         methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, new HashSet<Class<? extends Annotation>>() {{

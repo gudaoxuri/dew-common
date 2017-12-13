@@ -98,4 +98,9 @@ public class $ {
      */
     public static AmountHelper amount = new AmountHelper();
 
+    /**
+     * 简单的降级处理
+     */
+    public static FallbackHelper fallback = new FallbackHelper();
+
 }
