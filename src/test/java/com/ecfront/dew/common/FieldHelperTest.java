@@ -38,7 +38,6 @@ public class FieldHelperTest {
         Assert.assertFalse($.field.isIPv4Address("300.168.0.1"));
 
         Assert.assertTrue($.field.validateIdNumber("330102199901015759"));
-        Assert.assertEquals(18, $.field.getAgeByIdCard("330102199901015759"));
         Assert.assertEquals("19990101", $.field.getBirthByIdCard("330102199901015759"));
         Assert.assertEquals("M", $.field.getGenderByIdCard("330102199901015759"));
         Assert.assertEquals("浙江", $.field.getProvinceByIdCard("330102199901015759"));
