@@ -7,6 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -70,6 +71,14 @@ public class SecurityHelper {
             switch (algorithm.toLowerCase()) {
                 case "bcrypt":
                     encryptStr = BCrypt.hashpw(strSrc, BCrypt.gensalt());
+                    break;
+                case "md5":
+                    MessageDigest md5MD = MessageDigest.getInstance(algorithm);
+                    md5MD.update(strSrc.getBytes());
+                    encryptStr = new BigInteger(1, md5MD.digest()).toString(16);
+                    while (encryptStr.length() < 32) {
+                        encryptStr = "0" + encryptStr;
+                    }
                     break;
                 default:
                     MessageDigest md = MessageDigest.getInstance(algorithm);

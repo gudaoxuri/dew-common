@@ -48,7 +48,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.4.5</version>
+        <version>1.4.6</version>
 </parent>
 ----
 

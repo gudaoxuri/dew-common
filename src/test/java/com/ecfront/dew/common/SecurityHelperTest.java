@@ -15,6 +15,8 @@ public class SecurityHelperTest {
     public void digest() throws Exception {
         Assert.assertEquals("70C0CC2B7BF8A8EBCD7B59C49DDDA9A1E551122BA5D7AB3B7B02141D4CE4C626".toLowerCase(),
                 $.security.digest.digest("gudaoxuri", "SHA-256"));
+        Assert.assertEquals("0ef841c028908fca6e78c51490e4a0cf".toLowerCase(),
+                $.security.digest.digest("gudaoxuri", "MD5"));
         Assert.assertTrue($.security.digest.validate("gudaoxuri", $.security.digest.digest("gudaoxuri", "SHA-256"), "SHA-256"));
         Assert.assertTrue($.security.digest.validate("password", $.security.digest.digest("password", "SHA-512"), "SHA-512"));
         Assert.assertTrue($.security.digest.validate("password", $.security.digest.digest("password", "bcrypt"), "bcrypt"));
