@@ -1,5 +1,6 @@
 package com.ecfront.dew.common;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,6 +13,13 @@ import java.util.Map;
 public class JsonHelperTest {
 
     private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    @Test
+    public void testPath() throws Exception {
+      JsonNode jsonNode = $.json.toJson("{'a_key':'a_val','child':{'c_key':'c_val'}}");
+        Assert.assertEquals("a_val",$.json.path(jsonNode,"a_key").asText());
+        Assert.assertEquals("c_val",$.json.path(jsonNode,"child.c_key").asText());
+    }
 
     @Test
     public void toJsonString() throws Exception {

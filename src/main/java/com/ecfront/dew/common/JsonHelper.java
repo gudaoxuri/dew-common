@@ -3,6 +3,7 @@ package com.ecfront.dew.common;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.MissingNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -28,7 +29,7 @@ public class JsonHelper {
             mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
             mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
             mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-            JavaTimeModule javaTimeModule=new JavaTimeModule();
+            JavaTimeModule javaTimeModule = new JavaTimeModule();
             javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME));
             mapper.registerModule(javaTimeModule);
             mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -92,7 +93,7 @@ public class JsonHelper {
      * @throws RuntimeException
      */
     public <E> List<E> toList(Object obj, Class<E> clazz) {
-        return (List<E>) toGeneric(obj,List.class, clazz);
+        return (List<E>) toGeneric(obj, List.class, clazz);
     }
 
     /**
@@ -104,34 +105,34 @@ public class JsonHelper {
      * @throws RuntimeException
      */
     public <E> Set<E> toSet(Object obj, Class<E> clazz) {
-        return (Set<E>) toGeneric(obj,Set.class, clazz);
+        return (Set<E>) toGeneric(obj, Set.class, clazz);
     }
 
     /**
      * 转成Map泛型对象
      *
-     * @param obj   源数据，可以是Json字符串、JsonNode或其它Java对象
-     * @param keyClazz 目标对象类型Key
+     * @param obj        源数据，可以是Json字符串、JsonNode或其它Java对象
+     * @param keyClazz   目标对象类型Key
      * @param valueClazz 目标对象类型Value
      * @return 目标对象
      * @throws RuntimeException
      */
-    public <K,V> Map<K,V> toMap(Object obj, Class<K> keyClazz, Class<V> valueClazz) {
-        return (Map<K,V>) toGeneric(obj,Map.class, keyClazz,valueClazz);
+    public <K, V> Map<K, V> toMap(Object obj, Class<K> keyClazz, Class<V> valueClazz) {
+        return (Map<K, V>) toGeneric(obj, Map.class, keyClazz, valueClazz);
     }
 
     /**
      * 转成泛型对象
      *
-     * @param obj   源数据，可以是Json字符串、JsonNode或其它Java对象
-     * @param parametrized 目标对象类型
+     * @param obj              源数据，可以是Json字符串、JsonNode或其它Java对象
+     * @param parametrized     目标对象类型
      * @param parameterClasses 目标对象泛型类型
      * @return 目标对象
      * @throws RuntimeException
      */
     public Object toGeneric(Object obj, Class<?> parametrized, Class... parameterClasses) {
         JavaType type = mapper.getTypeFactory().constructParametricType(parametrized, parameterClasses);
-        return toGeneric(obj,type);
+        return toGeneric(obj, type);
     }
 
     private Object toGeneric(Object obj, JavaType type) {
@@ -171,6 +172,25 @@ public class JsonHelper {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 获取对应路径下的Json
+     *
+     * @param jsonNode Json对象
+     * @param pathStr  路径
+     * @return 对应的Json对象
+     */
+    public JsonNode path(JsonNode jsonNode, String pathStr) {
+        String[] splitPaths = pathStr.split("\\.");
+        jsonNode = jsonNode.path(splitPaths[0]);
+        if (jsonNode instanceof MissingNode) {
+            return null;
+        } else if (splitPaths.length == 1) {
+            return jsonNode;
+        } else {
+            return path(jsonNode, pathStr.substring(pathStr.indexOf(".") + 1));
         }
     }
 
