@@ -1,6 +1,5 @@
 package com.ecfront.dew.common;
 
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -30,6 +29,7 @@ import org.w3c.dom.Document;
 import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.net.URLDecoder;
@@ -284,42 +284,42 @@ public class ApacheHttpHelper implements HttpHelper {
     }
 
     @Override
-    public Map<String, String> head(String url) throws IOException {
+    public Map<String, List<String>> head(String url) throws IOException {
         return head(url, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public Map<String, String> head(String url, Map<String, String> header) throws IOException {
+    public Map<String, List<String>> head(String url, Map<String, String> header) throws IOException {
         return head(url, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public Map<String, String> head(String url, String contentType) throws IOException {
+    public Map<String, List<String>> head(String url, String contentType) throws IOException {
         return head(url, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public Map<String, String> head(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+    public Map<String, List<String>> head(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
         return request("HEAD", url, null, header, contentType, charset, connectTimeoutMS, socketTimeoutMS).head;
     }
 
     @Override
-    public Map<String, String> options(String url) throws IOException {
+    public Map<String, List<String>> options(String url) throws IOException {
         return options(url, null, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public Map<String, String> options(String url, Map<String, String> header) throws IOException {
+    public Map<String, List<String>> options(String url, Map<String, String> header) throws IOException {
         return options(url, header, null, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public Map<String, String> options(String url, String contentType) throws IOException {
+    public Map<String, List<String>> options(String url, String contentType) throws IOException {
         return options(url, null, contentType, null, defaultConnectTimeoutMS, defaultSocketTimeoutMS);
     }
 
     @Override
-    public Map<String, String> options(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+    public Map<String, List<String>> options(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
         return request("OPTIONS", url, null, header, contentType, charset, connectTimeoutMS, socketTimeoutMS).head;
     }
 
@@ -445,10 +445,25 @@ public class ApacheHttpHelper implements HttpHelper {
                 responseWrap.result = "";
             }
             responseWrap.statusCode = response.getStatusLine().getStatusCode();
-            responseWrap.head = Arrays.stream(response.getAllHeaders()).collect(Collectors.toMap(Header::getName, Header::getValue));
-            for (Map.Entry<String, String> entry : responseWrap.head.entrySet()) {
-                entry.setValue(URLDecoder.decode(entry.getValue(), charset));
-            }
+            String finalCharset = charset;
+            responseWrap.head = Arrays
+                    .stream(response.getAllHeaders())
+                    .collect(Collectors.groupingBy(head -> head.getName()))
+                    .entrySet()
+                    .stream()
+                    .collect(Collectors.toMap(head -> head.getKey(),
+                            head -> head.getValue()
+                                    .stream()
+                                    .map(h -> {
+                                        try {
+                                            return URLDecoder.decode(h.getValue(), finalCharset);
+                                        } catch (UnsupportedEncodingException e) {
+                                            logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR ", e);
+                                            return null;
+                                        }
+                                    })
+                                    .collect(Collectors.toList())
+                    ));
             return responseWrap;
         } catch (UnknownHostException | ConnectException | ConnectTimeoutException e) {
             // 同络错误重试5次

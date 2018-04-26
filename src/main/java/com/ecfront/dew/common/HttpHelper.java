@@ -1,6 +1,7 @@
 package com.ecfront.dew.common;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public interface HttpHelper {
@@ -222,11 +223,11 @@ public interface HttpHelper {
      */
     ResponseWrap deleteWrap(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
 
-    Map<String, String> head(String url) throws IOException;
+    Map<String, List<String>> head(String url) throws IOException;
 
-    Map<String, String> head(String url, Map<String, String> header) throws IOException;
+    Map<String, List<String>> head(String url, Map<String, String> header) throws IOException;
 
-    Map<String, String> head(String url, String contentType) throws IOException;
+    Map<String, List<String>> head(String url, String contentType) throws IOException;
 
     /**
      * Head请求
@@ -238,13 +239,13 @@ public interface HttpHelper {
      * @param connectTimeoutMS 连接超时时间
      * @param socketTimeoutMS  读取超时时间
      */
-    Map<String, String> head(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
+    Map<String, List<String>> head(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
 
-    Map<String, String> options(String url) throws IOException;
+    Map<String, List<String>> options(String url) throws IOException;
 
-    Map<String, String> options(String url, Map<String, String> header) throws IOException;
+    Map<String, List<String>> options(String url, Map<String, String> header) throws IOException;
 
-    Map<String, String> options(String url, String contentType) throws IOException;
+    Map<String, List<String>> options(String url, String contentType) throws IOException;
 
     /**
      * Options请求
@@ -256,7 +257,7 @@ public interface HttpHelper {
      * @param connectTimeoutMS 连接超时时间
      * @param socketTimeoutMS  读取超时时间
      */
-    Map<String, String> options(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
+    Map<String, List<String>> options(String url, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
 
     /**
      * 发起请求
@@ -280,6 +281,6 @@ public interface HttpHelper {
     class ResponseWrap {
         public int statusCode;
         public String result;
-        public Map<String, String> head;
+        public Map<String, List<String>> head;
     }
 }

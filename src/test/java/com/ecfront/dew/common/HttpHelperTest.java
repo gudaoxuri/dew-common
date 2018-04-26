@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpHelperTest {
@@ -55,13 +56,13 @@ public class HttpHelperTest {
         // put with head
         HttpHelper.ResponseWrap responseWrap = $.http.putWrap("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
         Assert.assertEquals("1", $.json.toJson($.json.toJson(result).get("files").get("conf1.json").asText()).get("a").asText());
-        Assert.assertEquals("application/json", responseWrap.head.get("Content-Type"));
+        Assert.assertEquals("application/json", responseWrap.head.get("Content-Type").get(0));
         // head
-        Map<String, String> head = $.http.head("https://httpbin.org/get");
-        Assert.assertEquals("application/json", head.get("Content-Type"));
+        Map<String, List<String>> head = $.http.head("https://httpbin.org/get");
+        Assert.assertEquals("application/json", head.get("Content-Type").get(0));
         // options
         head = $.http.options("https://httpbin.org/get");
-        Assert.assertTrue(head.get("Allow").contains("GET"));
+        Assert.assertTrue(head.get("Allow").get(0).contains("GET"));
     }
 
 }
