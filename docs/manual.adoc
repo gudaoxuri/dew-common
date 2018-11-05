@@ -1,6 +1,6 @@
 = Dew Common — Java常用操作工具集
 ECFront
-v1.3.18,2017-10-19
+v1.4.8,2018-11-05
 :doctype: book
 :encoding: utf-8
 :lang: zh-CN
