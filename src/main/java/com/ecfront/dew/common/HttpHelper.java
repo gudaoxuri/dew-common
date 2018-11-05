@@ -276,7 +276,8 @@ public interface HttpHelper {
      * @param socketTimeoutMS  读取超时时间
      * @return 返回结果
      */
-    ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
+    ResponseWrap request(String method, String url, Object body, Map<String, String> header,
+                         String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
 
     class ResponseWrap {
         public int statusCode;

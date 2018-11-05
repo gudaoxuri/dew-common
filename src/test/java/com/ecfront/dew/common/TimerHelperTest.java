@@ -3,6 +3,8 @@ package com.ecfront.dew.common;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.concurrent.CountDownLatch;
+
 public class TimerHelperTest {
 
     @Test
@@ -16,7 +18,19 @@ public class TimerHelperTest {
         $.timer.cancel(taskId);
         Thread.sleep(2000);
         Assert.assertEquals(3, i[0]);
-    }
 
+        for (int j = 0; j < 10; j++) {
+            int finalJ = j;
+            new Thread(() -> $.timer.periodic(1, false, () -> {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(System.currentTimeMillis() / 1000 + "-" + Thread.currentThread().getName() + "-" + finalJ);
+            })).start();
+        }
+        new CountDownLatch(1).await();
+    }
 
 }

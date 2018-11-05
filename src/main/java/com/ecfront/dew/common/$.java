@@ -87,10 +87,11 @@ public class $ {
      * @param maxPerRoute             每个路由（域）的默认最大连接
      * @param defaultConnectTimeoutMS 默认连接超时时间
      * @param defaultSocketTimeoutMS  默认读取超时时间
+     * @param autoRedirect            302状态下是否自动跳转
      * @param retryAble               是否重试
      */
-    public static HttpHelper http(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean retryAble) {
-        return HttpHelperFactory.choose(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, retryAble);
+    public static HttpHelper http(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, Boolean autoRedirect, boolean retryAble) {
+        return HttpHelperFactory.choose(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, autoRedirect, retryAble);
     }
 
     /**

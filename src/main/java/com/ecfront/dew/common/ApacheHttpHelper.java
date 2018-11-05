@@ -18,6 +18,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContextBuilder;
@@ -49,19 +50,20 @@ public class ApacheHttpHelper implements HttpHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(ApacheHttpHelper.class);
 
-    private CloseableHttpClient httpClient = null;
-    private boolean retryAble = true;
-    private int defaultConnectTimeoutMS = -1;
-    private int defaultSocketTimeoutMS = -1;
+    private CloseableHttpClient httpClient;
+    private boolean retryAble;
+    private int defaultConnectTimeoutMS;
+    private int defaultSocketTimeoutMS;
 
     /**
      * @param maxTotal                整个连接池最大连接数
      * @param maxPerRoute             每个路由（域）的默认最大连接
      * @param defaultConnectTimeoutMS 默认连接超时时间
      * @param defaultSocketTimeoutMS  默认读取超时时间
+     * @param autoRedirect            302状态下是否自动跳转
      * @param retryAble               是否重试
      */
-    ApacheHttpHelper(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean retryAble) {
+    ApacheHttpHelper(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, Boolean autoRedirect, boolean retryAble) {
         this.defaultConnectTimeoutMS = defaultConnectTimeoutMS;
         this.defaultSocketTimeoutMS = defaultSocketTimeoutMS;
         this.retryAble = retryAble;
@@ -79,6 +81,9 @@ public class ApacheHttpHelper implements HttpHelper {
         PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
         connMgr.setMaxTotal(maxTotal);
         connMgr.setDefaultMaxPerRoute(maxPerRoute);
+        if (autoRedirect) {
+            httpClientBuilder.setRedirectStrategy(new LaxRedirectStrategy());
+        }
         httpClientBuilder.setConnectionManager(connMgr);
         httpClient = httpClientBuilder.build();
     }
