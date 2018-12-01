@@ -37,6 +37,10 @@ public class JsonHelper {
         }
     }
 
+    JsonHelper(ObjectMapper mapper) {
+        this.mapper = mapper;
+    }
+
     /**
      * 设置时区
      *

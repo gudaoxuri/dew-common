@@ -1,6 +1,8 @@
 package com.ecfront.dew.common;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,9 +18,9 @@ public class JsonHelperTest {
 
     @Test
     public void testPath() throws Exception {
-      JsonNode jsonNode = $.json.toJson("{'a_key':'a_val','child':{'c_key':'c_val'}}");
-        Assert.assertEquals("a_val",$.json.path(jsonNode,"a_key").asText());
-        Assert.assertEquals("c_val",$.json.path(jsonNode,"child.c_key").asText());
+        JsonNode jsonNode = $.json.toJson("{'a_key':'a_val','child':{'c_key':'c_val'}}");
+        Assert.assertEquals("a_val", $.json.path(jsonNode, "a_key").asText());
+        Assert.assertEquals("c_val", $.json.path(jsonNode, "child.c_key").asText());
     }
 
     @Test
@@ -56,9 +58,9 @@ public class JsonHelperTest {
 
     @Test
     public void toMap() throws Exception {
-        Map<String,TestIdModel> model = $.json.toMap("{'sunisle':{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}}",String.class, TestIdModel.class);
+        Map<String, TestIdModel> model = $.json.toMap("{'sunisle':{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}}", String.class, TestIdModel.class);
         Assert.assertEquals("sunisle", model.keySet().iterator().next());
-        TestIdModel val=model.get("sunisle");
+        TestIdModel val = model.get("sunisle");
         Assert.assertEquals("1", val.getCid());
         Assert.assertEquals("123456789", val.getCreateTime());
         Assert.assertEquals("2016-07-12 12:00:00", df.format(val.getDate()));
@@ -84,15 +86,31 @@ public class JsonHelperTest {
     }
 
     @Test
-    public void testLocalDateTime(){
-        TestIdModel model=new TestIdModel();
+    public void testLocalDateTime() {
+        TestIdModel model = new TestIdModel();
         model.setLocalDateTime(LocalDateTime.now());
         model.setLocalDate(LocalDate.now());
         model.setLocalTime(LocalTime.now());
-        TestIdModel model2 = $.json.toObject($.json.toJsonString(model),TestIdModel.class);
+        TestIdModel model2 = $.json.toObject($.json.toJsonString(model), TestIdModel.class);
         Assert.assertTrue(model.getLocalDateTime().isEqual(model2.getLocalDateTime()));
         Assert.assertTrue(model.getLocalDate().isEqual(model2.getLocalDate()));
-        Assert.assertEquals(model.getLocalTime().toString(),model2.getLocalTime().toString());
+        Assert.assertEquals(model.getLocalTime().toString(), model2.getLocalTime().toString());
+    }
+
+    @Test
+    public void customMapper() {
+        // Normal operation
+        Assert.assertEquals("1", $.json.toJson("{'a':'1'}").get("a").asText());
+        // Custom Mapper operation
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, false);
+        JsonHelper customJson = $.json(mapper);
+        try {
+            customJson.toJson("{'a':'1'}");
+            Assert.fail();
+        } catch (RuntimeException e) {
+            Assert.assertTrue(e.getMessage().contains("com.fasterxml.jackson.core.JsonParseException: Unexpected character"));
+        }
     }
 
 }

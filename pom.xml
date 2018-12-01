@@ -10,7 +10,7 @@
     <description>Dew公共模块</description>
     <url>https://github.com/gudaoxuri/dew-common</url>
     <packaging>jar</packaging>
-    <version>1.4.8</version>
+    <version>1.4.9</version>
 
     <properties>
         <java.version>1.8</java.version>
