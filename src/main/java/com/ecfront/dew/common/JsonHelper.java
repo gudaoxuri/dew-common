@@ -20,9 +20,15 @@ import java.util.*;
  */
 public class JsonHelper {
 
+    private static final Map<String, JsonHelper> INSTANCES = new HashMap<>();
+
     private ObjectMapper mapper;
 
-    JsonHelper() {
+    static JsonHelper pick(String instanceId) {
+        return INSTANCES.computeIfAbsent(instanceId, k -> new JsonHelper());
+    }
+
+    private JsonHelper() {
         if (DependencyHelper.hasDependency("com.fasterxml.jackson.core.JsonProcessingException")) {
             mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -35,10 +41,6 @@ public class JsonHelper {
             mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             setTimeZone(Calendar.getInstance().getTimeZone());
         }
-    }
-
-    JsonHelper(ObjectMapper mapper) {
-        this.mapper = mapper;
     }
 
     /**

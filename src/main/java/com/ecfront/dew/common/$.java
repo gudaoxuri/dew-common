@@ -1,7 +1,5 @@
 package com.ecfront.dew.common;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 /**
  * DEW Common 操作入口
  */
@@ -10,15 +8,16 @@ public class $ {
     /**
      * Json与Java对象互转
      */
-    public static JsonHelper json = new JsonHelper();
+    public static JsonHelper json = JsonHelper.pick("");
 
     /**
      * Json与Java对象互转
-     *
-     * 使用自定义Mapper
+     * <p>
+     * 使用自定义实例ID（用于支持不同Json配置）
      */
-    public static JsonHelper json(ObjectMapper customMapper) {
-        return new JsonHelper(customMapper);
+    public static JsonHelper json(String instanceId) {
+        assert instanceId!=null && !instanceId.trim().equals("");
+        return JsonHelper.pick(instanceId);
     }
 
     /**

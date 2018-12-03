@@ -2,7 +2,6 @@ package com.ecfront.dew.common;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -102,11 +101,9 @@ public class JsonHelperTest {
         // Normal operation
         Assert.assertEquals("1", $.json.toJson("{'a':'1'}").get("a").asText());
         // Custom Mapper operation
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, false);
-        JsonHelper customJson = $.json(mapper);
+        $.json("otherInst").getMapper().configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, false);
         try {
-            customJson.toJson("{'a':'1'}");
+            $.json("otherInst").toJson("{'a':'1'}");
             Assert.fail();
         } catch (RuntimeException e) {
             Assert.assertTrue(e.getMessage().contains("com.fasterxml.jackson.core.JsonParseException: Unexpected character"));
