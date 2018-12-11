@@ -416,7 +416,7 @@ public class ApacheHttpHelper implements HttpHelper {
                         }
                         entity = new UrlEncodedFormEntity(m, charset);
                     }else{
-                        throw new IllegalArgumentException("The body nly support Map OR String types when content type is application/x-www-form-urlencoded");
+                        throw new IllegalArgumentException("The body only support Map OR String types when content type is application/x-www-form-urlencoded");
                     }
                     break;
                 case "xml":
