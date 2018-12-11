@@ -404,12 +404,21 @@ public class ApacheHttpHelper implements HttpHelper {
             HttpEntity entity;
             switch (contentType.toLowerCase()) {
                 case "application/x-www-form-urlencoded":
+                    List<NameValuePair> m = new java.util.ArrayList<>();
                     if (body instanceof Map<?, ?>) {
-                        List<NameValuePair> m = new java.util.ArrayList<>();
                         ((Map<String, String>) body).forEach((key, value) -> m.add(new BasicNameValuePair(key, value)));
                         entity = new UrlEncodedFormEntity(m, charset);
-                        break;
+                    } else if (body instanceof String) {
+                        String[] items = URLDecoder.decode((String)body,charset).split("&");
+                        for (String item : items) {
+                           String[] kv = item.split("=");
+                            m.add(new BasicNameValuePair(kv[0], kv.length==2?kv[1]:""));
+                        }
+                        entity = new UrlEncodedFormEntity(m, charset);
+                    }else{
+                        throw new IllegalArgumentException("The body nly support Map OR String types when content type is application/x-www-form-urlencoded");
                     }
+                    break;
                 case "xml":
                     if (body instanceof Document) {
                         entity = new StringEntity($((Document) body).toString(), charset);

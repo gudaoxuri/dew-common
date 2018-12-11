@@ -43,7 +43,10 @@ public class HttpHelperTest {
         result = $.http.post("https://httpbin.org/post", new HashMap<String, Object>() {{
             put("a", "1");
         }}, "application/x-www-form-urlencoded");
-        Assert.assertEquals("1", $.json.toJson(result).get("form").get("a").asText());
+        result = $.http.post("https://httpbin.org/post", "custname=%E5%8C%BF%E5%90%8D&size=small&topping=cheese&topping=onion", "application/x-www-form-urlencoded");
+        Assert.assertEquals("匿名", $.json.toJson(result).get("form").get("custname").asText());
+        Assert.assertEquals("small", $.json.toJson(result).get("form").get("size").asText());
+        Assert.assertEquals("onion", $.json.toJson(result).get("form").get("topping").get(1).asText());
         // post - file
         result = $.http.post("https://httpbin.org/post", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
         Assert.assertEquals("1", $.json.toJson($.json.toJson(result).get("files").get("conf1.json").asText()).get("a").asText());
