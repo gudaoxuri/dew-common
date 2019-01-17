@@ -90,6 +90,21 @@ public class $ {
      */
     public static HttpHelper http = HttpHelperFactory.choose();
 
+
+
+    /**
+     * Http操作(302状态下不自动跳转)
+     *
+     * @param maxTotal                整个连接池最大连接数
+     * @param maxPerRoute             每个路由（域）的默认最大连接
+     * @param defaultConnectTimeoutMS 默认连接超时时间
+     * @param defaultSocketTimeoutMS  默认读取超时时间
+     * @param retryAble               是否重试
+     */
+    public static HttpHelper http(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean retryAble) {
+        return HttpHelperFactory.choose(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, false, retryAble);
+    }
+
     /**
      * Http操作
      *
