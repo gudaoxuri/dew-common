@@ -15,7 +15,7 @@ public class HttpHelperFactory {
      * @param autoRedirect            302状态下是否自动跳转
      * @param retryAble               是否重试
      */
-    static HttpHelper choose(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, Boolean autoRedirect, boolean retryAble) {
+    static HttpHelper choose(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean autoRedirect, boolean retryAble) {
         if (DependencyHelper.hasDependency("org.apache.http.impl.client.CloseableHttpClient")) {
             return new ApacheHttpHelper(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, autoRedirect, retryAble);
         }

@@ -63,7 +63,7 @@ public class ApacheHttpHelper implements HttpHelper {
      * @param autoRedirect            302状态下是否自动跳转
      * @param retryAble               是否重试
      */
-    ApacheHttpHelper(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, Boolean autoRedirect, boolean retryAble) {
+    ApacheHttpHelper(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean autoRedirect, boolean retryAble) {
         this.defaultConnectTimeoutMS = defaultConnectTimeoutMS;
         this.defaultSocketTimeoutMS = defaultSocketTimeoutMS;
         this.retryAble = retryAble;
@@ -355,7 +355,7 @@ public class ApacheHttpHelper implements HttpHelper {
         if (header == null) {
             header = new HashMap<>();
         }
-        if (body != null && body instanceof File) {
+        if (body instanceof File) {
             contentType = "multipart/form-data";
         } else if (contentType == null) {
             contentType = "application/json; charset=utf-8";
@@ -396,9 +396,7 @@ public class ApacheHttpHelper implements HttpHelper {
         for (Map.Entry<String, String> entry : header.entrySet()) {
             httpMethod.addHeader(entry.getKey(), entry.getValue());
         }
-        if (contentType != null) {
-            httpMethod.addHeader("Content-Type", contentType);
-        }
+        httpMethod.addHeader("Content-Type", contentType);
         logger.trace("HTTP [" + method + "]" + url);
         if (body != null) {
             HttpEntity entity;

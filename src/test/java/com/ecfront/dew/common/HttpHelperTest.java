@@ -3,12 +3,7 @@ package com.ecfront.dew.common;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +24,7 @@ public class HttpHelperTest {
         result = $.http.get("https://httpbin.org/get", new HashMap<String, String>() {{
             put("Customer-A", "AAA");
             put("Accept", "json");
-        }}, "application/json; charset=utf-8", "utf-8", 5000,5000);
+        }}, "application/json; charset=utf-8", "utf-8", 5000, 5000);
         Assert.assertEquals("AAA", $.json.toJson(result).get("headers").get("Customer-A").asText());
         Assert.assertEquals("json", $.json.toJson(result).get("headers").get("Accept").asText());
         Assert.assertEquals("application/json; charset=utf-8", $.json.toJson(result).get("headers").get("Content-Type").asText());

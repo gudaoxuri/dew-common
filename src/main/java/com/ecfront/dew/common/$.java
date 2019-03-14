@@ -100,7 +100,7 @@ public class $ {
      * @param autoRedirect            302状态下是否自动跳转
      * @param retryAble               是否重试
      */
-    public static HttpHelper http(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, Boolean autoRedirect, boolean retryAble) {
+    public static HttpHelper http(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean autoRedirect, boolean retryAble) {
         return HttpHelperFactory.choose(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, autoRedirect, retryAble);
     }
 
