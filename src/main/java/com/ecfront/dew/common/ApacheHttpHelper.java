@@ -329,8 +329,18 @@ public class ApacheHttpHelper implements HttpHelper {
     }
 
     @Override
-    public ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
-        return request(method, url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS, 0);
+    public ResponseWrap request(String method, String url, Object body,
+                                Map<String, String> header, String contentType,
+                                String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request(method, url, body, header, contentType, charset, charset, connectTimeoutMS, socketTimeoutMS);
+    }
+
+    @Override
+    public ResponseWrap request(String method, String url, Object body,
+                                Map<String, String> header, String contentType,
+                                String requestCharset, String responseCharset,
+                                int connectTimeoutMS, int socketTimeoutMS) throws IOException {
+        return request(method, url, body, header, contentType, requestCharset, responseCharset, connectTimeoutMS, socketTimeoutMS, 0);
     }
 
     /**
@@ -345,13 +355,17 @@ public class ApacheHttpHelper implements HttpHelper {
      *                         其它情况下，body可以是任意格式
      * @param header           请求头
      * @param contentType      content-type
-     * @param charset          请求与返回内容编码
+     * @param requestCharset   请求内容编码
+     * @param responseCharset  返回内容编码，默认等于请求内容编码
      * @param connectTimeoutMS 连接超时时间
      * @param socketTimeoutMS  读取超时时间
      * @param retry            重试次数
      * @return 返回结果
      */
-    private ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS, int retry) throws IOException {
+    private ResponseWrap request(String method, String url, Object body,
+                                 Map<String, String> header, String contentType,
+                                 String requestCharset, String responseCharset,
+                                 int connectTimeoutMS, int socketTimeoutMS, int retry) throws IOException {
         if (header == null) {
             header = new HashMap<>();
         }
@@ -360,8 +374,11 @@ public class ApacheHttpHelper implements HttpHelper {
         } else if (contentType == null) {
             contentType = "application/json; charset=utf-8";
         }
-        if (charset == null) {
-            charset = "UTF-8";
+        if (requestCharset == null) {
+            requestCharset = "UTF-8";
+        }
+        if (responseCharset == null) {
+            responseCharset = requestCharset;
         }
         HttpRequestBase httpMethod;
         switch (method.toUpperCase()) {
@@ -405,26 +422,26 @@ public class ApacheHttpHelper implements HttpHelper {
                     List<NameValuePair> m = new java.util.ArrayList<>();
                     if (body instanceof Map<?, ?>) {
                         ((Map<String, String>) body).forEach((key, value) -> m.add(new BasicNameValuePair(key, value)));
-                        entity = new UrlEncodedFormEntity(m, charset);
+                        entity = new UrlEncodedFormEntity(m, requestCharset);
                     } else if (body instanceof String) {
-                        String[] items = URLDecoder.decode((String)body,charset).split("&");
+                        String[] items = URLDecoder.decode((String) body, requestCharset).split("&");
                         for (String item : items) {
-                           String[] kv = item.split("=");
-                            m.add(new BasicNameValuePair(kv[0], kv.length==2?kv[1]:""));
+                            String[] kv = item.split("=");
+                            m.add(new BasicNameValuePair(kv[0], kv.length == 2 ? kv[1] : ""));
                         }
-                        entity = new UrlEncodedFormEntity(m, charset);
-                    }else{
+                        entity = new UrlEncodedFormEntity(m, requestCharset);
+                    } else {
                         throw new IllegalArgumentException("The body only support Map OR String types when content type is application/x-www-form-urlencoded");
                     }
                     break;
                 case "xml":
                     if (body instanceof Document) {
-                        entity = new StringEntity($((Document) body).toString(), charset);
+                        entity = new StringEntity($((Document) body).toString(), requestCharset);
                     } else if (body instanceof String) {
-                        entity = new StringEntity((String) body, charset);
+                        entity = new StringEntity((String) body, requestCharset);
                     } else {
                         logger.error("Not support return type [" + body.getClass().getName() + "] by xml");
-                        entity = new StringEntity("", charset);
+                        entity = new StringEntity("", requestCharset);
                     }
                     break;
                 case "multipart/form-data":
@@ -438,13 +455,14 @@ public class ApacheHttpHelper implements HttpHelper {
                     break;
                 default:
                     if (body instanceof String) {
-                        entity = new StringEntity((String) body, charset);
-                    } else if (body instanceof Integer || body instanceof Long || body instanceof Float || body instanceof Double || body instanceof BigDecimal || body instanceof Boolean) {
-                        entity = new StringEntity(body.toString(), charset);
+                        entity = new StringEntity((String) body, requestCharset);
+                    } else if (body instanceof Integer || body instanceof Long || body instanceof Float ||
+                            body instanceof Double || body instanceof BigDecimal || body instanceof Boolean) {
+                        entity = new StringEntity(body.toString(), requestCharset);
                     } else if (body instanceof Date) {
-                        entity = new StringEntity(((Date) body).getTime() + "", charset);
+                        entity = new StringEntity(((Date) body).getTime() + "", requestCharset);
                     } else {
-                        entity = new StringEntity($.json.toJsonString(body), charset);
+                        entity = new StringEntity($.json.toJsonString(body), requestCharset);
                     }
             }
             ((HttpEntityEnclosingRequestBase) httpMethod).setEntity(entity);
@@ -452,18 +470,18 @@ public class ApacheHttpHelper implements HttpHelper {
         try (CloseableHttpResponse response = httpClient.execute(httpMethod)) {
             ResponseWrap responseWrap = new ResponseWrap();
             if (!(httpMethod instanceof HttpHead || httpMethod instanceof HttpOptions)) {
-                responseWrap.result = EntityUtils.toString(response.getEntity(), charset);
+                responseWrap.result = EntityUtils.toString(response.getEntity(), responseCharset);
             } else {
                 responseWrap.result = "";
             }
             responseWrap.statusCode = response.getStatusLine().getStatusCode();
-            String finalCharset = charset;
+            String finalCharset = responseCharset;
             responseWrap.head = Arrays
                     .stream(response.getAllHeaders())
-                    .collect(Collectors.groupingBy(head -> head.getName()))
+                    .collect(Collectors.groupingBy(NameValuePair::getName))
                     .entrySet()
                     .stream()
-                    .collect(Collectors.toMap(head -> head.getKey(),
+                    .collect(Collectors.toMap(Map.Entry::getKey,
                             head -> head.getValue()
                                     .stream()
                                     .map(h -> {
@@ -487,7 +505,7 @@ public class ApacheHttpHelper implements HttpHelper {
                     e1.printStackTrace();
                 }
                 logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + (retry + 1) + ".");
-                return request(method, url, body, header, contentType, charset, connectTimeoutMS, socketTimeoutMS, retry + 1);
+                return request(method, url, body, header, contentType, requestCharset, responseCharset, connectTimeoutMS, socketTimeoutMS, retry + 1);
             } else {
                 logger.warn("HTTP [" + httpMethod.getMethod() + "] " + url + " ERROR. retry " + (retry + 1) + ".");
                 throw e;

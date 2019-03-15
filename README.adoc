@@ -1,6 +1,6 @@
 = Dew Common — Java常用操作工具集
 ECFront
-v1.4.9,2018-12-11
+v1.4.10,2018-12-11
 :doctype: book
 :encoding: utf-8
 :lang: zh-CN
@@ -48,7 +48,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.4.9</version>
+        <version>1.4.10</version>
 </parent>
 ----
 

@@ -276,8 +276,32 @@ public interface HttpHelper {
      * @param socketTimeoutMS  读取超时时间
      * @return 返回结果
      */
-    ResponseWrap request(String method, String url, Object body, Map<String, String> header,
-                         String contentType, String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
+    ResponseWrap request(String method, String url, Object body,
+                         Map<String, String> header, String contentType,
+                         String charset, int connectTimeoutMS, int socketTimeoutMS) throws IOException;
+
+    /**
+     * 发起请求
+     *
+     * @param method           http方法
+     * @param url              请求url
+     * @param body             请求体，用于post、put、patch
+     *                         如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                         如果content-type是xml时，body只能是Document或Xml的String格式
+     *                         如果content-type是multipart/form-data时，body只能是File格式
+     *                         其它情况下，body可以是任意格式
+     * @param header           请求头
+     * @param contentType      content-type
+     * @param requestCharset   请求内容编码
+     * @param responseCharset  返回内容编码，默认等于请求内容编码
+     * @param connectTimeoutMS 连接超时时间
+     * @param socketTimeoutMS  读取超时时间
+     * @return 返回结果
+     */
+    ResponseWrap request(String method, String url, Object body,
+                         Map<String, String> header, String contentType,
+                         String requestCharset, String responseCharset,
+                         int connectTimeoutMS, int socketTimeoutMS) throws IOException;
 
     class ResponseWrap {
         public int statusCode;
