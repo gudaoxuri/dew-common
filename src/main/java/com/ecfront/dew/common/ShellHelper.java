@@ -7,9 +7,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * Shell脚本操作
@@ -18,125 +18,142 @@ public class ShellHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(ShellHelper.class);
 
-    ShellHelper(){}
+    private static final ExecutorService pool = Executors.newCachedThreadPool();
 
-    private volatile String taskId;
-    private volatile String successFlag;
-    private volatile String progressFlag;
-    private volatile ReportHandler reportHandler;
+    ShellHelper() {
+    }
 
-    private volatile StringBuffer result = new StringBuffer();
-    private boolean returnResult = false;
 
     /**
-     * 执行入口
+     * 执行入口，如执行成功，此方法只返回output(标准输出)
      *
-     * @param shellPath     sh文件路径，包含参数
-     * @param taskId        任务ID
-     * @param successFlag   成功标识，只要捕捉到此标识就视为成功，
-     *                      为null时不会调用ReportHandler的success方法，执行结束后会调用ReportHandler的fail方法
-     * @param progressFlag  进度标识，只要捕捉到此标识就更新进度，
-     *                      格式为 <progressFlag>空格<progress>,如： progress 40，
-     *                      为null时不会调用ReportHandler的progress方法
-     * @param returnResult  是否返回结果（输出内容），为true时会返回结果到ReportHandler的complete方法中，
-     *                      结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
-     * @param reportHandler 任务报告实例
+     * @param cmd 命令，包含参数
      */
-    public void execute(String shellPath, String taskId, String successFlag, String progressFlag, boolean returnResult, ReportHandler reportHandler) {
-        this.taskId = taskId;
-        this.successFlag = successFlag.toLowerCase();
-        this.progressFlag = progressFlag.toLowerCase();
-        this.returnResult = returnResult;
-        this.reportHandler = reportHandler;
+    public Resp<List<String>> execute(String cmd) {
+        ReportHandler reportHandler = new ReportHandler() {
+        };
         try {
-            Process process = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", shellPath});
-            if (process != null) {
-                StreamGobbler errorGobbler = new StreamGobbler(process.getErrorStream());
-                StreamGobbler outputGobbler = new StreamGobbler(process.getInputStream());
-                Future<Boolean> errorFuture = Executors.newCachedThreadPool().submit(errorGobbler);
-                Future<Boolean> outputFuture = Executors.newCachedThreadPool().submit(outputGobbler);
-                if (0 == process.waitFor()) {
-                    if (errorFuture.get() || outputFuture.get()) {
-                        if (reportHandler != null) {
-                            //删除最后一行（\r\n）
-                            reportHandler.complete(taskId, result.length() > 0 ? result.substring(0, result.length() - 2) : result.toString());
-                        }
-                        logger.debug("Execute Success: " + shellPath);
-                    } else {
-                        logger.warn("Execute fail: Not Find successFlag [" + successFlag + "], shellPath:" + shellPath);
-                        reportHandler.fail(taskId, "Not Find successFlag [" + successFlag + "], shellPath:" + shellPath);
-                    }
-                } else {
-                    logger.warn("Execute fail: Abnormal termination , shellPath:" + shellPath);
-                    reportHandler.fail(taskId, "Abnormal termination , shellPath:" + shellPath);
-                }
+            execute(cmd, null, null, true, false, reportHandler).get();
+            if (!reportHandler.isFail()) {
+                return Resp.success(reportHandler.getOutput());
             } else {
-                logger.warn("Execute fail: PID NOT exist , shellPath:" + shellPath);
-                reportHandler.fail(taskId, "PID NOT exist , shellPath:" + shellPath);
+                return Resp.customFail("", reportHandler.getFailMessage());
             }
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             logger.error("Execute fail: ", e);
-            reportHandler.fail(taskId, e.getMessage() + " , shellPath:" + shellPath);
+            return Resp.customFail("", e.getMessage());
+        } catch (IOException | ExecutionException e) {
+            logger.error("Execute fail: ", e);
+            return Resp.customFail("", e.getMessage());
         }
     }
 
     /**
-     * 输出处理
+     * 执行入口
+     *
+     * @param cmd              命令或脚本，包含参数
+     * @param successFlag      成功标识，只要捕捉到此标识就视为成功，
+     *                         为null时不会调用ReportHandler的success方法
+     * @param progressFlag     进度标识，只要捕捉到此标识就更新进度，
+     *                         格式为 <progressFlag>空格<progress>,如： progress 40，
+     *                         为null时不会调用ReportHandler的progress方法
+     * @param returnResult     是否返回结果（输出内容，包含标准输出stdin及标准错误stderr），
+     *                         为true时会返回结果到ReportHandler的complete方法中，
+     *                         结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
+     * @param fetchErrorResult 是否返回标准错误stderr输出
+     * @param reportHandler    任务报告实例
      */
-    private class StreamGobbler implements Callable<Boolean> {
-        private InputStream is;
+    public Future<Void> execute(String cmd,
+                                String successFlag, String progressFlag,
+                                boolean returnResult, boolean fetchErrorResult,
+                                ReportHandler reportHandler) throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if ($.file.isWindows()) {
+            processBuilder.command("cmd.exe", "/c", cmd);
+        } else {
+            processBuilder.command("bash", "-c", cmd);
+        }
+        Process process = processBuilder.start();
+        return pool.submit(new ProcessReadTask(process, cmd,
+                successFlag, progressFlag, returnResult, fetchErrorResult, reportHandler));
+    }
 
-        StreamGobbler(InputStream is) {
-            this.is = is;
+    private static class ProcessReadTask implements Callable<Void> {
+        private Process process;
+        private InputStream errorStream;
+        private InputStream outputStream;
+        private String cmd;
+        private String successFlag;
+        private String progressFlag;
+        private boolean returnResult;
+        private boolean fetchErrorResult;
+        private ReportHandler reportHandler;
+
+        ProcessReadTask(Process process, String cmd, String successFlag, String progressFlag, boolean returnResult, boolean fetchErrorResult, ReportHandler reportHandler) {
+            this.process = process;
+            this.errorStream = process.getErrorStream();
+            this.outputStream = process.getInputStream();
+            this.cmd = cmd;
+            this.successFlag = successFlag;
+            this.progressFlag = progressFlag;
+            this.returnResult = returnResult;
+            this.fetchErrorResult = fetchErrorResult;
+            this.reportHandler = reportHandler;
         }
 
         @Override
-        public Boolean call() {
-            InputStreamReader isr = null;
-            BufferedReader br = null;
-            String line;
+        public Void call() throws InterruptedException {
+            List<String> errorResult = new ArrayList<>();
+            List<String> outputResult = new ArrayList<>();
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+            BufferedReader outputReader = new BufferedReader(new InputStreamReader(outputStream));
+            String errorLine = null;
+            String outputLine;
+            boolean stop = false;
             try {
-                isr = new InputStreamReader(is);
-                br = new BufferedReader(isr);
-                while ((line = br.readLine()) != null) {
-                    logger.trace("Shell content:" + line);
+                while (!stop
+                        && ((fetchErrorResult && (errorLine = errorReader.readLine()) != null)
+                        | (outputLine = outputReader.readLine()) != null)) {
+                    if (fetchErrorResult) {
+                        logger.trace("Shell error content:" + errorLine);
+                    }
+                    logger.trace("Shell output content:" + outputLine);
                     if (returnResult) {
-                        result.append(line).append("\r\n");
+                        if (errorLine != null) {
+                            errorResult.add(errorLine);
+                        }
+                        if (outputLine != null) {
+                            outputResult.add(outputLine);
+                        }
                     }
-                    if (successFlag != null && line.toLowerCase().contains(successFlag)) {
-                        reportHandler.success(taskId);
-                        return true;
+                    if (successFlag != null
+                            && outputLine != null
+                            && outputLine.toLowerCase().contains(successFlag)) {
+                        reportHandler.onSuccess();
+                        stop = true;
                     }
-                    if (progressFlag != null && line.toLowerCase().contains(progressFlag)) {
-                        reportHandler.progress(taskId, Integer.valueOf(line.substring(line.indexOf(progressFlag) + progressFlag.length()).trim()));
+                    if (progressFlag != null
+                            && outputLine != null
+                            && outputLine.toLowerCase().contains(progressFlag)) {
+                        reportHandler.onProgress(Integer.valueOf(outputLine.substring(outputLine.indexOf(progressFlag) + progressFlag.length()).trim()));
                     }
                 }
             } catch (IOException e) {
-                logger.warn("Execute fail: ", e);
+                String message = e.getMessage() + ", cmd : " + cmd
+                        + "\r\n" + String.join("\r\n", errorResult);
+                logger.error("Execute fail: " + message, e);
+                reportHandler.onFail(message);
             } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (Exception e) {
-                        logger.warn("Execute warn: ", e);
-                    }
+                if (0 != process.waitFor()) {
+                    String message = "Abnormal termination , cmd : " + cmd
+                            + "\r\n" + String.join("\r\n", errorResult);
+                    logger.warn("Execute fail: " + message);
+                    reportHandler.onFail(message);
                 }
-                if (isr != null) {
-                    try {
-                        isr.close();
-                    } catch (Exception e) {
-                        logger.warn("Execute warn: ", e);
-                    }
-                }
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (Exception e) {
-                        logger.warn("Execute warn: ", e);
-                    }
-                }
+                reportHandler.onComplete(outputResult, errorResult);
             }
-            return false;
+            return null;
         }
     }
 

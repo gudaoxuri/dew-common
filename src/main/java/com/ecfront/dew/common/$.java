@@ -76,9 +76,7 @@ public class $ {
     /**
      * Shell脚本操作
      */
-    public static ShellHelper shell() {
-        return new ShellHelper();
-    }
+    public static ShellHelper shell=new ShellHelper();
 
     /**
      * 拦截器栈执行器

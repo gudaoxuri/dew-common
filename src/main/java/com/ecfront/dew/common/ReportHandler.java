@@ -1,39 +1,118 @@
 package com.ecfront.dew.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 任务报告接口
  */
-public interface ReportHandler {
+public abstract class ReportHandler {
+
+    private boolean isSuccess = false;
+    private boolean isFail = false;
+    private String failMessage = "";
+    private int progress = 0;
+    private List<String> output = new ArrayList<>();
+    private List<String> error = new ArrayList<>();
+
+    public final boolean isSuccess() {
+        return isSuccess;
+    }
+
+    public final boolean isFail() {
+        return isFail;
+    }
+
+    public final String getFailMessage() {
+        return failMessage;
+    }
+
+    public final int getProgress() {
+        return progress;
+    }
+
+    public final List<String> getOutput() {
+        return output;
+    }
+
+    public final List<String> getError() {
+        return error;
+    }
 
     /**
      * 成功，在执行到successFlag时调用
-     *
-     * @param taskId 任务ID
      */
-    void success(String taskId);
+    final void onSuccess() {
+        this.isSuccess = true;
+        success();
+    }
+
 
     /**
-     * 失败，在执行完成且successFlag不存在或发生错误时调用
+     * 成功，在执行到successFlag时调用
+     */
+    void success() {
+
+    }
+
+    /**
+     * 失败，在发生错误时调用
      *
-     * @param taskId  任务ID
      * @param message 失败原因描述
      */
-    void fail(String taskId, String message);
+    final void onFail(String message) {
+        this.isFail = true;
+        this.failMessage = message;
+        fail(message);
+    }
+
+    /**
+     * 失败，在发生错误时调用
+     *
+     * @param message 失败原因描述
+     */
+    void fail(String message) {
+
+    }
 
     /**
      * 进度回调，在执行到progressFlag且格式正确时调用
      *
-     * @param taskId   任务ID
      * @param progress 0-100
      */
-    void progress(String taskId, int progress);
+    final void onProgress(int progress) {
+        this.progress = progress;
+        progress(progress);
+    }
 
     /**
-     * 完成，无法是否成功，在执行完成时调用
+     * 进度回调，在执行到progressFlag且格式正确时调用
      *
-     * @param taskId 任务ID
-     * @param result 结果，在returnResult为true时才有值
+     * @param progress 0-100
      */
-    void complete(String taskId, String result);
+    void progress(int progress) {
+    }
+
+    /**
+     * 完成，无论是否成功，在执行完成时(success 或 fail 方法后)调用
+     *
+     * @param output stdout标准输出结果
+     * @param error  stderr标准错误结果
+     */
+    final void onComplete(List<String> output, List<String> error) {
+        this.output = output;
+        this.error = error;
+        complete(output, error);
+    }
+
+    /**
+     * 完成，无论是否成功，在执行完成时(success 或 fail 方法后)调用
+     *
+     * @param output stdout结果
+     * @param error  stderr结果
+     */
+    void complete(List<String> output, List<String> error) {
+    }
+
 
 }
