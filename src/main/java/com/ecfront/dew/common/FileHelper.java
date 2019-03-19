@@ -1,17 +1,18 @@
 package com.ecfront.dew.common;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 常用文件操作
  */
 public class FileHelper {
 
-    FileHelper(){}
+    FileHelper() {
+    }
 
     /**
      * 根据文件路径名读取文件所有内容
@@ -64,5 +65,86 @@ public class FileHelper {
         return buffer.lines().collect(Collectors.joining("\n"));
     }
 
+    /**
+     * 判断是否是Windows系统
+     *
+     * @return 是否是Windows系统
+     */
+    public boolean isWindows() {
+        return System.getProperty("os.name", "linux").toLowerCase().startsWith("windows");
+    }
+
+
+    /**
+     * Glob模式文件过滤器
+     *
+     * @param files     要过滤的文件列表
+     * @param mathRules Glob过滤规则列表
+     * @return 过滤后的文件列表
+     * @link https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
+     */
+    public List<String> mathFilter(List<String> files, List<String> mathRules) {
+        if (mathRules.isEmpty()) {
+            return files;
+        }
+        List<PathMatcher> matchers = convertGlobMatchers(mathRules);
+        return convertPaths(files)
+                .filter(path -> matchers.stream()
+                        .anyMatch(mather -> mather.matches(path)))
+                .map(Path::toString)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 使用Glob模式过滤规则检查是否有匹配到的文件
+     *
+     * @param files     要匹配的文件列表
+     * @param mathRules Glob过滤规则列表
+     * @return 是否有匹配到的文件
+     * @link https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
+     */
+    public boolean anyMath(List<String> files, List<String> mathRules) {
+        if (files.isEmpty()) {
+            return false;
+        }
+        if (mathRules.isEmpty()) {
+            return true;
+        }
+        List<PathMatcher> matchers = convertGlobMatchers(mathRules);
+        return convertPaths(files)
+                .anyMatch(path -> matchers.stream()
+                        .anyMatch(mather -> mather.matches(path)));
+    }
+
+    /**
+     * 使用Glob模式过滤规则检查是否有未匹配到的文件
+     *
+     * @param files     要匹配的文件列表
+     * @param mathRules Glob过滤规则列表
+     * @return 是否有未匹配到的文件
+     * @link https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
+     */
+    public boolean noneMath(List<String> files, List<String> mathRules) {
+        if (files.isEmpty()) {
+            return true;
+        }
+        if (mathRules.isEmpty()) {
+            return false;
+        }
+        List<PathMatcher> matchers = convertGlobMatchers(mathRules);
+        return convertPaths(files)
+                .anyMatch(path -> matchers.stream()
+                        .noneMatch(mather -> mather.matches(path)));
+    }
+
+    private List<PathMatcher> convertGlobMatchers(List<String> mathRules) {
+        return mathRules.stream()
+                .map(rule -> FileSystems.getDefault().getPathMatcher("glob:" + rule))
+                .collect(Collectors.toList());
+    }
+
+    private Stream<Path> convertPaths(List<String> files) {
+        return files.stream().map(path -> Paths.get(path));
+    }
 
 }
