@@ -66,6 +66,18 @@ public class FileHelper {
     }
 
     /**
+     * 从流中复制文件到磁盘，不支持目录
+     *
+     * @param source   流，支持jar内文件复制
+     *                 e.g. Test.class.getResourceAsStream("/LICENSE-junit.txt")
+     * @param destPath 磁盘路径
+     * @throws IOException
+     */
+    public void copyStreamToPath(InputStream source, String destPath) throws IOException {
+        Files.copy(source, Paths.get(destPath), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    /**
      * 判断是否是Windows系统
      *
      * @return 是否是Windows系统
