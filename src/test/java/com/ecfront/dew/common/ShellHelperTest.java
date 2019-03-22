@@ -40,7 +40,7 @@ public class ShellHelperTest {
                          * 成功，在执行到successFlag时调用
                          */
                         @Override
-                        void success() {
+                        public void success() {
                             statusResult.add("Success");
                         }
 
@@ -50,7 +50,7 @@ public class ShellHelperTest {
                          * @param message 失败原因描述
                          */
                         @Override
-                        void fail(String message) {
+                        public void fail(String message) {
                             statusResult.add("Fail:" + message);
                         }
 
@@ -60,7 +60,7 @@ public class ShellHelperTest {
                          * @param progress 0-100
                          */
                         @Override
-                        void progress(int progress) {
+                        public void progress(int progress) {
                             statusResult.add("Progress:" + progress);
                         }
 
@@ -71,7 +71,7 @@ public class ShellHelperTest {
                          * @param error  stderr结果
                          */
                         @Override
-                        void complete(List<String> output, List<String> error) {
+                        public void complete(List<String> output, List<String> error) {
                             Assert.assertEquals("Start", statusResult.get(0));
                             Assert.assertEquals("Progress:10", statusResult.get(1));
                             Assert.assertEquals("Progress:70", statusResult.get(2));

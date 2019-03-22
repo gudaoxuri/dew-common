@@ -47,11 +47,24 @@ public abstract class ReportHandler {
         success();
     }
 
+    /**
+     * 输出每行错误输出数据
+     */
+    public void errorlog(String line) {
+
+    }
+
+    /**
+     * 输出每行标准输出数据
+     */
+    public void outputlog(String line) {
+
+    }
 
     /**
      * 成功，在执行到successFlag时调用
      */
-    void success() {
+    public void success() {
 
     }
 
@@ -71,7 +84,7 @@ public abstract class ReportHandler {
      *
      * @param message 失败原因描述
      */
-    void fail(String message) {
+    public void fail(String message) {
 
     }
 
@@ -90,7 +103,7 @@ public abstract class ReportHandler {
      *
      * @param progress 0-100
      */
-    void progress(int progress) {
+    public void progress(int progress) {
     }
 
     /**
@@ -111,7 +124,7 @@ public abstract class ReportHandler {
      * @param output stdout结果
      * @param error  stderr结果
      */
-    void complete(List<String> output, List<String> error) {
+    public void complete(List<String> output, List<String> error) {
     }
 
 

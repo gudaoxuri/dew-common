@@ -115,15 +115,17 @@ public class ShellHelper {
                 while (!stop
                         && ((fetchErrorResult && (errorLine = errorReader.readLine()) != null)
                         | (outputLine = outputReader.readLine()) != null)) {
-                    if (fetchErrorResult) {
+                    if (errorLine != null) {
+                        reportHandler.errorlog(errorLine);
                         logger.trace("Shell error content:" + errorLine);
-                    }
-                    logger.trace("Shell output content:" + outputLine);
-                    if (returnResult) {
-                        if (errorLine != null) {
+                        if (returnResult) {
                             errorResult.add(errorLine);
                         }
-                        if (outputLine != null) {
+                    }
+                    if (outputLine != null) {
+                        reportHandler.outputlog(outputLine);
+                        logger.trace("Shell output content:" + outputLine);
+                        if (returnResult) {
                             outputResult.add(outputLine);
                         }
                     }
