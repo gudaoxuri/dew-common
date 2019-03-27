@@ -35,6 +35,7 @@ public class JsonHelper {
             mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
             mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
             mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+            mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
             JavaTimeModule javaTimeModule = new JavaTimeModule();
             javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME));
             mapper.registerModule(javaTimeModule);
