@@ -115,7 +115,7 @@ public class $ {
     public static FallbackHelper fallback = new FallbackHelper();
 
     /**
-     * 脚本处理
+     * 脚本处理，包含预编译，适用于脚本复用性的场景
      *
      * @param jsFunsCode    JS 脚本
      * @param addCommonCode 是否添加dew-common包到脚本
@@ -125,12 +125,21 @@ public class $ {
     }
 
     /**
-     * 脚本处理，默认添加dew-common包到脚本
+     * 脚本处理，包含预编译，适用于脚本复用性的场景，默认添加dew-common包到脚本
      *
      * @param jsFunsCode JS 脚本
      */
     public static ScriptHelper script(String jsFunsCode) throws ScriptException {
         return ScriptHelper.build(jsFunsCode, true);
+    }
+
+    /**
+     * 脚本处理，适用于简单的脚本的执行
+     *
+     * @param jsCode JS 脚本
+     */
+    public static Object eval(String jsCode) throws ScriptException {
+        return ScriptHelper.eval(jsCode);
     }
 
 }

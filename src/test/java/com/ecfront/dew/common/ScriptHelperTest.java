@@ -16,6 +16,8 @@ public class ScriptHelperTest {
                 "}");
         Assert.assertEquals("M", s2.execute("fun2", "{\"idcard\":\"110101201604016117\"}"));
 
+        Assert.assertEquals(10240, $.eval( "1024*10"));
+
     }
 
 }

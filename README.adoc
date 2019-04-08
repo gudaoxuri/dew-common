@@ -473,7 +473,7 @@ TIP: 更多示例见`FallbackHelperTest.java`
 [source,java]
 ----
 /**
- * 脚本处理
+ * 脚本处理，包含预编译，适用于脚本复用性的场景
  *
  * @param jsFunsCode    JS 脚本
  * @param addCommonCode 是否添加dew-common包到脚本
@@ -483,12 +483,21 @@ public static ScriptHelper script(String jsFunsCode, boolean addCommonCode) thro
 }
 
 /**
- * 脚本处理，默认添加dew-common包到脚本
+ * 脚本处理，包含预编译，适用于脚本复用性的场景，默认添加dew-common包到脚本
  *
  * @param jsFunsCode JS 脚本
  */
 public static ScriptHelper script(String jsFunsCode) throws ScriptException {
     return ScriptHelper.build(jsFunsCode, true);
+}
+
+/**
+ * 脚本处理，适用于简单的脚本的执行
+ *
+ * @param jsCode JS 脚本
+ */
+public static Object eval(String jsCode) throws ScriptException {
+    return ScriptHelper.eval(jsCode);
 }
 ----
 
@@ -503,6 +512,8 @@ ScriptHelper s2 = $.script("function fun2(D){\r\n" +
         " return $.field.getGenderByIdCard(data.idcard);\n" +
         "}");
 Assert.assertEquals("M", s2.execute("fun2", "{\"idcard\":\"110101201604016117\"}"));
+
+Assert.assertEquals(10240, $.eval( "1024*10"));
 ----
 
 ==== 响应处理模型（Resp）

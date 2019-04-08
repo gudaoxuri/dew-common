@@ -25,4 +25,8 @@ public class ScriptHelper {
         return (T) invocable.invokeFunction(jsFunName, args);
     }
 
+    public static Object eval(String jsCode) throws ScriptException {
+        return SCRIPT_ENGINE_MANAGER.getEngineByName("nashorn").eval(jsCode);
+    }
+
 }
