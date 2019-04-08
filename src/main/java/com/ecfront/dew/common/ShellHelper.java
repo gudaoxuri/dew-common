@@ -131,13 +131,13 @@ public class ShellHelper {
                     }
                     if (successFlag != null
                             && outputLine != null
-                            && outputLine.toLowerCase().contains(successFlag)) {
+                            && outputLine.toLowerCase().contains(successFlag.toLowerCase())) {
                         reportHandler.onSuccess();
                         stop = true;
                     }
                     if (progressFlag != null
                             && outputLine != null
-                            && outputLine.toLowerCase().contains(progressFlag)) {
+                            && outputLine.toLowerCase().contains(progressFlag.toLowerCase())) {
                         reportHandler.onProgress(Integer.valueOf(outputLine.substring(outputLine.indexOf(progressFlag) + progressFlag.length()).trim()));
                     }
                 }

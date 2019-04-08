@@ -1,6 +1,6 @@
 = Dew Common — Java常用操作工具集
 ECFront
-v1.4.11,2019-03-27
+v1.4.12,2019-04-08
 :doctype: book
 :encoding: utf-8
 :lang: zh-CN
@@ -37,6 +37,7 @@ Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少
 . 常用时间处理，常规时间格式化模板
 . 主流文件MIME整理，MIME分类
 . 服务降级处理
+. 脚本处理
 . 响应处理及分页模型
 
 === 使用
@@ -48,7 +49,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <parent>
         <groupId>com.ecfront.dew</groupId>
         <artifactId>common</artifactId>
-        <version>1.4.11</version>
+        <version>1.4.12</version>
 </parent>
 ----
 
@@ -466,6 +467,43 @@ String getUserError(Throwable e, FallbackHelper.FallbackInfo fallbackInfo) {
 ----
 
 TIP: 更多示例见`FallbackHelperTest.java`
+
+==== 脚本操作（$.script）
+
+[source,java]
+----
+/**
+ * 脚本处理
+ *
+ * @param jsFunsCode    JS 脚本
+ * @param addCommonCode 是否添加dew-common包到脚本
+ */
+public static ScriptHelper script(String jsFunsCode, boolean addCommonCode) throws ScriptException {
+    return ScriptHelper.build(jsFunsCode, addCommonCode);
+}
+
+/**
+ * 脚本处理，默认添加dew-common包到脚本
+ *
+ * @param jsFunsCode JS 脚本
+ */
+public static ScriptHelper script(String jsFunsCode) throws ScriptException {
+    return ScriptHelper.build(jsFunsCode, true);
+}
+----
+
+[source,java]
+.脚本处理示例
+----
+ScriptHelper s1 = $.script("function fun1(param){return param;}");
+Assert.assertEquals("hi", s1.execute("fun1", "hi"));
+
+ScriptHelper s2 = $.script("function fun2(D){\r\n" +
+        " var data = JSON.parse(D);\n" +
+        " return $.field.getGenderByIdCard(data.idcard);\n" +
+        "}");
+Assert.assertEquals("M", s2.execute("fun2", "{\"idcard\":\"110101201604016117\"}"));
+----
 
 ==== 响应处理模型（Resp）
 

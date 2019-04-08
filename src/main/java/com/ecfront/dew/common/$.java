@@ -1,5 +1,7 @@
 package com.ecfront.dew.common;
 
+import javax.script.ScriptException;
+
 /**
  * DEW Common 操作入口
  */
@@ -16,7 +18,7 @@ public class $ {
      * 使用自定义实例ID（用于支持不同Json配置）
      */
     public static JsonHelper json(String instanceId) {
-        assert instanceId!=null && !instanceId.trim().equals("");
+        assert instanceId != null && !instanceId.trim().equals("");
         return JsonHelper.pick(instanceId);
     }
 
@@ -76,7 +78,7 @@ public class $ {
     /**
      * Shell脚本操作
      */
-    public static ShellHelper shell=new ShellHelper();
+    public static ShellHelper shell = new ShellHelper();
 
     /**
      * 拦截器栈执行器
@@ -111,5 +113,24 @@ public class $ {
      * 简单的降级处理
      */
     public static FallbackHelper fallback = new FallbackHelper();
+
+    /**
+     * 脚本处理
+     *
+     * @param jsFunsCode    JS 脚本
+     * @param addCommonCode 是否添加dew-common包到脚本
+     */
+    public static ScriptHelper script(String jsFunsCode, boolean addCommonCode) throws ScriptException {
+        return ScriptHelper.build(jsFunsCode, addCommonCode);
+    }
+
+    /**
+     * 脚本处理，默认添加dew-common包到脚本
+     *
+     * @param jsFunsCode JS 脚本
+     */
+    public static ScriptHelper script(String jsFunsCode) throws ScriptException {
+        return ScriptHelper.build(jsFunsCode, true);
+    }
 
 }
