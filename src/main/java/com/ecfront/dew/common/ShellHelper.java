@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -23,17 +24,26 @@ public class ShellHelper {
     ShellHelper() {
     }
 
-
     /**
      * 执行入口，如执行成功，此方法只返回output(标准输出)
      *
      * @param cmd 命令，包含参数
      */
     public Resp<List<String>> execute(String cmd) {
+        return execute(cmd, null);
+    }
+
+    /**
+     * 执行入口，如执行成功，此方法只返回output(标准输出)
+     *
+     * @param cmd 命令，包含参数
+     * @param env 执行环境
+     */
+    public Resp<List<String>> execute(String cmd, Map<String, String> env) {
         ReportHandler reportHandler = new ReportHandler() {
         };
         try {
-            execute(cmd, null, null, true, false, reportHandler).get();
+            execute(cmd, env, null, null, true, false, reportHandler).get();
             if (!reportHandler.isFail()) {
                 return Resp.success(reportHandler.getOutput());
             } else {
@@ -68,7 +78,33 @@ public class ShellHelper {
                                 String successFlag, String progressFlag,
                                 boolean returnResult, boolean fetchErrorResult,
                                 ReportHandler reportHandler) throws IOException {
+        return execute(cmd, null, successFlag, progressFlag, returnResult, fetchErrorResult, reportHandler);
+    }
+
+    /**
+     * 执行入口
+     *
+     * @param cmd              命令或脚本，包含参数
+     * @param env              执行环境
+     * @param successFlag      成功标识，只要捕捉到此标识就视为成功，
+     *                         为null时不会调用ReportHandler的success方法
+     * @param progressFlag     进度标识，只要捕捉到此标识就更新进度，
+     *                         格式为 <progressFlag>空格<progress>,如： progress 40，
+     *                         为null时不会调用ReportHandler的progress方法
+     * @param returnResult     是否返回结果（输出内容，包含标准输出stdin及标准错误stderr），
+     *                         为true时会返回结果到ReportHandler的complete方法中，
+     *                         结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
+     * @param fetchErrorResult 是否返回标准错误stderr输出
+     * @param reportHandler    任务报告实例
+     */
+    public Future<Void> execute(String cmd, Map<String, String> env,
+                                String successFlag, String progressFlag,
+                                boolean returnResult, boolean fetchErrorResult,
+                                ReportHandler reportHandler) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
+        if (env != null && !env.isEmpty()) {
+            processBuilder.environment().putAll(env);
+        }
         if ($.file.isWindows()) {
             processBuilder.command("cmd.exe", "/c", cmd);
         } else {
