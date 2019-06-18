@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.Optional;
 
 public class TestIdModel extends Ext {
     private String name;
@@ -16,6 +17,8 @@ public class TestIdModel extends Ext {
     private LocalDateTime localDateTime;
     private LocalDate localDate;
     private LocalTime localTime;
+
+    private Optional<String> opt;
 
     public String getName() {
         return name;
@@ -55,5 +58,13 @@ public class TestIdModel extends Ext {
 
     public void setLocalTime(LocalTime localTime) {
         this.localTime = localTime;
+    }
+
+    public Optional<String> getOpt() {
+        return opt;
+    }
+
+    public void setOpt(Optional<String> opt) {
+        this.opt = opt;
     }
 }

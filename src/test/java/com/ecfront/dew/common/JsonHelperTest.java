@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
+import java.util.Optional;
 
 public class JsonHelperTest {
 
@@ -94,6 +95,23 @@ public class JsonHelperTest {
         Assert.assertTrue(model.getLocalDateTime().isEqual(model2.getLocalDateTime()));
         Assert.assertTrue(model.getLocalDate().isEqual(model2.getLocalDate()));
         Assert.assertEquals(model.getLocalTime().toString(), model2.getLocalTime().toString());
+    }
+
+    @Test
+    public void testOptional() {
+        TestIdModel model = new TestIdModel();
+        TestIdModel model2 = $.json.toObject($.json.toJsonString(model), TestIdModel.class);
+        Assert.assertTrue(!model2.getOpt().isPresent());
+
+        model = new TestIdModel();
+        model.setOpt(Optional.ofNullable(null));
+        model2 = $.json.toObject($.json.toJsonString(model), TestIdModel.class);
+        Assert.assertTrue(!model2.getOpt().isPresent());
+
+        model = new TestIdModel();
+        model.setOpt(Optional.of("a"));
+        model2 = $.json.toObject($.json.toJsonString(model), TestIdModel.class);
+        Assert.assertEquals("a", model2.getOpt().get());
     }
 
     @Test
