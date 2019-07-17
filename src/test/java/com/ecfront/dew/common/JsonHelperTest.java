@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -109,9 +110,13 @@ public class JsonHelperTest {
         Assert.assertTrue(!model2.getOpt().isPresent());
 
         model = new TestIdModel();
-        model.setOpt(Optional.of("a"));
+        model.setOpt(Optional.of(new HashMap<String, Object>() {
+            {
+                put("h", "001");
+            }
+        }));
         model2 = $.json.toObject($.json.toJsonString(model), TestIdModel.class);
-        Assert.assertEquals("a", model2.getOpt().get());
+        Assert.assertEquals("001", model2.getOpt().get().get("h"));
     }
 
     @Test

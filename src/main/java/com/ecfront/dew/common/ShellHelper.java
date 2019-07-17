@@ -43,7 +43,7 @@ public class ShellHelper {
         ReportHandler reportHandler = new ReportHandler() {
         };
         try {
-            execute(cmd, env, null, null, true, false, reportHandler).get();
+            execute(cmd, env, null, null, true, reportHandler).get();
             if (!reportHandler.isFail()) {
                 return Resp.success(reportHandler.getOutput());
             } else {
@@ -62,44 +62,42 @@ public class ShellHelper {
     /**
      * 执行入口
      *
-     * @param cmd              命令或脚本，包含参数
-     * @param successFlag      成功标识，只要捕捉到此标识就视为成功，
-     *                         为null时不会调用ReportHandler的success方法
-     * @param progressFlag     进度标识，只要捕捉到此标识就更新进度，
-     *                         格式为 <progressFlag>空格<progress>,如： progress 40，
-     *                         为null时不会调用ReportHandler的progress方法
-     * @param returnResult     是否返回结果（输出内容，包含标准输出stdin及标准错误stderr），
-     *                         为true时会返回结果到ReportHandler的complete方法中，
-     *                         结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
-     * @param fetchErrorResult 是否返回标准错误stderr输出
-     * @param reportHandler    任务报告实例
+     * @param cmd           命令或脚本，包含参数
+     * @param successFlag   成功标识，只要捕捉到此标识就视为成功，
+     *                      为null时不会调用ReportHandler的success方法
+     * @param progressFlag  进度标识，只要捕捉到此标识就更新进度，
+     *                      格式为 <progressFlag>空格<progress>,如： progress 40，
+     *                      为null时不会调用ReportHandler的progress方法
+     * @param returnResult  是否返回结果（输出内容，包含标准输出stdin及标准错误stderr），
+     *                      为true时会返回结果到ReportHandler的complete方法中，
+     *                      结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
+     * @param reportHandler 任务报告实例
      */
     public Future<Void> execute(String cmd,
                                 String successFlag, String progressFlag,
-                                boolean returnResult, boolean fetchErrorResult,
+                                boolean returnResult,
                                 ReportHandler reportHandler) throws IOException {
-        return execute(cmd, null, successFlag, progressFlag, returnResult, fetchErrorResult, reportHandler);
+        return execute(cmd, null, successFlag, progressFlag, returnResult, reportHandler);
     }
 
     /**
      * 执行入口
      *
-     * @param cmd              命令或脚本，包含参数
-     * @param env              执行环境
-     * @param successFlag      成功标识，只要捕捉到此标识就视为成功，
-     *                         为null时不会调用ReportHandler的success方法
-     * @param progressFlag     进度标识，只要捕捉到此标识就更新进度，
-     *                         格式为 <progressFlag>空格<progress>,如： progress 40，
-     *                         为null时不会调用ReportHandler的progress方法
-     * @param returnResult     是否返回结果（输出内容，包含标准输出stdin及标准错误stderr），
-     *                         为true时会返回结果到ReportHandler的complete方法中，
-     *                         结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
-     * @param fetchErrorResult 是否返回标准错误stderr输出
-     * @param reportHandler    任务报告实例
+     * @param cmd           命令或脚本，包含参数
+     * @param env           执行环境
+     * @param successFlag   成功标识，只要捕捉到此标识就视为成功，
+     *                      为null时不会调用ReportHandler的success方法
+     * @param progressFlag  进度标识，只要捕捉到此标识就更新进度，
+     *                      格式为 <progressFlag>空格<progress>,如： progress 40，
+     *                      为null时不会调用ReportHandler的progress方法
+     * @param returnResult  是否返回结果（输出内容，包含标准输出stdin及标准错误stderr），
+     *                      为true时会返回结果到ReportHandler的complete方法中，
+     *                      结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
+     * @param reportHandler 任务报告实例
      */
     public Future<Void> execute(String cmd, Map<String, String> env,
                                 String successFlag, String progressFlag,
-                                boolean returnResult, boolean fetchErrorResult,
+                                boolean returnResult,
                                 ReportHandler reportHandler) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
         if (env != null && !env.isEmpty()) {
@@ -112,7 +110,7 @@ public class ShellHelper {
         }
         Process process = processBuilder.start();
         return pool.submit(new ProcessReadTask(process, cmd,
-                successFlag, progressFlag, returnResult, fetchErrorResult, reportHandler));
+                successFlag, progressFlag, returnResult, reportHandler));
     }
 
     private static class ProcessReadTask implements Callable<Void> {
@@ -123,10 +121,9 @@ public class ShellHelper {
         private String successFlag;
         private String progressFlag;
         private boolean returnResult;
-        private boolean fetchErrorResult;
         private ReportHandler reportHandler;
 
-        ProcessReadTask(Process process, String cmd, String successFlag, String progressFlag, boolean returnResult, boolean fetchErrorResult, ReportHandler reportHandler) {
+        ProcessReadTask(Process process, String cmd, String successFlag, String progressFlag, boolean returnResult, ReportHandler reportHandler) {
             this.process = process;
             this.errorStream = process.getErrorStream();
             this.outputStream = process.getInputStream();
@@ -134,7 +131,6 @@ public class ShellHelper {
             this.successFlag = successFlag;
             this.progressFlag = progressFlag;
             this.returnResult = returnResult;
-            this.fetchErrorResult = fetchErrorResult;
             this.reportHandler = reportHandler;
         }
 
@@ -144,13 +140,12 @@ public class ShellHelper {
             List<String> outputResult = new ArrayList<>();
             BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
             BufferedReader outputReader = new BufferedReader(new InputStreamReader(outputStream));
-            String errorLine = null;
-            String outputLine;
+            String errorLine;
+            String outputLine = null;
             boolean stop = false;
             try {
                 while (!stop
-                        && ((fetchErrorResult && (errorLine = errorReader.readLine()) != null)
-                        | (outputLine = outputReader.readLine()) != null)) {
+                        && ((errorLine = errorReader.readLine()) != null || (outputLine = outputReader.readLine()) != null)) {
                     if (errorLine != null) {
                         reportHandler.errorlog(errorLine);
                         logger.trace("Shell error content:" + errorLine);

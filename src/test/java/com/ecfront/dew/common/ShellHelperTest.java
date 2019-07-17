@@ -8,8 +8,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 
 public class ShellHelperTest {
+
+    /*@Test
+    public void testENV() throws IOException, InterruptedException, ExecutionException {
+        $.shell.execute("cd C:\\Users\\i\\OneDrive\\workspaces\\2.jobs\\message-devops-test\\terminal\\captcha\\ && npm run build:uat",
+                new HashMap<String, String>() {
+                    {
+                        put("NODE_ENV", "uat");
+                    }
+                },null, null, false, new ReportHandler() {
+                    @Override
+                    public void outputlog(String line) {
+                        System.out.println("O:"+line);
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        System.out.println("F:" + message);
+                    }
+
+                    @Override
+                    public void errorlog(String line) {
+                        System.out.println("E:"+line);
+                    }
+                }).get();
+    }*/
 
     @Test
     public void test() throws IOException, InterruptedException {
@@ -35,7 +61,6 @@ public class ShellHelperTest {
                     "done!", // 成功标识，只要捕捉到此标识就视为成功，为null时不会调用ReportHandler的success方法
                     "step", // 进度标识，只要捕捉到此标识就更新进度，格式为 <progressFlag>空格<progress>,如： progress 40，为null时不会调用ReportHandler的progress方法
                     true, // 是否返回结果（输出内容，包含标准输出stdout及错误输出stderr），为true时会返回结果到ReportHandler的complete方法中，结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
-                    true, // 是否返回错误stderr输出
                     new ReportHandler() {
                         /**
                          * 成功，在执行到successFlag时调用

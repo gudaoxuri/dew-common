@@ -21,7 +21,7 @@ image:https://maven-badges.herokuapp.com/maven-central/com.ecfront.dew/common/ba
 
 Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少地引入第三方包，做到通用、易用、精简。
 
-=== 功能
+== 功能
 
 . Json与Java对象互转，支持泛型
 . Java Bean操作，Bean复制、反射获取/设置注解、字段、方法等
@@ -40,7 +40,7 @@ Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少
 . 脚本处理
 . 响应处理及分页模型
 
-=== 使用
+== 使用
 
 NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.github.io/dew-common/]
 
@@ -49,11 +49,11 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <dependency>
   <groupId>com.ecfront.dew</groupId>
   <artifactId>common</artifactId>
-  <version>1.4.14</version>
+  <version>1.4.15</version>
 </dependency>
 ----
 
-==== Json与Java对象互转（$.json）
+=== Json与Java对象互转（$.json）
 
 [source,java]
 ----
@@ -91,7 +91,7 @@ static class JavaModel{
 
 TIP: 更多示例见`JsonHelperTest.java`
 
-==== Java Bean操作（$.bean）
+=== Java Bean操作（$.bean）
 
 [source,java]
 ----
@@ -124,7 +124,7 @@ TIP: 更多示例见`BeanHelperTest.java`
 
 NOTE: 还有一个`$.bean(boolean useCache)`方法，用于指定是否启用缓存，启用后会缓存获取过的字段和方法列表，默认启用。
 
-==== Java Class扫描操作（$.clazz）
+=== Java Class扫描操作（$.clazz）
 
 [source,java]
 ----
@@ -136,7 +136,7 @@ Set<Class<?>> resultInJar = $.clazz.scan("org.junit",null, new HashSet<String>()
 
 TIP: 更多示例见`ClassScanHelperTest.java`
 
-==== Shell脚本操作（$.shell）
+=== Shell脚本操作（$.shell）
 
 支持执行 ``Windows(cmd)`` 及 ``Linux(bash)`` 操作。
 
@@ -151,7 +151,6 @@ $.shell.execute(
   "done!", // 成功标识，只要捕捉到此标识就视为成功，为null时不会调用ReportHandler的success方法
   "step", // 进度标识，只要捕捉到此标识就更新进度，格式为 <progressFlag>空格<progress>,如： progress 40，为null时不会调用ReportHandler的progress方法
   true, // 是否返回结果（输出内容，包含标准输出stdout及错误输出stderr），为true时会返回结果到ReportHandler的complete方法中，结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
-  true, // 是否返回错误stderr输出
   new ReportHandler() {
       /**
        * 成功，在执行到successFlag时调用
@@ -192,7 +191,7 @@ $.shell.execute(
 
 TIP: 更多示例见`ShellHelperTest.java`
 
-==== 加解密操作（$.security）
+=== 加解密操作（$.security）
 
 [source,java]
 ----
@@ -239,7 +238,7 @@ $.security.asymmetric.verify(publicKey, decryptByPub,
 
 TIP: 更多示例见`SecurityHelperTest.java`
 
-==== Http操作（$.http）
+=== Http操作（$.http）
 
 [source,java]
 ----
@@ -288,7 +287,7 @@ NOTE: GET POST PUT DELETE 都带 `Wrap`方法，返回包含扩展信息的数�
 
 NOTE: 还有一个`$.http(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS, boolean retryAble)`方法，用于指定`整个连接池最大连接数`及`每个路由（域）的默认最大连接`，`$.http`是`$.http(200,20)`的语法糖。
 
-==== 通用拦截器栈（$.interceptor）
+=== 通用拦截器栈（$.interceptor）
 
 [source,java]
 ----
@@ -324,7 +323,7 @@ Assert.assertTrue(!resp.ok());
 
 TIP: 更多示例见`InterceptorTest.java`
 
-==== 定时器操作（$.timer）
+=== 定时器操作（$.timer）
 
 [source,java]
 ----
@@ -338,7 +337,7 @@ $.timer.cancel(taskId);
 
 TIP: 更多示例见`TimerHelperTest.java`
 
-==== 常用文件操作（$.file）
+=== 常用文件操作（$.file）
 
 [source,java]
 ----
@@ -348,7 +347,7 @@ String conf=$.file.readAllByClassPath("conf1.json","UTF-8");
 
 TIP: 更多示例见`FileHelperTest.java`
 
-==== 常用字段操作（$.amount）
+=== 常用字段操作（$.amount）
 
 [source,java]
 ----
@@ -358,7 +357,7 @@ $.amount.convert("1234,5678,9012.34");
 
 TIP: 更多示例见`AmountHelperTest.java`
 
-==== 常用字段操作（$.field）
+=== 常用字段操作（$.field）
 
 [source,java]
 ----
@@ -388,7 +387,7 @@ $.field.getProvinceByIdCard("330102199901015759");
 
 TIP: 更多示例见`FieldHelperTest.java`
 
-==== 服务降级处理（$.fallback）
+=== 服务降级处理（$.fallback）
 
 [source,java]
 ----
@@ -468,7 +467,7 @@ String getUserError(Throwable e, FallbackHelper.FallbackInfo fallbackInfo) {
 
 TIP: 更多示例见`FallbackHelperTest.java`
 
-==== 脚本操作（$.script）
+=== 脚本操作（$.script）
 
 [source,java]
 ----
@@ -516,7 +515,7 @@ Assert.assertEquals("M", s2.execute("fun2", "{\"idcard\":\"110101201604016117\"}
 Assert.assertEquals(10240, $.eval( "1024*10"));
 ----
 
-==== 响应处理模型（Resp）
+=== 响应处理模型（Resp）
 
 [NOTE]
 ====
@@ -669,7 +668,7 @@ public static <E> Resp<List<E>> genericList(Resp resp, Class<E> bodyClazz);
 public static <E> Resp<PageDTO<E>> genericPage(Resp resp, Class<E> bodyClazz);
 ----
 
-==== 分页模型（Page）
+=== 分页模型（Page）
 
 [NOTE]
 ====
@@ -703,7 +702,7 @@ private long recordTotal;
 private List<E> objects;
 ----
 
-=== 功能禁用
+== 功能禁用
 
 如果不需要某些功能可以在maven中排除以减少包体积
 
