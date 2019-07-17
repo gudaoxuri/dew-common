@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 
 public class ShellHelperTest {
 
-    /*@Test
+   /* @Test
     public void testENV() throws IOException, InterruptedException, ExecutionException {
         $.shell.execute("cd C:\\Users\\i\\OneDrive\\workspaces\\2.jobs\\message-devops-test\\terminal\\captcha\\ && npm run build:uat",
                 new HashMap<String, String>() {

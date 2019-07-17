@@ -135,58 +135,77 @@ public class ShellHelper {
         }
 
         @Override
-        public Void call() throws InterruptedException {
-            List<String> errorResult = new ArrayList<>();
-            List<String> outputResult = new ArrayList<>();
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
-            BufferedReader outputReader = new BufferedReader(new InputStreamReader(outputStream));
-            String errorLine;
-            String outputLine = null;
-            boolean stop = false;
-            try {
-                while (!stop
-                        && ((errorLine = errorReader.readLine()) != null || (outputLine = outputReader.readLine()) != null)) {
-                    if (errorLine != null) {
-                        reportHandler.errorlog(errorLine);
-                        logger.trace("Shell error content:" + errorLine);
-                        if (returnResult) {
-                            errorResult.add(errorLine);
-                        }
-                    }
-                    if (outputLine != null) {
-                        reportHandler.outputlog(outputLine);
-                        logger.trace("Shell output content:" + outputLine);
-                        if (returnResult) {
-                            outputResult.add(outputLine);
-                        }
-                    }
-                    if (successFlag != null
-                            && outputLine != null
-                            && outputLine.toLowerCase().contains(successFlag.toLowerCase())) {
-                        reportHandler.onSuccess();
-                        stop = true;
-                    }
-                    if (progressFlag != null
-                            && outputLine != null
-                            && outputLine.toLowerCase().contains(progressFlag.toLowerCase())) {
-                        reportHandler.onProgress(Integer.valueOf(outputLine.substring(outputLine.indexOf(progressFlag) + progressFlag.length()).trim()));
-                    }
-                }
-            } catch (IOException e) {
-                String message = e.getMessage() + ", cmd : " + cmd
-                        + "\r\n" + String.join("\r\n", errorResult);
-                logger.error("Execute fail: " + message, e);
-                reportHandler.onFail(message);
-            } finally {
-                if (0 != process.waitFor()) {
-                    String message = "Abnormal termination , cmd : " + cmd
-                            + "\r\n" + String.join("\r\n", errorResult);
-                    logger.warn("Execute fail: " + message);
-                    reportHandler.onFail(message);
-                }
-                reportHandler.onComplete(outputResult, errorResult);
-            }
+        public Void call() throws InterruptedException, ExecutionException {
+            Future<List<String>> outputResultF = pool.submit(new ProcessReader(outputStream, successFlag, progressFlag, returnResult, reportHandler, true));
+            Future<List<String>> errorResultF = pool.submit(new ProcessReader(errorStream, successFlag, progressFlag, returnResult, reportHandler, false));
+            List<String> outputResult = outputResultF.get();
+            List<String> errorResult = errorResultF.get();
+            reportHandler.onComplete(outputResult, errorResult);
             return null;
+        }
+
+        private class ProcessReader implements Callable<List<String>> {
+
+            private InputStream stream;
+            private String successFlag;
+            private String progressFlag;
+            private boolean returnResult;
+            private ReportHandler reportHandler;
+            private boolean isOutput;
+
+            ProcessReader(InputStream stream, String successFlag, String progressFlag,
+                          boolean returnResult, ReportHandler reportHandler, boolean isOutput) {
+                this.stream = stream;
+                this.successFlag = successFlag;
+                this.progressFlag = progressFlag;
+                this.returnResult = returnResult;
+                this.reportHandler = reportHandler;
+                this.isOutput = isOutput;
+            }
+
+            @Override
+            public List<String> call() throws Exception {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+                List<String> result = new ArrayList<>();
+                String message;
+                boolean stop = false;
+                try {
+                    while (!stop && (message = reader.readLine()) != null) {
+                        if (isOutput) {
+                            reportHandler.outputlog(message);
+                            logger.trace("Shell output content:" + message);
+                        } else {
+                            reportHandler.errorlog(message);
+                            logger.trace("Shell error content:" + message);
+                        }
+                        if (returnResult) {
+                            result.add(message);
+                        }
+                        if (successFlag != null
+                                && message.toLowerCase().contains(successFlag.toLowerCase())) {
+                            reportHandler.onSuccess();
+                            stop = true;
+                        }
+                        if (progressFlag != null
+                                && message.toLowerCase().contains(progressFlag.toLowerCase())) {
+                            reportHandler.onProgress(Integer.valueOf(message.substring(message.indexOf(progressFlag) + progressFlag.length()).trim()));
+                        }
+                    }
+                } catch (IOException e) {
+                    String error = e.getMessage() + ", cmd : " + cmd
+                            + "\r\n" + String.join("\r\n", result);
+                    logger.error("Execute fail: " + error, e);
+                    reportHandler.onFail(error);
+                } finally {
+                    if (0 != process.waitFor()) {
+                        String error = "Abnormal termination , cmd : " + cmd
+                                + "\r\n" + String.join("\r\n", result);
+                        logger.warn("Execute fail: " + error);
+                        reportHandler.onFail(error);
+                    }
+                }
+                return result;
+            }
         }
     }
 
