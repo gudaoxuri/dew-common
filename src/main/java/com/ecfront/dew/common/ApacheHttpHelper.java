@@ -13,6 +13,7 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -39,6 +40,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.joox.JOOX.$;
@@ -54,6 +56,7 @@ public class ApacheHttpHelper implements HttpHelper {
     private boolean retryAble;
     private int defaultConnectTimeoutMS;
     private int defaultSocketTimeoutMS;
+    private Consumer preRequestFun;
 
     /**
      * @param maxTotal                整个连接池最大连接数
@@ -86,6 +89,11 @@ public class ApacheHttpHelper implements HttpHelper {
         }
         httpClientBuilder.setConnectionManager(connMgr);
         httpClient = httpClientBuilder.build();
+    }
+
+    @Override
+    public <T> void setPreRequest(Consumer<T> preRequestFun) {
+        this.preRequestFun = preRequestFun;
     }
 
     @Override
@@ -369,8 +377,8 @@ public class ApacheHttpHelper implements HttpHelper {
         if (header == null) {
             header = new HashMap<>();
         }
-        if (body instanceof File) {
-            contentType = "multipart/form-data";
+        if (body instanceof File && (contentType == null || contentType.isEmpty())) {
+            contentType = $.mime.getContentType((File) body);
         } else if (contentType == null) {
             contentType = "application/json; charset=utf-8";
         }
@@ -413,7 +421,9 @@ public class ApacheHttpHelper implements HttpHelper {
         for (Map.Entry<String, String> entry : header.entrySet()) {
             httpMethod.addHeader(entry.getKey(), entry.getValue());
         }
-        httpMethod.addHeader("Content-Type", contentType);
+        if (!httpMethod.containsHeader("Content-Type")) {
+            httpMethod.addHeader("Content-Type", contentType);
+        }
         logger.trace("HTTP [" + method + "]" + url);
         if (body != null) {
             HttpEntity entity;
@@ -450,8 +460,7 @@ public class ApacheHttpHelper implements HttpHelper {
                             .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
                             .addBinaryBody(((File) body).getName(), (File) body, ContentType.APPLICATION_OCTET_STREAM, ((File) body).getName())
                             .build();
-                    // delete custom value,httpclient will use like this "multipart/form-data; boundary=---------------------------7e1295335048a"
-                    httpMethod.removeHeaders("Content-Type");
+                    httpMethod.addHeader(entity.getContentType());
                     break;
                 default:
                     if (body instanceof String) {
@@ -461,15 +470,21 @@ public class ApacheHttpHelper implements HttpHelper {
                         entity = new StringEntity(body.toString(), requestCharset);
                     } else if (body instanceof Date) {
                         entity = new StringEntity(((Date) body).getTime() + "", requestCharset);
+                    } else if (body instanceof File) {
+                        entity = new FileEntity((File) body);
                     } else {
                         entity = new StringEntity($.json.toJsonString(body), requestCharset);
                     }
             }
             ((HttpEntityEnclosingRequestBase) httpMethod).setEntity(entity);
         }
+        if (preRequestFun != null) {
+            preRequestFun.accept(httpMethod);
+        }
         try (CloseableHttpResponse response = httpClient.execute(httpMethod)) {
             ResponseWrap responseWrap = new ResponseWrap();
-            if (!(httpMethod instanceof HttpHead || httpMethod instanceof HttpOptions)) {
+            if (!(httpMethod instanceof HttpHead || httpMethod instanceof HttpOptions)
+                    && response.getEntity() != null) {
                 responseWrap.result = EntityUtils.toString(response.getEntity(), responseCharset);
             } else {
                 responseWrap.result = "";

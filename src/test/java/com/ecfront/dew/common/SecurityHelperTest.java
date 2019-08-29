@@ -13,11 +13,26 @@ public class SecurityHelperTest {
 
     @Test
     public void digest() throws Exception {
-        Assert.assertEquals("70C0CC2B7BF8A8EBCD7B59C49DDDA9A1E551122BA5D7AB3B7B02141D4CE4C626".toLowerCase(),
+        Assert.assertEquals("70c0cc2b7bf8a8ebcd7b59c49ddda9a1e551122ba5d7ab3b7b02141d4ce4c626".toLowerCase(),
                 $.security.digest.digest("gudaoxuri", "SHA-256"));
+        Assert.assertEquals("7d9def92860187bf1150ebb6ec342becb50bc5d5".toLowerCase(),
+                $.security.digest.digest("gudaoxuri", "SHA1"));
+        Assert.assertEquals("e2806245bd7235d0a8b76ca489d2984aabc5a71a9b1d39abfd6bf24980cd808333f15788c0ef9a1e0c8afcec7a427f74a6f39da47d282810028d113a0ea5b11a".toLowerCase(),
+                $.security.digest.digest("gudaoxuri", "SHA-512"));
         Assert.assertEquals("0ef841c028908fca6e78c51490e4a0cf".toLowerCase(),
                 $.security.digest.digest("gudaoxuri", "MD5"));
+
+        Assert.assertEquals("300ef751875b206d9001a1fc5695ef4403e249ae".toLowerCase(),
+                $.security.digest.digest("gudaoxuri", "test", "HmacSHA1"));
+        Assert.assertEquals("5a6d9c078d427b752754a731016a3f0c5753a2117bd274712d31c9990477d35f".toLowerCase(),
+                $.security.digest.digest("gudaoxuri", "test", "HmacSHA256"));
+        Assert.assertEquals("a958eafd9b36d3b90bc35f9c13fd6f82c0ad535022e4572e36f2e266b78eb44d0858d5ba1ac80baa2295a8b50804aa4c1f44a710375bc821d94dc799d2fc1193".toLowerCase(),
+                $.security.digest.digest("gudaoxuri", "test", "HmacSHA512"));
+        Assert.assertEquals("8e03e0f7c20e19c58a636a043b9296ae".toLowerCase(),
+                $.security.digest.digest("gudaoxuri", "test", "HmacMD5"));
+
         Assert.assertTrue($.security.digest.validate("gudaoxuri", $.security.digest.digest("gudaoxuri", "SHA-256"), "SHA-256"));
+        Assert.assertTrue($.security.digest.validate("gudaoxuri", "test", $.security.digest.digest("gudaoxuri", "test", "HmacSHA256"), "HmacSHA256"));
         Assert.assertTrue($.security.digest.validate("password", $.security.digest.digest("password", "SHA-512"), "SHA-512"));
         Assert.assertTrue($.security.digest.validate("password", $.security.digest.digest("password", "bcrypt"), "bcrypt"));
     }

@@ -7,7 +7,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -44,9 +45,16 @@ public class SecurityHelper {
     }
 
     /**
+     * Base64 转 字符串
+     */
+    public String decodeBase64ToString(String str, Charset encode) {
+        return new String(Base64.getDecoder().decode(str), encode);
+    }
+
+    /**
      * 数组 转 Base64
      */
-    public String encodeBytesToBase64(byte[] str) throws UnsupportedEncodingException {
+    public String encodeBytesToBase64(byte[] str) {
         return new String(Base64.getEncoder().encode(str));
     }
 
@@ -57,37 +65,73 @@ public class SecurityHelper {
         return new String(Base64.getEncoder().encode(str.getBytes(encode)), encode);
     }
 
+    /**
+     * 字符串 转 Base64
+     */
+    public String encodeStringToBase64(String str, Charset encode) {
+        return new String(Base64.getEncoder().encode(str.getBytes(encode)), encode);
+    }
+
     public class Digest {
 
         /**
          * 摘要
          *
-         * @param strSrc    原始值
-         * @param algorithm 加密算法 ，如 bcrypt SHA-x MD5
+         * @param text      原始值
+         * @param algorithm 摘要算法 ，如 bcrypt SHA-x MD5
          * @return 摘要后的值
          */
-        public String digest(String strSrc, String algorithm) throws NoSuchAlgorithmException {
-            String encryptStr;
+        public String digest(String text, String algorithm) throws NoSuchAlgorithmException {
             switch (algorithm.toLowerCase()) {
                 case "bcrypt":
-                    encryptStr = BCrypt.hashpw(strSrc, BCrypt.gensalt());
-                    break;
-                case "md5":
-                    MessageDigest md5MD = MessageDigest.getInstance(algorithm);
-                    md5MD.update(strSrc.getBytes());
-                    encryptStr = new BigInteger(1, md5MD.digest()).toString(16);
-                    while (encryptStr.length() < 32) {
-                        encryptStr = "0" + encryptStr;
-                    }
-                    break;
+                    return BCrypt.hashpw(text, BCrypt.gensalt());
+                default:
+                    return byte2HexStr(digestToByte(text, algorithm));
+            }
+        }
+
+        /**
+         * 摘要
+         *
+         * @param text      原始值
+         * @param algorithm 摘要算法 ，如 bcrypt SHA-x MD5
+         * @return 摘要后的值
+         */
+        public byte[] digestToByte(String text, String algorithm) throws NoSuchAlgorithmException {
+            switch (algorithm.toLowerCase()) {
+                case "bcrypt":
+                    return BCrypt.hashpw(text, BCrypt.gensalt()).getBytes(StandardCharsets.UTF_8);
                 default:
                     MessageDigest md = MessageDigest.getInstance(algorithm);
-                    md.update(strSrc.getBytes());
-                    byte[] digest = md.digest();
-                    encryptStr = String.format("%064x", new java.math.BigInteger(1, digest));
-                    break;
+                    md.update(text.getBytes(StandardCharsets.UTF_8));
+                    return md.digest();
             }
-            return encryptStr;
+        }
+
+        /**
+         * 摘要，带密钥，多为 Hmac* 算法
+         *
+         * @param text      原始值
+         * @param secretKey 密钥
+         * @param algorithm 摘要算法 ，如 HmacSHA256
+         * @return 摘要后的值
+         */
+        public String digest(String text, String secretKey, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
+            return byte2HexStr(digestToByte(text, secretKey, algorithm));
+        }
+
+        /**
+         * 摘要，带密钥，多为 Hmac* 算法
+         *
+         * @param text      原始值
+         * @param secretKey 密钥
+         * @param algorithm 摘要算法 ，如 HmacSHA256
+         * @return 摘要后的值
+         */
+        public byte[] digestToByte(String text, String secretKey, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
+            Mac mac = Mac.getInstance(algorithm);
+            mac.init(new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), algorithm));
+            return mac.doFinal(text.getBytes(StandardCharsets.UTF_8));
         }
 
         /**
@@ -95,24 +139,63 @@ public class SecurityHelper {
          * <p>
          * 对于bcrypt之类默认使用随机slat的加密算法必须使用此方法验证
          *
-         * @param strSrc       原始值
-         * @param strEncrypted 加密后的值
-         * @param algorithm    加密算法，如 bcrypt SHA-256
+         * @param text       原始值
+         * @param ciphertext 加密后的值
+         * @param algorithm  加密算法，如 bcrypt SHA-256
          * @return 是否匹配
          */
-        public boolean validate(String strSrc, String strEncrypted, String algorithm) throws GeneralSecurityException {
+        public boolean validate(String text, String ciphertext, String algorithm) throws GeneralSecurityException {
             boolean result;
             switch (algorithm.toLowerCase()) {
                 case "bcrypt":
-                    result = BCrypt.checkpw(strSrc, strEncrypted);
+                    result = BCrypt.checkpw(text, ciphertext);
                     break;
                 default:
-                    result = Objects.equals(digest(strSrc, algorithm), strEncrypted);
+                    result = Objects.equals(digest(text, algorithm), ciphertext);
                     break;
             }
             return result;
         }
 
+        /**
+         * 验证，带密钥，多为 Hmac* 算法
+         * <p>
+         *
+         * @param text       原始值
+         * @param secretKey  密钥
+         * @param ciphertext 加密后的值
+         * @param algorithm  加密算法，如 HmacSHA256
+         * @return 是否匹配
+         */
+        public boolean validate(String text, String secretKey, String ciphertext, String algorithm) throws GeneralSecurityException {
+            return Objects.equals(digest(text, secretKey, algorithm), ciphertext);
+        }
+
+    }
+
+    public String byte2HexStr(byte buf[]) {
+        StringBuilder sb = new StringBuilder();
+        for (byte aBuf : buf) {
+            String hex = Integer.toHexString(aBuf & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            sb.append(hex);
+        }
+        return sb.toString();
+    }
+
+    public byte[] hexStr2Byte(String hexStr) {
+        if (hexStr.length() < 1) {
+            return null;
+        }
+        byte[] result = new byte[hexStr.length() / 2];
+        for (int i = 0; i < hexStr.length() / 2; i++) {
+            int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
+            int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16);
+            result[i] = (byte) (high * 16 + low);
+        }
+        return result;
     }
 
 
@@ -135,17 +218,12 @@ public class SecurityHelper {
             }
             KeyGenerator kgen = KeyGenerator.getInstance(algorithm);
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(password.getBytes());
+            secureRandom.setSeed(password.getBytes(StandardCharsets.UTF_8));
             kgen.init(128, secureRandom);
             SecretKeySpec key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            try {
-                return byte2HexStr(cipher.doFinal(strSrc.getBytes("utf-8")));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                return null;
-            }
+            return byte2HexStr(cipher.doFinal(strSrc.getBytes(StandardCharsets.UTF_8)));
         }
 
         /**
@@ -161,42 +239,12 @@ public class SecurityHelper {
         public String decrypt(String strEncrypted, String password, String algorithm) throws GeneralSecurityException {
             KeyGenerator kgen = KeyGenerator.getInstance(algorithm);
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(password.getBytes());
+            secureRandom.setSeed(password.getBytes(StandardCharsets.UTF_8));
             kgen.init(128, secureRandom);
             SecretKeySpec key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.DECRYPT_MODE, key);
-            try {
-                return new String(cipher.doFinal(hexStr2Byte(strEncrypted)), "utf-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        private String byte2HexStr(byte buf[]) {
-            StringBuilder sb = new StringBuilder();
-            for (byte aBuf : buf) {
-                String hex = Integer.toHexString(aBuf & 0xFF);
-                if (hex.length() == 1) {
-                    hex = '0' + hex;
-                }
-                sb.append(hex.toUpperCase());
-            }
-            return sb.toString();
-        }
-
-        private byte[] hexStr2Byte(String hexStr) {
-            if (hexStr.length() < 1) {
-                return null;
-            }
-            byte[] result = new byte[hexStr.length() / 2];
-            for (int i = 0; i < hexStr.length() / 2; i++) {
-                int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
-                int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16);
-                result[i] = (byte) (high * 16 + low);
-            }
-            return result;
+            return new String(cipher.doFinal(hexStr2Byte(strEncrypted)), StandardCharsets.UTF_8);
         }
 
     }
@@ -213,7 +261,7 @@ public class SecurityHelper {
          * @param length    密钥长度
          * @return PublicKey -> Base64编码后的值  ， PrivateKey -> Base64编码后的值
          */
-        public Map<String, String> generateKeys(String algorithm, int length) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        public Map<String, String> generateKeys(String algorithm, int length) throws NoSuchAlgorithmException {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm);
             keyPairGenerator.initialize(length);
             KeyPair keyPair = keyPairGenerator.generateKeyPair();

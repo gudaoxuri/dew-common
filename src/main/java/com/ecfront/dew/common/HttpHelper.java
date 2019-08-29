@@ -3,8 +3,11 @@ package com.ecfront.dew.common;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public interface HttpHelper {
+
+    <T> void setPreRequest(Consumer<T> preRequestFun);
 
     String get(String url) throws IOException;
 
