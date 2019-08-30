@@ -110,6 +110,11 @@ public class $ {
     public static AmountHelper amount = new AmountHelper();
 
     /**
+     * 函数操作
+     */
+    public static FunctionHelper fun = new FunctionHelper();
+
+    /**
      * 简单的降级处理
      */
     public static FallbackHelper fallback = new FallbackHelper();

@@ -86,7 +86,7 @@ public class SecurityHelper {
                 case "bcrypt":
                     return BCrypt.hashpw(text, BCrypt.gensalt());
                 default:
-                    return byte2HexStr(digestToByte(text, algorithm));
+                    return byte2HexStr(digest(text.getBytes(StandardCharsets.UTF_8), algorithm));
             }
         }
 
@@ -97,13 +97,13 @@ public class SecurityHelper {
          * @param algorithm 摘要算法 ，如 bcrypt SHA-x MD5
          * @return 摘要后的值
          */
-        public byte[] digestToByte(String text, String algorithm) throws NoSuchAlgorithmException {
+        public byte[] digest(byte[] text, String algorithm) throws NoSuchAlgorithmException {
             switch (algorithm.toLowerCase()) {
                 case "bcrypt":
-                    return BCrypt.hashpw(text, BCrypt.gensalt()).getBytes(StandardCharsets.UTF_8);
+                    return BCrypt.hashpw(new String(text, StandardCharsets.UTF_8), BCrypt.gensalt()).getBytes(StandardCharsets.UTF_8);
                 default:
                     MessageDigest md = MessageDigest.getInstance(algorithm);
-                    md.update(text.getBytes(StandardCharsets.UTF_8));
+                    md.update(text);
                     return md.digest();
             }
         }
@@ -117,7 +117,7 @@ public class SecurityHelper {
          * @return 摘要后的值
          */
         public String digest(String text, String secretKey, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
-            return byte2HexStr(digestToByte(text, secretKey, algorithm));
+            return byte2HexStr(digest(text.getBytes(StandardCharsets.UTF_8), secretKey.getBytes(StandardCharsets.UTF_8), algorithm));
         }
 
         /**
@@ -128,10 +128,10 @@ public class SecurityHelper {
          * @param algorithm 摘要算法 ，如 HmacSHA256
          * @return 摘要后的值
          */
-        public byte[] digestToByte(String text, String secretKey, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
+        public byte[] digest(byte[] text, byte[] secretKey, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
             Mac mac = Mac.getInstance(algorithm);
-            mac.init(new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), algorithm));
-            return mac.doFinal(text.getBytes(StandardCharsets.UTF_8));
+            mac.init(new SecretKeySpec(secretKey, algorithm));
+            return mac.doFinal(text);
         }
 
         /**
