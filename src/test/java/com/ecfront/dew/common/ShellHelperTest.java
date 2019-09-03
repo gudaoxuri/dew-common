@@ -22,7 +22,7 @@ public class ShellHelperTest {
      * @throws InterruptedException the interrupted exception
      * @throws ExecutionException   the execution exception
      */
-//@Test
+    // @Test
     public void testENV() throws InterruptedException, ExecutionException {
         $.shell.execute("cd C:\\Users\\i\\OneDrive\\workspaces\\2.jobs\\message-devops-test\\terminal\\captcha\\ && npm run build:uat",
                 new HashMap<String, String>() {
