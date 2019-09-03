@@ -22,7 +22,7 @@ public class ShellHelperTest {
      * @throws InterruptedException the interrupted exception
      * @throws ExecutionException   the execution exception
      */
-    //@Test
+//@Test
     public void testENV() throws InterruptedException, ExecutionException {
         $.shell.execute("cd C:\\Users\\i\\OneDrive\\workspaces\\2.jobs\\message-devops-test\\terminal\\captcha\\ && npm run build:uat",
                 new HashMap<String, String>() {
@@ -49,12 +49,9 @@ public class ShellHelperTest {
 
     /**
      * Test.
-     *
-     * @throws InterruptedException the interrupted exception
      */
-    // travis-ci 中执行有问题
-    // @Test
-    public void test() throws InterruptedException {
+    @Test
+    public void test() {
         // Error test
         Assert.assertTrue($.shell.execute("abc").getMessage().contains("Abnormal termination"));
         // Normal test
@@ -67,7 +64,17 @@ public class ShellHelperTest {
         Assert.assertTrue(result.stream().anyMatch(i -> i.contains("README.adoc")));
         result = $.shell.execute("git remote -v").getBody();
         Assert.assertTrue(result.stream().anyMatch(i -> i.contains("dew-common.git")));
+    }
 
+    /**
+     * Test bash.
+     * <p>
+     * NOTE: travis-ci 中执行有问题
+     *
+     * @throws InterruptedException the interrupted exception
+     */
+    // @Test
+    public void testBash() throws InterruptedException {
         if (!$.file.isWindows()) {
             final List<String> statusResult = new ArrayList<>();
             CountDownLatch cdl = new CountDownLatch(1);
