@@ -90,6 +90,7 @@ public class FileHelper {
     public void copyStreamToPath(InputStream source, String destPath) throws RTIOException {
         try {
             Files.copy(source, Paths.get(destPath), StandardCopyOption.REPLACE_EXISTING);
+            source.close();
         } catch (IOException e) {
             throw new RTIOException(e);
         }

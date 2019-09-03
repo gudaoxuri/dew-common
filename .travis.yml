@@ -1,9 +1,9 @@
 language: java
 
-script: mvn clean package
+script: mvn clean test -B -V
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 notifications:
   email:

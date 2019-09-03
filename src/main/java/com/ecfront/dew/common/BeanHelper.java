@@ -29,7 +29,6 @@ public class BeanHelper {
      */
     BeanHelper() {
         if (DependencyHelper.hasDependency("org.apache.commons.beanutils.BeanUtilsBean")) {
-            this.useCache = true;
             copyPropertiesAdapter = new NullAwareBeanUtilsBean();
         }
     }
@@ -63,10 +62,6 @@ public class BeanHelper {
      * @param <T>       the type parameter
      * @param ori       源Bean
      * @param destClazz 目标Bean类型
-     * @return the t
-     * @throws InvocationTargetException the invocation target exception
-     * @throws IllegalAccessException    the illegal access exception
-     * @throws InstantiationException    the instantiation exception
      */
     public <T> T copyProperties(Object ori, Class<T> destClazz) throws RTGeneralSecurityException {
         try {
