@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 任务报告接口
+ * 任务报告接口.
+ *
+ * @author gudaoxuri
  */
 public abstract class ReportHandler {
 
@@ -40,7 +42,7 @@ public abstract class ReportHandler {
     }
 
     /**
-     * 成功，在执行到successFlag时调用
+     * 成功，在执行到successFlag时调用.
      */
     final void onSuccess() {
         this.isSuccess = true;
@@ -48,28 +50,28 @@ public abstract class ReportHandler {
     }
 
     /**
-     * 输出每行错误输出数据
+     * 输出每行错误输出数据.
      */
     public void errorlog(String line) {
 
     }
 
     /**
-     * 输出每行标准输出数据
+     * 输出每行标准输出数据.
      */
     public void outputlog(String line) {
 
     }
 
     /**
-     * 成功，在执行到successFlag时调用
+     * 成功，在执行到successFlag时调用.
      */
     public void success() {
 
     }
 
     /**
-     * 失败，在发生错误时调用
+     * 失败，在发生错误时调用.
      *
      * @param message 失败原因描述
      */
@@ -80,7 +82,7 @@ public abstract class ReportHandler {
     }
 
     /**
-     * 失败，在发生错误时调用
+     * 失败，在发生错误时调用.
      *
      * @param message 失败原因描述
      */
@@ -89,7 +91,7 @@ public abstract class ReportHandler {
     }
 
     /**
-     * 进度回调，在执行到progressFlag且格式正确时调用
+     * 进度回调，在执行到progressFlag且格式正确时调用.
      *
      * @param progress 0-100
      */
@@ -99,7 +101,7 @@ public abstract class ReportHandler {
     }
 
     /**
-     * 进度回调，在执行到progressFlag且格式正确时调用
+     * 进度回调，在执行到progressFlag且格式正确时调用.
      *
      * @param progress 0-100
      */
@@ -107,7 +109,7 @@ public abstract class ReportHandler {
     }
 
     /**
-     * 完成，无论是否成功，在执行完成时(success 或 fail 方法后)调用
+     * 完成，无论是否成功，在执行完成时(success 或 fail 方法后)调用.
      *
      * @param output stdout标准输出结果
      * @param error  stderr标准错误结果
@@ -119,13 +121,12 @@ public abstract class ReportHandler {
     }
 
     /**
-     * 完成，无论是否成功，在执行完成时(success 或 fail 方法后)调用
+     * 完成，无论是否成功，在执行完成时(success 或 fail 方法后)调用.
      *
      * @param output stdout结果
      * @param error  stderr结果
      */
     public void complete(List<String> output, List<String> error) {
     }
-
 
 }

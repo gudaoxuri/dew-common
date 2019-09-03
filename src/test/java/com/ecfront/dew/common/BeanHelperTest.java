@@ -14,8 +14,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The type Bean helper test.
+ *
+ * @author gudaoxuri
+ */
 public class BeanHelperTest {
 
+    /**
+     * Copy properties.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void copyProperties() throws Exception {
         User ori = new User();
@@ -27,64 +37,102 @@ public class BeanHelperTest {
         Assert.assertTrue(Objects.equals(dest.getName(), "张三") && dest.getAge() == 0 && dest.getWorkAge() == 11);
     }
 
+    /**
+     * Find class annotation.
+     */
     @Test
     public void findClassAnnotation() {
         TestAnnotation.RPC ann = $.bean.getClassAnnotation(IdxController.class, TestAnnotation.RPC.class);
         Assert.assertEquals("/idx/", ann.path());
     }
 
+    /**
+     * Find field info.
+     */
     @Test
     public void findFieldInfo() {
         Map<String, BeanHelper.FieldInfo> fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, null);
         Assert.assertEquals(2, fieldsInfo.size());
-        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, new HashSet<Class<? extends Annotation>>() {{
-            add(Deprecated.class);
-        }}, null, null);
+        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, new HashSet<Class<? extends Annotation>>() {
+            {
+                add(Deprecated.class);
+            }
+        }, null, null);
         Assert.assertEquals(1, fieldsInfo.size());
-        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, new HashSet<String>() {{
-            add("parentField");
-        }}, new HashSet<Class<? extends Annotation>>() {{
-            add(Deprecated.class);
-        }}, null, null);
+        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, new HashSet<String>() {
+            {
+                add("parentField");
+            }
+        }, new HashSet<Class<? extends Annotation>>() {
+            {
+                add(Deprecated.class);
+            }
+        }, null, null);
         Assert.assertEquals(0, fieldsInfo.size());
-        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, new HashSet<Class<? extends Annotation>>() {{
-            add(Deprecated.class);
-        }});
+        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, new HashSet<Class<? extends Annotation>>() {
+            {
+                add(Deprecated.class);
+            }
+        });
         Assert.assertEquals(1, fieldsInfo.size());
-        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, new HashSet<String>() {{
-            add("parentField");
-        }}, new HashSet<Class<? extends Annotation>>() {{
-            add(Resource.class);
-        }});
+        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, new HashSet<String>() {
+            {
+                add("parentField");
+            }
+        }, new HashSet<Class<? extends Annotation>>() {
+            {
+                add(Resource.class);
+            }
+        });
         Assert.assertEquals(1, fieldsInfo.size());
     }
 
+    /**
+     * Find method info.
+     */
     @Test
     public void findMethodInfo() {
         List<BeanHelper.MethodInfo> methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, null);
         Assert.assertEquals(methodsInfo.size(), 7);
-        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, new HashSet<Class<? extends Annotation>>() {{
-            add(TestAnnotation.GET.class);
-        }}, null, null);
+        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, new HashSet<Class<? extends Annotation>>() {
+            {
+                add(TestAnnotation.GET.class);
+            }
+        }, null, null);
         Assert.assertEquals(methodsInfo.size(), 6);
-        methodsInfo = $.bean.findMethodsInfo(IdxController.class, new HashSet<String>() {{
-            add("find");
-        }}, new HashSet<Class<? extends Annotation>>() {{
-            add(TestAnnotation.GET.class);
-        }}, null, null);
+        methodsInfo = $.bean.findMethodsInfo(IdxController.class, new HashSet<String>() {
+            {
+                add("find");
+            }
+        }, new HashSet<Class<? extends Annotation>>() {
+            {
+                add(TestAnnotation.GET.class);
+            }
+        }, null, null);
         Assert.assertEquals(methodsInfo.size(), 4);
-        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, new HashSet<Class<? extends Annotation>>() {{
-            add(TestAnnotation.POST.class);
-        }});
+        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, new HashSet<Class<? extends Annotation>>() {
+            {
+                add(TestAnnotation.POST.class);
+            }
+        });
         Assert.assertEquals(methodsInfo.size(), 3);
-        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, new HashSet<String>() {{
-            add("childFind");
-        }}, new HashSet<Class<? extends Annotation>>() {{
-            add(TestAnnotation.POST.class);
-        }});
+        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, new HashSet<String>() {
+            {
+                add("childFind");
+            }
+        }, new HashSet<Class<? extends Annotation>>() {
+            {
+                add(TestAnnotation.POST.class);
+            }
+        });
         Assert.assertEquals(methodsInfo.size(), 1);
     }
 
+    /**
+     * Parse rel field and method.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void parseRelFieldAndMethod() throws Exception {
         Map<String, Method[]> rel = $.bean.parseRelFieldAndMethod(User.class, null, null, null, null);
@@ -92,6 +140,11 @@ public class BeanHelperTest {
         Assert.assertEquals(2, rel.get("enable").length);
     }
 
+    /**
+     * Find values by rel.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void findValuesByRel() throws Exception {
         User user = new User();
@@ -100,6 +153,11 @@ public class BeanHelperTest {
         Assert.assertEquals("张三", values.get("name"));
     }
 
+    /**
+     * Find values.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void findValues() throws Exception {
         User user = new User();
@@ -108,6 +166,11 @@ public class BeanHelperTest {
         Assert.assertEquals("张三", values.get("name"));
     }
 
+    /**
+     * Gets value.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void getValue() throws Exception {
         User user = new User();
@@ -117,6 +180,11 @@ public class BeanHelperTest {
         Assert.assertEquals("李四", $.bean.getValue(user, "name"));
     }
 
+    /**
+     * Sets value.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void setValue() throws Exception {
         User user = new User();

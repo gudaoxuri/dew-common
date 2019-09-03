@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 拦截器栈执行器
+ * 拦截器栈执行器.
+ *
+ * @author gudaoxuri
  */
 public class InterceptorHelper {
 
@@ -20,11 +22,14 @@ public class InterceptorHelper {
 
     private static Map<String, List<DewInterceptor<?, ?>>> CONTAINER = new HashMap<>();
 
+    /**
+     * Instantiates a new Interceptor helper.
+     */
     InterceptorHelper() {
     }
 
     /**
-     * 注册拦截器栈
+     * 注册拦截器栈.
      *
      * @param category    拦截类型
      * @param interceptor 拦截器
@@ -37,7 +42,7 @@ public class InterceptorHelper {
     }
 
     /**
-     * 注册拦截器栈
+     * 注册拦截器栈.
      *
      * @param category     拦截类型
      * @param interceptors 拦截器列表
@@ -47,11 +52,14 @@ public class InterceptorHelper {
     }
 
     /**
-     * 拦截器栈处理方法
+     * 拦截器栈处理方法.
      *
+     * @param <I>      the type parameter
+     * @param <O>      the type parameter
      * @param category 拦截类型
      * @param input    初始入栈对象
      * @param fun      实际执行方法
+     * @return the resp
      * @tparam E 对象的类型
      */
     public <I, O> Resp<DewInterceptContext<I, O>> process(String category, I input, DewInterceptExec<I, O> fun) {
@@ -59,12 +67,15 @@ public class InterceptorHelper {
     }
 
     /**
-     * 拦截器栈处理方法
+     * 拦截器栈处理方法.
      *
+     * @param <I>      the type parameter
+     * @param <O>      the type parameter
      * @param category 拦截类型
      * @param input    初始入栈对象
      * @param args     初始入栈参数
      * @param fun      实际执行方法
+     * @return the resp
      * @tparam E 对象的类型
      */
     public <I, O> Resp<DewInterceptContext<I, O>> process(String category, I input, Map<String, Object> args, DewInterceptExec<I, O> fun) {
@@ -87,10 +98,12 @@ public class InterceptorHelper {
         return doProcess(execR.getBody(), interceptors, false);
     }
 
-    private static <I, O> Resp<DewInterceptContext<I, O>> doProcess(DewInterceptContext<I, O> context, List<DewInterceptor<?, ?>> interceptors, boolean isBefore) {
+    private static <I, O> Resp<DewInterceptContext<I, O>> doProcess(DewInterceptContext<I, O> context,
+                                                                    List<DewInterceptor<?, ?>> interceptors, boolean isBefore) {
         Resp<DewInterceptContext<I, O>> result = Resp.success(context);
         for (DewInterceptor<?, ?> interceptor : interceptors) {
-            logger.trace("[DewInterceptorProcessor] Process interceptor [{}]:{}-{}", interceptor.getCategory(), interceptor.getName(), isBefore ? "before" : "after");
+            logger.trace("[DewInterceptorProcessor] Process interceptor [{}]:{}-{}",
+                    interceptor.getCategory(), interceptor.getName(), isBefore ? "before" : "after");
             DewInterceptor<I, O> interceptorE = (DewInterceptor<I, O>) interceptor;
             try {
                 if (isBefore) {

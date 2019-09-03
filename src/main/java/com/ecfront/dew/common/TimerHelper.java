@@ -8,7 +8,9 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 定时器操作
+ * 定时器操作.
+ *
+ * @author gudaoxuri
  */
 public class TimerHelper {
 
@@ -16,17 +18,20 @@ public class TimerHelper {
 
     private static Map<String, ScheduledFuture<?>> CONTAINER = new HashMap<>();
 
-    TimerHelper(){}
+    /**
+     * Instantiates a new Timer helper.
+     */
+    TimerHelper() {
+    }
 
     /**
-     * 延迟执行的周期性任务
+     * 延迟执行的周期性任务.
      *
      * @param delaySec  延迟秒数
      * @param periodSec 周期秒数
-     * @param fixedRate 是否按固定周期执行，
-     *                  为true时表示每periodSec执行，为false表示fixedDelay，表示在当前任务执行完成后过periodSec再执行
+     * @param fixedRate 是否按固定周期执行，                  为true时表示每periodSec执行，为false表示fixedDelay，表示在当前任务执行完成后过periodSec再执行
      * @param fun       执行的方法
-     * @return 任务id
+     * @return 任务id string
      */
     public String periodic(long delaySec, long periodSec, boolean fixedRate, Runnable fun) {
         String id = UUID.randomUUID().toString();
@@ -41,20 +46,19 @@ public class TimerHelper {
     }
 
     /**
-     * 周期性任务
+     * 周期性任务.
      *
      * @param periodSec 周期秒数
-     * @param fixedRate 是否按固定周期执行，
-     *                  为true时表示每periodSec执行，为false表示fixedDelay，表示在当前任务执行完成后过periodSec再执行
+     * @param fixedRate 是否按固定周期执行，                  为true时表示每periodSec执行，为false表示fixedDelay，表示在当前任务执行完成后过periodSec再执行
      * @param fun       执行的方法
-     * @return 任务id
+     * @return 任务id string
      */
     public String periodic(long periodSec, boolean fixedRate, Runnable fun) {
         return periodic(0, periodSec, fixedRate, fun);
     }
 
     /**
-     * 取消周期性任务
+     * 取消周期性任务.
      *
      * @param taskId 任务id
      */
@@ -66,7 +70,7 @@ public class TimerHelper {
     }
 
     /**
-     * 延迟任务
+     * 延迟任务.
      *
      * @param delaySec 延迟秒数
      * @param fun      执行的方法

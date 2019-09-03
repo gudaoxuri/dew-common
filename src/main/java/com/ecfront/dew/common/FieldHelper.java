@@ -6,7 +6,9 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
- * 常用字段操作
+ * 常用字段操作.
+ *
+ * @author gudaoxuri
  */
 public class FieldHelper {
 
@@ -14,7 +16,7 @@ public class FieldHelper {
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]*[A-Z0-9]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern MOBILE_PATTERN =
-            Pattern.compile("^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4\\D])|(18[0-9])|(166)|(199)|(198))\\d{8}$");
+            Pattern.compile("^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$");
 
     private static final Pattern CHINESE_PATTERN =
             Pattern.compile("^[\u4e00-\u9fa5]+$");
@@ -35,7 +37,7 @@ public class FieldHelper {
     }
 
     /**
-     * 验证邮箱格式是否合法
+     * 验证邮箱格式是否合法.
      *
      * @param email 邮件
      */
@@ -44,7 +46,7 @@ public class FieldHelper {
     }
 
     /**
-     * 验证手机号格式是否合法
+     * 验证手机号格式是否合法.
      *
      * @param mobile 手机号
      */
@@ -53,7 +55,7 @@ public class FieldHelper {
     }
 
     /**
-     * 验证身份证是否合法
+     * 验证身份证是否合法.
      *
      * @param idNumber 身份编号
      */
@@ -63,7 +65,7 @@ public class FieldHelper {
 
 
     /**
-     * 验证是否是IPv4
+     * 验证是否是IPv4.
      *
      * @param str 待校验字符串
      */
@@ -72,7 +74,7 @@ public class FieldHelper {
     }
 
     /**
-     * 验证是否是IPv6
+     * 验证是否是IPv6.
      *
      * @param str 待校验字符串
      */
@@ -89,7 +91,7 @@ public class FieldHelper {
     }
 
     /**
-     * 是否是汉字
+     * 是否是汉字.
      *
      * @param str 待校验字符串
      */
@@ -98,7 +100,7 @@ public class FieldHelper {
     }
 
     /**
-     * 根据身份编号获取年龄
+     * 根据身份编号获取年龄.
      *
      * @param idNumber 身份编号
      * @return 年龄
@@ -108,7 +110,7 @@ public class FieldHelper {
     }
 
     /**
-     * 根据身份编号获取生日
+     * 根据身份编号获取生日.
      *
      * @param idNumber 身份编号
      * @return 生日(yyyyMMdd)
@@ -118,7 +120,7 @@ public class FieldHelper {
     }
 
     /**
-     * 根据身份编号获取生日年
+     * 根据身份编号获取生日年.
      *
      * @param idNumber 身份编号
      * @return 生日(yyyy)
@@ -128,7 +130,7 @@ public class FieldHelper {
     }
 
     /**
-     * 根据身份编号获取生日月
+     * 根据身份编号获取生日月.
      *
      * @param idNumber 身份编号
      * @return 生日(MM)
@@ -138,7 +140,7 @@ public class FieldHelper {
     }
 
     /**
-     * 根据身份编号获取生日天
+     * 根据身份编号获取生日天.
      *
      * @param idNumber 身份编号
      * @return 生日(dd)
@@ -148,17 +150,17 @@ public class FieldHelper {
     }
 
     /**
-     * 根据身份编号获取性别
+     * 根据身份编号获取性别.
      *
      * @param idNumber 身份编号
-     * @return 性别(M-男，F-女，N-未知)
+     * @return 性别(M - 男 ， F - 女 ， N - 未知)
      */
     public String getGenderByIdCard(String idNumber) {
         return IdcardUtils.getGenderByIdCard(idNumber);
     }
 
     /**
-     * 根据身份编号获取户籍省份
+     * 根据身份编号获取户籍省份.
      *
      * @param idNumber 身份编码
      * @return 省级编码。
@@ -176,7 +178,7 @@ public class FieldHelper {
             "W", "X", "Y", "Z"};
 
     /**
-     * 获取UUID
+     * 获取UUID.
      *
      * @return UUID
      */
@@ -185,7 +187,7 @@ public class FieldHelper {
     }
 
     /**
-     * 获取短UUID
+     * 获取短UUID.
      *
      * @return 短UUID
      */

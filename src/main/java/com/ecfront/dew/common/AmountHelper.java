@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 金额操作
+ * 金额操作.
  *
  * @author Based By https://gist.github.com/binjoo/6028263
  */
@@ -21,7 +21,8 @@ public class AmountHelper {
      * 将金额（整数部分等于或少于12位，小数部分2位）转换为中文大写形式.
      *
      * @param amount 金额数字
-     * @return 中文大写
+     * @return 中文大写 string
+     * @throws IllegalArgumentException the illegal argument exception
      */
     public String convert(String amount) throws IllegalArgumentException {
         amount = amount.replace(",", "");
@@ -68,7 +69,8 @@ public class AmountHelper {
     private static String integer2rmb(String integer) {
         StringBuilder buffer = new StringBuilder();
         // 从个位数开始转换
-        int i, j;
+        int i;
+        int j;
         for (i = integer.length() - 1, j = 0; i >= 0; i--, j++) {
             char n = integer.charAt(i);
             if (n == '0') {

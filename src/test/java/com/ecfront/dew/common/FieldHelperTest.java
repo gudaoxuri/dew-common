@@ -3,8 +3,18 @@ package com.ecfront.dew.common;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * The type Field helper test.
+ *
+ * @author gudaoxuri
+ */
 public class FieldHelperTest {
 
+    /**
+     * Test field.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testField() throws Exception {
         Assert.assertTrue($.field.validateEmail("i@sunisle.org"));

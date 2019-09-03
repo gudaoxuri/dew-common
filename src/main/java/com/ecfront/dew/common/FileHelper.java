@@ -1,5 +1,7 @@
 package com.ecfront.dew.common;
 
+import com.ecfront.dew.common.exception.RTIOException;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.List;
@@ -7,7 +9,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * 常用文件操作
+ * 常用文件操作.
+ *
+ * @author gudaoxuri
  */
 public class FileHelper {
 
@@ -15,47 +19,58 @@ public class FileHelper {
     }
 
     /**
-     * 根据文件路径名读取文件所有内容
+     * 根据文件路径名读取文件所有内容.
      *
      * @param pathName 文件路径名
      * @param encode   编码
      * @return 文件内容
      */
-    public String readAllByPathName(String pathName, String encode) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(pathName)), encode);
+    public String readAllByPathName(String pathName, String encode) throws RTIOException {
+        try {
+            return new String(Files.readAllBytes(Paths.get(pathName)), encode);
+        } catch (IOException e) {
+            throw new RTIOException(e);
+        }
     }
 
     /**
-     * 根据文件读取文件所有内容
+     * 根据文件读取文件所有内容.
      *
      * @param file   文件
      * @param encode 编码
      * @return 文件内容
      */
-    public String readAllByFile(File file, String encode) throws IOException {
-        return new String(Files.readAllBytes(file.toPath()), encode);
+    public String readAllByFile(File file, String encode) throws RTIOException {
+        try {
+            return new String(Files.readAllBytes(file.toPath()), encode);
+        } catch (IOException e) {
+            throw new RTIOException(e);
+        }
     }
 
     /**
-     * 根据文件路径读取文件所有内容
+     * 根据文件路径读取文件所有内容.
      *
      * @param path   文件路径
      * @param encode 编码
      * @return 文件内容
      */
-    public String readAllByPath(Path path, String encode) throws IOException {
-        return new String(Files.readAllBytes(path), encode);
+    public String readAllByPath(Path path, String encode) throws RTIOException {
+        try {
+            return new String(Files.readAllBytes(path), encode);
+        } catch (IOException e) {
+            throw new RTIOException(e);
+        }
     }
 
     /**
-     * 根据classpath读取文件所有内容（jar包外路径优先）
+     * 根据classpath读取文件所有内容（jar包外路径优先）.
      *
      * @param classpath classpath，先找jar外的文件，找不到再去读jar包内文件
      * @param encode    编码
      * @return 文件内容
-     * @throws IOException
      */
-    public String readAllByClassPath(String classpath, String encode) throws IOException {
+    public String readAllByClassPath(String classpath, String encode) throws RTIOException {
         File file = new File(FileHelper.class.getResource("/").getPath() + classpath);
         if (file.exists()) {
             return readAllByFile(file, encode);
@@ -66,19 +81,22 @@ public class FileHelper {
     }
 
     /**
-     * 从流中复制文件到磁盘，不支持目录
+     * 从流中复制文件到磁盘，不支持目录.
      *
      * @param source   流，支持jar内文件复制
      *                 e.g. Test.class.getResourceAsStream("/LICENSE-junit.txt")
      * @param destPath 磁盘路径
-     * @throws IOException
      */
-    public void copyStreamToPath(InputStream source, String destPath) throws IOException {
-        Files.copy(source, Paths.get(destPath), StandardCopyOption.REPLACE_EXISTING);
+    public void copyStreamToPath(InputStream source, String destPath) throws RTIOException {
+        try {
+            Files.copy(source, Paths.get(destPath), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RTIOException(e);
+        }
     }
 
     /**
-     * 判断是否是Windows系统
+     * 判断是否是Windows系统.
      *
      * @return 是否是Windows系统
      */
@@ -88,7 +106,7 @@ public class FileHelper {
 
 
     /**
-     * Glob模式文件过滤器
+     * Glob模式文件过滤器.
      *
      * @param files     要过滤的文件列表
      * @param mathRules Glob过滤规则列表
@@ -108,7 +126,7 @@ public class FileHelper {
     }
 
     /**
-     * 使用Glob模式过滤规则检查是否有匹配到的文件
+     * 使用Glob模式过滤规则检查是否有匹配到的文件.
      *
      * @param files     要匹配的文件列表
      * @param mathRules Glob过滤规则列表
@@ -129,7 +147,7 @@ public class FileHelper {
     }
 
     /**
-     * 使用Glob模式过滤规则检查是否有未匹配到的文件
+     * 使用Glob模式过滤规则检查是否有未匹配到的文件.
      *
      * @param files     要匹配的文件列表
      * @param mathRules Glob过滤规则列表

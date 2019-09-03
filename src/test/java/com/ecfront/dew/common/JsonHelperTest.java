@@ -13,10 +13,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Json helper test.
+ *
+ * @author gudaoxuri
+ */
 public class JsonHelperTest {
 
     private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * Test path.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testPath() throws Exception {
         JsonNode jsonNode = $.json.toJson("{'a_key':'a_val','child':{'c_key':'c_val'}}");
@@ -24,6 +34,11 @@ public class JsonHelperTest {
         Assert.assertEquals("c_val", $.json.path(jsonNode, "child.c_key").asText());
     }
 
+    /**
+     * To json string.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void toJsonString() throws Exception {
         Assert.assertEquals(
@@ -31,6 +46,11 @@ public class JsonHelperTest {
                 $.json.toJsonString($.json.createObjectNode().set("", $.json.createObjectNode().put("a_key", "a_val"))));
     }
 
+    /**
+     * To json.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void toJson() throws Exception {
         Assert.assertEquals("a_val",
@@ -39,27 +59,48 @@ public class JsonHelperTest {
                 $.json.toJson("{\r\n'a_key':'a_val' // 注释\r\n}").get("a_key").asText());
     }
 
+    /**
+     * To list.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void toList() throws Exception {
-        TestIdModel model = $.json.toList("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]", TestIdModel.class).get(0);
+        TestIdModel model =
+                $.json.toList("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]",
+                        TestIdModel.class).get(0);
         Assert.assertEquals("sunisle", model.getName());
         Assert.assertEquals("1", model.getCid());
         Assert.assertEquals("123456789", model.getCreateTime());
         Assert.assertEquals("2016-07-12 12:00:00", df.format(model.getDate()));
     }
 
+    /**
+     * To set.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void toSet() throws Exception {
-        TestIdModel model = $.json.toSet("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]", TestIdModel.class).iterator().next();
+        TestIdModel model =
+                $.json.toSet("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]",
+                        TestIdModel.class).iterator().next();
         Assert.assertEquals("sunisle", model.getName());
         Assert.assertEquals("1", model.getCid());
         Assert.assertEquals("123456789", model.getCreateTime());
         Assert.assertEquals("2016-07-12 12:00:00", df.format(model.getDate()));
     }
 
+    /**
+     * To map.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void toMap() throws Exception {
-        Map<String, TestIdModel> model = $.json.toMap("{'sunisle':{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}}", String.class, TestIdModel.class);
+        Map<String, TestIdModel> model =
+                $.json.toMap("{'sunisle':{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}}",
+                        String.class, TestIdModel.class);
         Assert.assertEquals("sunisle", model.keySet().iterator().next());
         TestIdModel val = model.get("sunisle");
         Assert.assertEquals("1", val.getCid());
@@ -67,6 +108,11 @@ public class JsonHelperTest {
         Assert.assertEquals("2016-07-12 12:00:00", df.format(val.getDate()));
     }
 
+    /**
+     * To object.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void toObject() throws Exception {
         TestIdModel model = $.json.toObject("{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}", TestIdModel.class);
@@ -76,9 +122,16 @@ public class JsonHelperTest {
         Assert.assertEquals("2016-07-12 12:00:00", df.format(model.getDate()));
     }
 
+    /**
+     * To generic object.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void toGenericObject() throws Exception {
-        GenericModel model = $.json.toObject("{'strs':['sunisle'],'exts':[{'createTime':'123456789','cid':'1'}],'extMap':{'a':{'createTime':'123456789','cid':'1'}}}", GenericModel.class);
+        GenericModel model = $.json.toObject(
+                "{'strs':['sunisle'],'exts':[{'createTime':'123456789','cid':'1'}],'extMap':{'a':{'createTime':'123456789','cid':'1'}}}",
+                GenericModel.class);
         Assert.assertEquals("sunisle", model.getStrs().get(0));
         Assert.assertEquals("1", model.getExts().get(0).getCid());
         Assert.assertEquals("123456789", model.getExts().get(0).getCreateTime());
@@ -86,6 +139,9 @@ public class JsonHelperTest {
         Assert.assertEquals("123456789", model.getExtMap().get("a").getCreateTime());
     }
 
+    /**
+     * Test local date time.
+     */
     @Test
     public void testLocalDateTime() {
         TestIdModel model = new TestIdModel();
@@ -98,6 +154,9 @@ public class JsonHelperTest {
         Assert.assertEquals(model.getLocalTime().toString(), model2.getLocalTime().toString());
     }
 
+    /**
+     * Test optional.
+     */
     @Test
     public void testOptional() {
         TestIdModel model = new TestIdModel();
@@ -119,6 +178,9 @@ public class JsonHelperTest {
         Assert.assertEquals("001", model2.getOpt().get().get("h"));
     }
 
+    /**
+     * Custom mapper.
+     */
     @Test
     public void customMapper() {
         // Normal operation

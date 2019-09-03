@@ -3,10 +3,18 @@ package com.ecfront.dew.common;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.concurrent.CountDownLatch;
-
+/**
+ * The type Timer helper test.
+ *
+ * @author gudaoxuri
+ */
 public class TimerHelperTest {
 
+    /**
+     * Test timer.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testTimer() throws Exception {
         int[] i = {0};

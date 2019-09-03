@@ -3,8 +3,16 @@ package com.ecfront.dew.common;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * The type Fallback helper test.
+ *
+ * @author gudaoxuri
+ */
 public class FallbackHelperTest {
 
+    /**
+     * Test get user.
+     */
     @Test
     public void testGetUser() {
         String result = $.fallback.execute("testGetUser",
@@ -13,6 +21,9 @@ public class FallbackHelperTest {
         Assert.assertEquals("-1", result);
     }
 
+    /**
+     * Test get user with strategy.
+     */
     @Test
     public void testGetUserWithStrategy() {
         for (int i = 0; i < 10; i++) {
@@ -40,6 +51,9 @@ public class FallbackHelperTest {
                 });
     }
 
+    /**
+     * Test get user without some exception.
+     */
     @Test
     public void testGetUserWithoutSomeException() {
         try {
@@ -62,7 +76,15 @@ public class FallbackHelperTest {
         return e.getClass() == FallbackHelper.FallbackException.class ? "-2" : "-1";
     }
 
+    /**
+     * The type Not found exception.
+     */
     public static class NotFoundException extends Exception {
+        /**
+         * Instantiates a new Not found exception.
+         *
+         * @param message the message
+         */
         public NotFoundException(String message) {
             super(message);
         }

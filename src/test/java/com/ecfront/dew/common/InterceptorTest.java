@@ -5,37 +5,35 @@ import com.ecfront.dew.common.interceptor.DewInterceptor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
+/**
+ * The type Interceptor test.
+ *
+ * @author gudaoxuri
+ */
 public class InterceptorTest {
 
+    /**
+     * Test interceptor.
+     */
     @Test
-    public void testInterceptor() throws Exception {
+    public void testInterceptor() {
         // 没有注册拦截器的情况
         Resp<DewInterceptContext<Obj, Obj>> resp =
                 $.interceptor.process("none", new Obj("1"), new HashMap<>(), context -> {
-                    try {
-                        // 业务逻辑，只做简单将input对象copy到output对象
-                        context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
-                        return Resp.success(context);
-                    } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                        e.printStackTrace();
-                        return Resp.serverError("");
-                    }
+                    // 业务逻辑，只做简单将input对象copy到output对象
+                    context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
+                    return Resp.success(context);
                 });
         Assert.assertTrue(resp.ok());
         Assert.assertEquals("1", resp.getBody().getOutput().getF());
         // 注册了一个拦截器A
         $.interceptor.register("test", new InterceptorA());
         resp = $.interceptor.process("test", new Obj("1"), new HashMap<>(), context -> {
-            try {
-                // 业务逻辑，只做简单将input对象copy到output对象
-                context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
-                return Resp.success(context);
-            } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                return Resp.serverError("");
-            }
+            // 业务逻辑，只做简单将input对象copy到output对象
+            context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
+            return Resp.success(context);
         });
         Assert.assertTrue(resp.ok());
         Assert.assertEquals("2", resp.getBody().getInput().getF());
@@ -43,37 +41,57 @@ public class InterceptorTest {
         // 注册了另一个拦截器B，假设B执行会报错
         $.interceptor.register("test", new InterceptorB());
         resp = $.interceptor.process("test", new Obj("11"), new HashMap<>(), context -> {
-            try {
-                // 业务逻辑，只做简单将input对象copy到output对象
-                context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
-                return Resp.success(context);
-            } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                return Resp.serverError("");
-            }
+            // 业务逻辑，只做简单将input对象copy到output对象
+            context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
+            return Resp.success(context);
         });
         Assert.assertTrue(!resp.ok());
     }
 
 
+    /**
+     * The type Obj.
+     */
     public static class Obj {
         private String f;
 
+        /**
+         * Instantiates a new Obj.
+         */
         public Obj() {
         }
 
+        /**
+         * Instantiates a new Obj.
+         *
+         * @param f the f
+         */
         public Obj(String f) {
             this.f = f;
         }
 
+        /**
+         * Gets f.
+         *
+         * @return the f
+         */
         public String getF() {
             return f;
         }
 
+        /**
+         * Sets f.
+         *
+         * @param f the f
+         */
         public void setF(String f) {
             this.f = f;
         }
     }
 
+    /**
+     * The type Interceptor a.
+     */
     public class InterceptorA implements DewInterceptor<Obj, Obj> {
 
         @Override
@@ -100,6 +118,9 @@ public class InterceptorTest {
 
     }
 
+    /**
+     * The type Interceptor b.
+     */
     public class InterceptorB implements DewInterceptor<Obj, Obj> {
 
         @Override

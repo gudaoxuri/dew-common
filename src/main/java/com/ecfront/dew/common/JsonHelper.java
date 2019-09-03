@@ -1,5 +1,7 @@
 package com.ecfront.dew.common;
 
+import com.ecfront.dew.common.exception.RTException;
+import com.ecfront.dew.common.exception.RTIOException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -15,9 +17,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * Json与Java对象互转<br/>
+ * Json与Java对象互转.
  * <p>
  * 为方便在Java8 Stream中使用，操作返回的异常都是运行时异常
+ *
+ * @author gudaoxuri
  */
 public class JsonHelper {
 
@@ -25,6 +29,12 @@ public class JsonHelper {
 
     private ObjectMapper mapper;
 
+    /**
+     * Pick json helper.
+     *
+     * @param instanceId the instance id
+     * @return the json helper
+     */
     static JsonHelper pick(String instanceId) {
         return INSTANCES.computeIfAbsent(instanceId, k -> new JsonHelper());
     }
@@ -47,7 +57,7 @@ public class JsonHelper {
     }
 
     /**
-     * 设置时区
+     * 设置时区.
      *
      * @param tz 时区
      */
@@ -56,11 +66,10 @@ public class JsonHelper {
     }
 
     /**
-     * Java对象转成Json字符串
+     * Java对象转成Json字符串.
      *
      * @param obj Java对象
-     * @return Json字符串
-     * @throws RuntimeException
+     * @return Json字符串 string
      */
     public String toJsonString(Object obj) {
         if (obj instanceof String) {
@@ -69,24 +78,23 @@ public class JsonHelper {
             try {
                 return mapper.writeValueAsString(obj);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new RTException(e);
             }
         }
     }
 
     /**
-     * Java对象转成JsonNode
+     * Java对象转成JsonNode.
      *
      * @param obj Java对象
-     * @return JsonNode
-     * @throws RuntimeException
+     * @return JsonNode json node
      */
     public JsonNode toJson(Object obj) {
         if (obj instanceof String) {
             try {
                 return mapper.readTree((String) obj);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RTIOException(e);
             }
         } else {
             return mapper.valueToTree(obj);
@@ -94,50 +102,50 @@ public class JsonHelper {
     }
 
     /**
-     * 转成List泛型对象
+     * 转成List泛型对象.
      *
+     * @param <E>   the type parameter
      * @param obj   源数据，可以是Json字符串、JsonNode或其它Java对象
      * @param clazz 目标对象类型
-     * @return 目标对象
-     * @throws RuntimeException
+     * @return 目标对象 list
      */
     public <E> List<E> toList(Object obj, Class<E> clazz) {
         return (List<E>) toGeneric(obj, List.class, clazz);
     }
 
     /**
-     * 转成Set泛型对象
+     * 转成Set泛型对象.
      *
+     * @param <E>   the type parameter
      * @param obj   源数据，可以是Json字符串、JsonNode或其它Java对象
      * @param clazz 目标对象类型
-     * @return 目标对象
-     * @throws RuntimeException
+     * @return 目标对象 set
      */
     public <E> Set<E> toSet(Object obj, Class<E> clazz) {
         return (Set<E>) toGeneric(obj, Set.class, clazz);
     }
 
     /**
-     * 转成Map泛型对象
+     * 转成Map泛型对象.
      *
+     * @param <K>        the type parameter
+     * @param <V>        the type parameter
      * @param obj        源数据，可以是Json字符串、JsonNode或其它Java对象
      * @param keyClazz   目标对象类型Key
      * @param valueClazz 目标对象类型Value
-     * @return 目标对象
-     * @throws RuntimeException
+     * @return 目标对象 map
      */
     public <K, V> Map<K, V> toMap(Object obj, Class<K> keyClazz, Class<V> valueClazz) {
         return (Map<K, V>) toGeneric(obj, Map.class, keyClazz, valueClazz);
     }
 
     /**
-     * 转成泛型对象
+     * 转成泛型对象.
      *
      * @param obj              源数据，可以是Json字符串、JsonNode或其它Java对象
      * @param parametrized     目标对象类型
      * @param parameterClasses 目标对象泛型类型
-     * @return 目标对象
-     * @throws RuntimeException
+     * @return 目标对象 object
      */
     public Object toGeneric(Object obj, Class<?> parametrized, Class... parameterClasses) {
         JavaType type = mapper.getTypeFactory().constructParametricType(parametrized, parameterClasses);
@@ -154,17 +162,17 @@ public class JsonHelper {
                 return mapper.readValue(mapper.writeValueAsString(obj), type);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RTIOException(e);
         }
     }
 
     /**
-     * 转成目标对象
+     * 转成目标对象.
      *
+     * @param <E>   the type parameter
      * @param obj   源数据，可以是Json字符串、JsonNode或其它Java对象
      * @param clazz 目标对象类型
-     * @return 目标对象
-     * @throws RuntimeException
+     * @return 目标对象 e
      */
     public <E> E toObject(Object obj, Class<E> clazz) {
         try {
@@ -180,16 +188,16 @@ public class JsonHelper {
                 return mapper.readValue(mapper.writeValueAsString(obj), clazz);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RTIOException(e);
         }
     }
 
     /**
-     * 获取对应路径下的Json
+     * 获取对应路径下的Json.
      *
      * @param jsonNode Json对象
      * @param pathStr  路径
-     * @return 对应的Json对象
+     * @return 对应的Json对象 json node
      */
     public JsonNode path(JsonNode jsonNode, String pathStr) {
         String[] splitPaths = pathStr.split("\\.");
@@ -204,25 +212,25 @@ public class JsonHelper {
     }
 
     /**
-     * 创建ObjectNode
+     * 创建ObjectNode.
      *
-     * @return objectNode
+     * @return objectNode object node
      */
     public ObjectNode createObjectNode() {
         return mapper.createObjectNode();
     }
 
     /**
-     * 创建ArrayNode
+     * 创建ArrayNode.
      *
-     * @return arrayNode
+     * @return arrayNode array node
      */
     public ArrayNode createArrayNode() {
         return mapper.createArrayNode();
     }
 
     /**
-     * 获取Jackson底层操作
+     * 获取Jackson底层操作.
      *
      * @return Jackson ObjectMapper
      */

@@ -1,5 +1,7 @@
 package com.ecfront.dew.common;
 
+import com.ecfront.dew.common.exception.RTException;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -7,7 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 简单的降级处理工具
+ * 简单的降级处理工具.
+ *
+ * @author gudaoxuri
  */
 public class FallbackHelper {
 
@@ -16,33 +20,37 @@ public class FallbackHelper {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss SSS");
 
     /**
-     * 根据组名获取降级信息
+     * 根据组名获取降级信息.
      *
      * @param groupName 组名，全局唯一
-     * @return 降级信息
+     * @return 降级信息 fallback info
      */
     public FallbackInfo getFallbackInfo(String groupName) {
         return CONTAINER.getOrDefault(groupName, new FallbackInfo());
     }
 
     /**
-     * 带降级的处理方法
+     * 带降级的处理方法.
      *
+     * @param <E>             the type parameter
      * @param groupName       组名，全局唯一
      * @param normalProcessor 正常方法，抛异常时进入失败方法
      * @param errorProcessor  失败方法
+     * @return the e
      */
     public <E> E execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor) {
         return execute(groupName, normalProcessor, errorProcessor, new DefaultFallbackStrategy(), new ArrayList<>());
     }
 
     /**
-     * 带降级的处理方法
+     * 带降级的处理方法.
      *
+     * @param <E>              the type parameter
      * @param groupName        组名，全局唯一
      * @param normalProcessor  正常方法，抛异常时进入失败方法
      * @param errorProcessor   失败方法
      * @param fallbackStrategy 降级策略
+     * @return the e
      */
     public <E> E execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
                          FallbackStrategy fallbackStrategy) {
@@ -50,12 +58,14 @@ public class FallbackHelper {
     }
 
     /**
-     * 带降级的处理方法
+     * 带降级的处理方法.
      *
+     * @param <E>                   the type parameter
      * @param groupName             组名，全局唯一
      * @param normalProcessor       正常方法，抛异常时进入失败方法
      * @param errorProcessor        失败方法
      * @param excludeFallbackErrors 不做降级处理的异常集合（视为业务上正常的错误）
+     * @return the e
      */
     public <E> E execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
                          Class<? extends Throwable>... excludeFallbackErrors) {
@@ -63,13 +73,15 @@ public class FallbackHelper {
     }
 
     /**
-     * 带降级的处理方法
+     * 带降级的处理方法.
      *
+     * @param <E>                   the type parameter
      * @param groupName             组名，全局唯一
      * @param normalProcessor       正常方法，抛异常时进入失败方法
      * @param errorProcessor        失败方法
      * @param fallbackStrategy      降级策略
      * @param excludeFallbackErrors 不做降级处理的异常集合（视为业务上正常的错误）
+     * @return the e
      */
     public <E> E execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
                          FallbackStrategy fallbackStrategy, Class<? extends Throwable>... excludeFallbackErrors) {
@@ -77,7 +89,7 @@ public class FallbackHelper {
     }
 
     /**
-     * 带降级的处理方法
+     * 带降级的处理方法.
      *
      * @param groupName             组名，全局唯一
      * @param normalProcessor       正常方法，抛异常时进入失败方法
@@ -101,7 +113,7 @@ public class FallbackHelper {
                     return (E) errorProcessor.execute(e, fallbackInfo);
                 } else {
                     fallbackInfo.success();
-                    throw new RuntimeException(e);
+                    throw new RTException(e);
                 }
             }
         } else {
@@ -109,13 +121,13 @@ public class FallbackHelper {
                     new FallbackException(String.format("%s has %s errors , last success is %s",
                             groupName,
                             fallbackInfo.getErrorTimes(),
-                            fallbackInfo.getLastGreenTime().format(DATE_TIME_FORMATTER)))
-                    , fallbackInfo);
+                            fallbackInfo.getLastGreenTime().format(DATE_TIME_FORMATTER))),
+                    fallbackInfo);
         }
     }
 
     /**
-     * 降级信息
+     * 降级信息.
      */
     public static class FallbackInfo {
 
@@ -127,6 +139,11 @@ public class FallbackHelper {
         private AtomicInteger successTimes = new AtomicInteger(0);
         private AtomicInteger errorTimes = new AtomicInteger(0);
 
+        /**
+         * Sets status.
+         *
+         * @param status the status
+         */
         public void setStatus(FallbackStatus status) {
             this.status = status;
             switch (status) {
@@ -146,77 +163,161 @@ public class FallbackHelper {
             }
         }
 
+        /**
+         * Request.
+         */
         void request() {
             requestTimes.incrementAndGet();
         }
 
+        /**
+         * Success.
+         */
         void success() {
             successTimes.incrementAndGet();
         }
 
+        /**
+         * Error.
+         */
         void error() {
             errorTimes.incrementAndGet();
         }
 
+        /**
+         * Init request times.
+         */
         void initRequestTimes() {
             requestTimes = new AtomicInteger(0);
         }
 
+        /**
+         * Init success times.
+         */
         void initSuccessTimes() {
             successTimes = new AtomicInteger(0);
         }
 
+        /**
+         * Init error times.
+         */
         void initErrorTimes() {
             errorTimes = new AtomicInteger(0);
         }
 
+        /**
+         * Init last green time.
+         */
         void initLastGreenTime() {
             this.lastGreenTime = LocalDateTime.now();
         }
 
+        /**
+         * Init last yellow time.
+         */
         void initLastYellowTime() {
             this.lastYellowTime = LocalDateTime.now();
         }
 
+        /**
+         * Init last red time.
+         */
         void initLastRedTime() {
             this.lastRedTime = LocalDateTime.now();
         }
 
+        /**
+         * Gets status.
+         *
+         * @return the status
+         */
         public FallbackStatus getStatus() {
             return status;
         }
 
+        /**
+         * Gets request times.
+         *
+         * @return the request times
+         */
         public int getRequestTimes() {
             return requestTimes.intValue();
         }
 
+        /**
+         * Gets success times.
+         *
+         * @return the success times
+         */
         public int getSuccessTimes() {
             return successTimes.intValue();
         }
 
+        /**
+         * Gets error times.
+         *
+         * @return the error times
+         */
         public int getErrorTimes() {
             return errorTimes.intValue();
         }
 
+        /**
+         * Gets last green time.
+         *
+         * @return the last green time
+         */
         public LocalDateTime getLastGreenTime() {
             return lastGreenTime;
         }
 
+        /**
+         * Gets last yellow time.
+         *
+         * @return the last yellow time
+         */
         public LocalDateTime getLastYellowTime() {
             return lastYellowTime;
         }
 
+        /**
+         * Gets last red time.
+         *
+         * @return the last red time
+         */
         public LocalDateTime getLastRedTime() {
             return lastRedTime;
         }
     }
 
+    /**
+     * The enum Fallback status.
+     */
     public enum FallbackStatus {
-        GREEN, YELLOW, RED
+        /**
+         * Green fallback status.
+         */
+        GREEN,
+        /**
+         * Yellow fallback status.
+         */
+        YELLOW,
+        /**
+         * Red fallback status.
+         */
+        RED
     }
 
-    public static class FallbackException extends RuntimeException {
+    /**
+     * The type Fallback exception.
+     */
+    public static class FallbackException extends RTException {
 
+        /**
+         * Instantiates a new Fallback exception.
+         *
+         * @param message the message
+         */
         public FallbackException(String message) {
             super(message);
         }
@@ -224,17 +325,27 @@ public class FallbackHelper {
     }
 
     /**
-     * 降级策略
+     * 降级策略.
+     *
+     * @author gudaoxuri
      */
     @FunctionalInterface
     public interface FallbackStrategy {
 
+        /**
+         * Check boolean.
+         *
+         * @param info the info
+         * @return the boolean
+         */
         boolean check(FallbackInfo info);
 
     }
 
     /**
-     * 默认的降级策略
+     * 默认的降级策略.
+     *
+     * @author gudaoxuri
      */
     public static class DefaultFallbackStrategy implements FallbackStrategy {
 
@@ -243,9 +354,18 @@ public class FallbackHelper {
         private double yellowRatio = 1;
         private double redRatio = 5;
 
+        /**
+         * Instantiates a new Default fallback strategy.
+         */
         public DefaultFallbackStrategy() {
         }
 
+        /**
+         * Instantiates a new Default fallback strategy.
+         *
+         * @param yellowRatio the yellow ratio
+         * @param redRatio    the red ratio
+         */
         public DefaultFallbackStrategy(double yellowRatio, double redRatio) {
             this.yellowRatio = yellowRatio;
             this.redRatio = redRatio;
@@ -274,16 +394,39 @@ public class FallbackHelper {
         }
     }
 
+    /**
+     * The interface Error processor.
+     *
+     * @param <E> the type parameter
+     */
     @FunctionalInterface
     public interface ErrorProcessor<E> {
 
+        /**
+         * Execute e.
+         *
+         * @param e            the e
+         * @param fallbackInfo the fallback info
+         * @return the e
+         */
         E execute(Throwable e, FallbackHelper.FallbackInfo fallbackInfo);
 
     }
 
+    /**
+     * The interface Normal processor.
+     *
+     * @param <E> the type parameter
+     */
     @FunctionalInterface
     public interface NormalProcessor<E> {
 
+        /**
+         * Execute e.
+         *
+         * @return the e
+         * @throws Throwable the throwable
+         */
         E execute() throws Throwable;
 
     }

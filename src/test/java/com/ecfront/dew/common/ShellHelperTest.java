@@ -3,26 +3,36 @@ package com.ecfront.dew.common;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Shell helper test.
+ *
+ * @author gudaoxuri
+ */
 public class ShellHelperTest {
 
-   /* @Test
-    public void testENV() throws IOException, InterruptedException, ExecutionException {
+    /**
+     * Test env.
+     *
+     * @throws InterruptedException the interrupted exception
+     * @throws ExecutionException   the execution exception
+     */
+    //@Test
+    public void testENV() throws InterruptedException, ExecutionException {
         $.shell.execute("cd C:\\Users\\i\\OneDrive\\workspaces\\2.jobs\\message-devops-test\\terminal\\captcha\\ && npm run build:uat",
                 new HashMap<String, String>() {
                     {
                         put("NODE_ENV", "uat");
                     }
-                },null, null, false, new ReportHandler() {
+                }, null, null, false, new ReportHandler() {
                     @Override
                     public void outputlog(String line) {
-                        System.out.println("O:"+line);
+                        System.out.println("O:" + line);
                     }
 
                     @Override
@@ -32,13 +42,18 @@ public class ShellHelperTest {
 
                     @Override
                     public void errorlog(String line) {
-                        System.out.println("E:"+line);
+                        System.out.println("E:" + line);
                     }
                 }).get();
-    }*/
+    }
 
+    /**
+     * Test.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
-    public void test() throws IOException, InterruptedException {
+    public void test() throws InterruptedException {
         // Error test
         Assert.assertTrue($.shell.execute("abc").getMessage().contains("Abnormal termination"));
         // Normal test
@@ -63,7 +78,7 @@ public class ShellHelperTest {
                     true, // 是否返回结果（输出内容，包含标准输出stdout及错误输出stderr），为true时会返回结果到ReportHandler的complete方法中，结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
                     new ReportHandler() {
                         /**
-                         * 成功，在执行到successFlag时调用
+                         * 成功，在执行到successFlag时调用.
                          */
                         @Override
                         public void success() {
@@ -71,7 +86,7 @@ public class ShellHelperTest {
                         }
 
                         /**
-                         * 失败，在发生错误时调用
+                         * 失败，在发生错误时调用.
                          *
                          * @param message 失败原因描述
                          */
@@ -81,7 +96,7 @@ public class ShellHelperTest {
                         }
 
                         /**
-                         * 进度回调，在执行到progressFlag且格式正确时调用
+                         * 进度回调，在执行到progressFlag且格式正确时调用.
                          *
                          * @param progress 0-100
                          */
@@ -91,7 +106,7 @@ public class ShellHelperTest {
                         }
 
                         /**
-                         * 完成，无论是否成功，在执行完成时(success 或 fail 方法后)调用
+                         * 完成，无论是否成功，在执行完成时(success 或 fail 方法后)调用.
                          *
                          * @param output stdout结果
                          * @param error  stderr结果

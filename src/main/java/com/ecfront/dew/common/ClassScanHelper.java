@@ -1,6 +1,9 @@
 package com.ecfront.dew.common;
 
 
+import com.ecfront.dew.common.exception.RTException;
+import com.ecfront.dew.common.exception.RTIOException;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -15,44 +18,61 @@ import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
 /**
- * Java Class扫描操作
+ * Java Class扫描操作.
+ *
+ * @author gudaoxuri
  */
 public class ClassScanHelper {
 
+    /**
+     * Instantiates a new Class scan helper.
+     */
     ClassScanHelper() {
     }
 
     /**
-     * 扫描获取指定包下符合条件的class类
+     * 扫描获取指定包下符合条件的class类.
      *
      * @param basePackage        要扫描的根包名
      * @param includeAnnotations 要包含的注解，默认为全部
      * @param includeNames       要包含的class名称（支持正则），默认为全部
-     * @return 符合条件的class类集合
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @return 符合条件的class类集合 set
      */
-    public Set<Class<?>> scan(String basePackage, Set<Class<? extends Annotation>> includeAnnotations, Set<String> includeNames) throws IOException, ClassNotFoundException {
+    public Set<Class<?>> scan(String basePackage,
+                              Set<Class<? extends Annotation>> includeAnnotations, Set<String> includeNames) throws RTIOException {
         Set<Class<?>> result = new HashSet<>();
         String packageDir = basePackage.replace('.', '/');
-        Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageDir);
-        while (urls.hasMoreElements()) {
-            URL url = urls.nextElement();
-            switch (url.getProtocol()) {
-                case "file":
-                    result.addAll(findAndAddClassesByFile(basePackage, new File(URLDecoder.decode(url.getFile(), "UTF-8")), includeAnnotations, includeNames));
-                    break;
-                case "jar":
-                    result.addAll(findAndAddClassesByJar(((JarURLConnection) url.openConnection()).getJarFile(), packageDir, includeAnnotations, includeNames));
-                    break;
-                default:
-                    break;
+        try {
+            Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageDir);
+            while (urls.hasMoreElements()) {
+                URL url = urls.nextElement();
+                switch (url.getProtocol()) {
+                    case "file":
+                        result.addAll(
+                                findAndAddClassesByFile(
+                                        basePackage, new File(URLDecoder.decode(url.getFile(), "UTF-8")),
+                                        includeAnnotations, includeNames)
+                        );
+                        break;
+                    case "jar":
+                        result.addAll(
+                                findAndAddClassesByJar(
+                                        ((JarURLConnection) url.openConnection()).getJarFile(),
+                                        packageDir, includeAnnotations, includeNames)
+                        );
+                        break;
+                    default:
+                        break;
+                }
             }
+        } catch (IOException e) {
+            throw new RTException(e);
         }
         return result;
     }
 
-    private static Set<Class<?>> findAndAddClassesByFile(String currentPackage, File currentFile, Set<Class<? extends Annotation>> annotations, Set<String> classNames) throws ClassNotFoundException {
+    private static Set<Class<?>> findAndAddClassesByFile(String currentPackage, File currentFile,
+                                                         Set<Class<? extends Annotation>> annotations, Set<String> classNames) {
         Set<Class<?>> result = new HashSet<>();
         if (currentFile.exists() && currentFile.isDirectory()) {
             File[] files = currentFile.listFiles(file -> file.isDirectory() || file.getName().endsWith(".class"));
@@ -75,7 +95,8 @@ public class ClassScanHelper {
         return result;
     }
 
-    private static Set<Class<?>> findAndAddClassesByJar(JarFile jar, String currentPath, Set<Class<? extends Annotation>> annotations, Set<String> classNames) throws ClassNotFoundException {
+    private static Set<Class<?>> findAndAddClassesByJar(JarFile jar, String currentPath,
+                                                        Set<Class<? extends Annotation>> annotations, Set<String> classNames) {
         Set<Class<?>> result = new HashSet<>();
         Enumeration<JarEntry> entries = jar.entries();
         JarEntry jarEntry;

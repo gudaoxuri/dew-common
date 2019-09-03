@@ -1,5 +1,6 @@
 package com.ecfront.dew.common;
 
+import com.ecfront.dew.common.exception.RTIOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,9 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 /**
- * Shell脚本操作
+ * Shell脚本操作.
+ *
+ * @author gudaoxuri
  */
 public class ShellHelper {
 
@@ -25,7 +28,7 @@ public class ShellHelper {
     }
 
     /**
-     * 执行入口，如执行成功，此方法只返回output(标准输出)
+     * 执行入口，如执行成功，此方法只返回output(标准输出).
      *
      * @param cmd 命令，包含参数
      */
@@ -34,7 +37,7 @@ public class ShellHelper {
     }
 
     /**
-     * 执行入口，如执行成功，此方法只返回output(标准输出)
+     * 执行入口，如执行成功，此方法只返回output(标准输出).
      *
      * @param cmd 命令，包含参数
      * @param env 执行环境
@@ -53,20 +56,20 @@ public class ShellHelper {
             Thread.currentThread().interrupt();
             logger.error("Execute fail: ", e);
             return Resp.customFail("", e.getMessage());
-        } catch (IOException | ExecutionException e) {
+        } catch (Exception e) {
             logger.error("Execute fail: ", e);
             return Resp.customFail("", e.getMessage());
         }
     }
 
     /**
-     * 执行入口
+     * 执行入口.
      *
      * @param cmd           命令或脚本，包含参数
      * @param successFlag   成功标识，只要捕捉到此标识就视为成功，
      *                      为null时不会调用ReportHandler的success方法
      * @param progressFlag  进度标识，只要捕捉到此标识就更新进度，
-     *                      格式为 <progressFlag>空格<progress>,如： progress 40，
+     *                      格式为: progressFlag 空格 progress ,如： progress 40，
      *                      为null时不会调用ReportHandler的progress方法
      * @param returnResult  是否返回结果（输出内容，包含标准输出stdin及标准错误stderr），
      *                      为true时会返回结果到ReportHandler的complete方法中，
@@ -76,19 +79,19 @@ public class ShellHelper {
     public Future<Void> execute(String cmd,
                                 String successFlag, String progressFlag,
                                 boolean returnResult,
-                                ReportHandler reportHandler) throws IOException {
+                                ReportHandler reportHandler) throws RTIOException {
         return execute(cmd, null, successFlag, progressFlag, returnResult, reportHandler);
     }
 
     /**
-     * 执行入口
+     * 执行入口.
      *
      * @param cmd           命令或脚本，包含参数
      * @param env           执行环境
      * @param successFlag   成功标识，只要捕捉到此标识就视为成功，
      *                      为null时不会调用ReportHandler的success方法
      * @param progressFlag  进度标识，只要捕捉到此标识就更新进度，
-     *                      格式为 <progressFlag>空格<progress>,如： progress 40，
+     *                      格式为: progressFlag 空格 progress ,如： progress 40，
      *                      为null时不会调用ReportHandler的progress方法
      * @param returnResult  是否返回结果（输出内容，包含标准输出stdin及标准错误stderr），
      *                      为true时会返回结果到ReportHandler的complete方法中，
@@ -98,7 +101,7 @@ public class ShellHelper {
     public Future<Void> execute(String cmd, Map<String, String> env,
                                 String successFlag, String progressFlag,
                                 boolean returnResult,
-                                ReportHandler reportHandler) throws IOException {
+                                ReportHandler reportHandler) throws RTIOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
         if (env != null && !env.isEmpty()) {
             processBuilder.environment().putAll(env);
@@ -108,7 +111,12 @@ public class ShellHelper {
         } else {
             processBuilder.command("bash", "-c", cmd);
         }
-        Process process = processBuilder.start();
+        Process process = null;
+        try {
+            process = processBuilder.start();
+        } catch (IOException e) {
+            throw new RTIOException(e);
+        }
         return pool.submit(new ProcessReadTask(process, cmd,
                 successFlag, progressFlag, returnResult, reportHandler));
     }
@@ -136,8 +144,10 @@ public class ShellHelper {
 
         @Override
         public Void call() throws InterruptedException, ExecutionException {
-            Future<List<String>> outputResultF = pool.submit(new ProcessReader(outputStream, successFlag, progressFlag, returnResult, reportHandler, true));
-            Future<List<String>> errorResultF = pool.submit(new ProcessReader(errorStream, successFlag, progressFlag, returnResult, reportHandler, false));
+            Future<List<String>> outputResultF = pool.submit(
+                    new ProcessReader(outputStream, successFlag, progressFlag, returnResult, reportHandler, true));
+            Future<List<String>> errorResultF = pool.submit(
+                    new ProcessReader(errorStream, successFlag, progressFlag, returnResult, reportHandler, false));
             List<String> outputResult = outputResultF.get();
             List<String> errorResult = errorResultF.get();
             reportHandler.onComplete(outputResult, errorResult);
@@ -188,7 +198,8 @@ public class ShellHelper {
                         }
                         if (progressFlag != null
                                 && message.toLowerCase().contains(progressFlag.toLowerCase())) {
-                            reportHandler.onProgress(Integer.valueOf(message.substring(message.indexOf(progressFlag) + progressFlag.length()).trim()));
+                            reportHandler.onProgress(
+                                    Integer.valueOf(message.substring(message.indexOf(progressFlag) + progressFlag.length()).trim()));
                         }
                     }
                 } catch (IOException e) {
