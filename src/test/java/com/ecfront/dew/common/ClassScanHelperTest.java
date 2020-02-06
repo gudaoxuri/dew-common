@@ -43,7 +43,7 @@ public class ClassScanHelperTest {
             }
         }, null);
         Assert.assertEquals(2, resultInFile.size());
-        Set<Class<?>> resultInJar = $.clazz.scan("org.junit", null, new HashSet<String>() {
+        Set<Class<?>> resultInJar = $.clazz.scan("org.junit", null, new HashSet<>() {
             {
                 add("Before\\w*");
             }

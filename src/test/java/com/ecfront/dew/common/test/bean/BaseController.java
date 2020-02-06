@@ -16,7 +16,6 @@
 
 package com.ecfront.dew.common.test.bean;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,7 @@ import java.util.Map;
  */
 public class BaseController {
 
-    @Resource
+    @TestAnnotation.RPC(path = "")
     private String parentField;
 
     /**

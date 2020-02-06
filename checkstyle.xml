@@ -222,12 +222,12 @@
             <property name="allowLineBreaks" value="true"/>
         </module>
         <module name="ParenPad"/>
-        <module name="OperatorWrap">
+        <!--<module name="OperatorWrap">
             <property name="option" value="NL"/>
             <property name="tokens"
                       value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR,
                     LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR, METHOD_REF "/>
-        </module>
+        </module>-->
         <module name="AnnotationLocation">
             <property name="id" value="AnnotationLocationMostCases"/>
             <property name="tokens"

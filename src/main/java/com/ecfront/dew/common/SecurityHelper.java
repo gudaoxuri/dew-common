@@ -372,7 +372,7 @@ public class SecurityHelper {
                 KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm);
                 keyPairGenerator.initialize(length);
                 KeyPair keyPair = keyPairGenerator.generateKeyPair();
-                return new HashMap<String, String>() {
+                return new HashMap<>() {
                     {
                         put("PublicKey", encodeBytesToBase64(keyPair.getPublic().getEncoded()));
                         put("PrivateKey", encodeBytesToBase64(keyPair.getPrivate().getEncoded()));

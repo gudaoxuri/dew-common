@@ -185,7 +185,7 @@ public class JsonHelperTest {
         Assert.assertTrue(!model2.getOpt().isPresent());
 
         model = new TestIdModel();
-        model.setOpt(Optional.of(new HashMap<String, Object>() {
+        model.setOpt(Optional.of(new HashMap<>() {
             {
                 put("h", "001");
             }

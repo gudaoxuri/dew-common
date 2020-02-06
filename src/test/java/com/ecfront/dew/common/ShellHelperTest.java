@@ -41,7 +41,7 @@ public class ShellHelperTest {
     // @Test
     public void testENV() throws InterruptedException, ExecutionException {
         $.shell.execute("cd C:\\Users\\i\\OneDrive\\workspaces\\2.jobs\\message-devops-test\\terminal\\captcha\\ && npm run build:uat",
-                new HashMap<String, String>() {
+                new HashMap<>() {
                     {
                         put("NODE_ENV", "uat");
                     }

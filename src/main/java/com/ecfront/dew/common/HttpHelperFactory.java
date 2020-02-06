@@ -24,14 +24,28 @@ package com.ecfront.dew.common;
  */
 public class HttpHelperFactory {
 
+    enum BACKEND {
+        APACHE, JDK, AUTO
+    }
+
+
     /**
      * Choose http helper.
      *
      * @return the http helper
      */
     static HttpHelper choose() {
-        return choose(200, 20, -1, -1, false, true);
+        return choose(200, 20, -1, -1, false, true, BACKEND.AUTO);
     }
+
+    static HttpHelper choose(BACKEND backend) {
+        return choose(200, 20, -1, -1, false, true, backend);
+    }
+
+    static HttpHelper choose(int timeoutMS, boolean autoRedirect, BACKEND backend) {
+        return choose(200, 20, -1, -1, false, true, backend);
+    }
+
 
     /**
      * Choose http helper.
@@ -42,14 +56,22 @@ public class HttpHelperFactory {
      * @param defaultSocketTimeoutMS  默认读取超时时间
      * @param autoRedirect            302状态下是否自动跳转
      * @param retryAble               是否重试
+     * @param backend                 指定HTTP Client的实现
      * @return the http helper
      */
     static HttpHelper choose(int maxTotal, int maxPerRoute, int defaultConnectTimeoutMS, int defaultSocketTimeoutMS,
-                             boolean autoRedirect, boolean retryAble) {
-        if (DependencyHelper.hasDependency("org.apache.http.impl.client.CloseableHttpClient")) {
-            return new ApacheHttpHelper(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, autoRedirect, retryAble);
+                             boolean autoRedirect, boolean retryAble, HttpHelperFactory.BACKEND backend) {
+        switch (backend) {
+            case JDK:
+                return new JDKHttpHelper(defaultConnectTimeoutMS, autoRedirect, retryAble);
+            case APACHE:
+                return new ApacheHttpHelper(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, autoRedirect, retryAble);
+            case AUTO:
+            default:
+                if (DependencyHelper.hasDependency("org.apache.http.impl.client.CloseableHttpClient")) {
+                    return new ApacheHttpHelper(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, autoRedirect, retryAble);
+                }
+                return new JDKHttpHelper(defaultConnectTimeoutMS, autoRedirect, retryAble);
         }
-        return null;
     }
-
 }

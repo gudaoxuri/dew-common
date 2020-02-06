@@ -52,8 +52,6 @@ public class $ {
         return new BeanHelper(useCache);
     }
 
-    ;
-
     /**
      * Java Class扫描操作.
      */
@@ -109,18 +107,39 @@ public class $ {
     /**
      * Http操作.
      *
+     * @param backend 指定HTTP Client的实现
+     */
+    public static HttpHelper http(HttpHelperFactory.BACKEND backend) {
+        return HttpHelperFactory.choose(backend);
+    }
+
+    /**
+     * Http操作.
+     *
+     * @param timeoutMS    默认超时时间
+     * @param autoRedirect 302状态下是否自动跳转
+     * @param backend      指定HTTP Client的实现
+     */
+    public static HttpHelper http(int timeoutMS, boolean autoRedirect, HttpHelperFactory.BACKEND backend) {
+        return HttpHelperFactory.choose(timeoutMS, autoRedirect, backend);
+    }
+
+    /**
+     * Http操作.
+     *
      * @param maxTotal                整个连接池最大连接数
      * @param maxPerRoute             每个路由（域）的默认最大连接
      * @param defaultConnectTimeoutMS 默认连接超时时间
      * @param defaultSocketTimeoutMS  默认读取超时时间
      * @param autoRedirect            302状态下是否自动跳转
      * @param retryAble               是否重试
+     * @param backend                 指定HTTP Client的实现
      */
     public static HttpHelper http(int maxTotal, int maxPerRoute,
                                   int defaultConnectTimeoutMS, int defaultSocketTimeoutMS,
-                                  boolean autoRedirect, boolean retryAble) {
+                                  boolean autoRedirect, boolean retryAble, HttpHelperFactory.BACKEND backend) {
         return HttpHelperFactory.choose(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS,
-                autoRedirect, retryAble);
+                autoRedirect, retryAble, backend);
     }
 
     /**

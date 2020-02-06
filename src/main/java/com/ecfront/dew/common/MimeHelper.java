@@ -18,7 +18,6 @@ package com.ecfront.dew.common;
 
 import com.ecfront.dew.common.exception.RTException;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,9 +39,9 @@ public class MimeHelper {
     MimeHelper() {
     }
 
-    private static Map<String, List<String>> types = new HashMap<String, List<String>>() {
+    private static Map<String, List<String>> types = new HashMap<>() {
         {
-            put("office", new ArrayList<String>() {
+            put("office", new ArrayList<>() {
                 {
                     add(Mime.TXT.toString());
                     add(Mime.DOC.toString());
@@ -56,12 +55,12 @@ public class MimeHelper {
                     add(Mime.PDF.toString());
                 }
             });
-            put("txt", new ArrayList<String>() {
+            put("txt", new ArrayList<>() {
                 {
                     add(Mime.TXT.toString());
                 }
             });
-            put("compress", new ArrayList<String>() {
+            put("compress", new ArrayList<>() {
                 {
                     add(Mime.ZIP1.toString());
                     add(Mime.ZIP2.toString());
@@ -73,7 +72,7 @@ public class MimeHelper {
                     add(Mime.RAR2.toString());
                 }
             });
-            put("image", new ArrayList<String>() {
+            put("image", new ArrayList<>() {
                 {
                     add(Mime.GIF.toString());
                     add(Mime.JPG1.toString());
@@ -83,7 +82,7 @@ public class MimeHelper {
                     add(Mime.BMP2.toString());
                 }
             });
-            put("audio", new ArrayList<String>() {
+            put("audio", new ArrayList<>() {
                 {
                     add(Mime.MP3.toString());
                     add(Mime.WAV1.toString());
@@ -91,7 +90,7 @@ public class MimeHelper {
                     add(Mime.WMA.toString());
                 }
             });
-            put("video", new ArrayList<String>() {
+            put("video", new ArrayList<>() {
                 {
                     add(Mime.MP4.toString());
                     add(Mime.MOV.toString());
@@ -143,19 +142,16 @@ public class MimeHelper {
         if (nameSplit.length > 1 && mimeTypes.containsKey(nameSplit[nameSplit.length - 1].toLowerCase())) {
             return mimeTypes.get(nameSplit[nameSplit.length - 1].toLowerCase());
         }
-        String contentType = null;
+        String contentType;
         try {
             contentType = Files.probeContentType(file.toPath());
-        } catch (IOException ignore) {
-            throw new RTException(ignore);
-        }
-        if (contentType == null) {
-            contentType = new MimetypesFileTypeMap().getContentType(file);
+        } catch (IOException e) {
+            throw new RTException(e);
         }
         return contentType;
     }
 
-    private final Map<String, String> mimeTypes = new HashMap<String, String>() {
+    private final Map<String, String> mimeTypes = new HashMap<>() {
         {
             put("kar", "audio/midi");
             put("mid", "audio/midi");

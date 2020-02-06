@@ -24,6 +24,7 @@ Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少
 . 脚本处理
 . 响应处理及分页模型
 . Tuple支持
+. Java11支持
 
 == 使用
 
@@ -34,7 +35,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <dependency>
   <groupId>com.ecfront.dew</groupId>
   <artifactId>common</artifactId>
-  <version>1.5.1</version>
+  <version>2.0.0</version>
 </dependency>
 ----
 

@@ -33,7 +33,7 @@ public class TestAnnotation {
      * The interface Rpc.
      */
     @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
+    @Target({ElementType.TYPE, ElementType.FIELD})
     public @interface RPC {
         /**
          * Path string.

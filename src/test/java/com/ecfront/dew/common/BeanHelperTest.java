@@ -22,7 +22,6 @@ import com.ecfront.dew.common.test.bean.User;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -75,7 +74,7 @@ public class BeanHelperTest {
             }
         }, null, null);
         Assert.assertEquals(1, fieldsInfo.size());
-        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, new HashSet<String>() {
+        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, new HashSet<>() {
             {
                 add("parentField");
             }
@@ -85,19 +84,19 @@ public class BeanHelperTest {
             }
         }, null, null);
         Assert.assertEquals(0, fieldsInfo.size());
-        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, new HashSet<Class<? extends Annotation>>() {
+        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, new HashSet<>() {
             {
                 add(Deprecated.class);
             }
         });
         Assert.assertEquals(1, fieldsInfo.size());
-        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, new HashSet<String>() {
+        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, new HashSet<>() {
             {
                 add("parentField");
             }
-        }, new HashSet<Class<? extends Annotation>>() {
+        }, new HashSet<>() {
             {
-                add(Resource.class);
+                add(TestAnnotation.RPC.class);
             }
         });
         Assert.assertEquals(1, fieldsInfo.size());
@@ -116,7 +115,7 @@ public class BeanHelperTest {
             }
         }, null, null);
         Assert.assertEquals(methodsInfo.size(), 6);
-        methodsInfo = $.bean.findMethodsInfo(IdxController.class, new HashSet<String>() {
+        methodsInfo = $.bean.findMethodsInfo(IdxController.class, new HashSet<>() {
             {
                 add("find");
             }
@@ -132,7 +131,7 @@ public class BeanHelperTest {
             }
         });
         Assert.assertEquals(methodsInfo.size(), 3);
-        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, new HashSet<String>() {
+        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, new HashSet<>() {
             {
                 add("childFind");
             }
