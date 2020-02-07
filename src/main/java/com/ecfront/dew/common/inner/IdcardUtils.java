@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -139,6 +139,9 @@ public class IdcardUtils {
 
     /**
      * 验证身份证是否合法.
+     *
+     * @param idCard 身份证号码
+     * @return 验证是否通过
      */
     public static boolean validateCard(String idCard) {
         String card = idCard.trim();

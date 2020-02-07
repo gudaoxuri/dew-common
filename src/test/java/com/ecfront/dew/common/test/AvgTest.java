@@ -16,6 +16,7 @@
 
 package com.ecfront.dew.common.test;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -25,7 +26,7 @@ import org.junit.Test;
  */
 public class AvgTest {
 
-    Accumulator accumulator = new Accumulator();
+    private Accumulator accumulator = new Accumulator();
 
     /**
      * Test.
@@ -35,12 +36,12 @@ public class AvgTest {
         accumulator.addDateValue(1);
         accumulator.addDateValue(2);
         accumulator.addDateValue(3);
-        System.out.println(">>" + accumulator.m);
+        Assert.assertEquals(2,accumulator.m,0);
         accumulator.addDateValue(4);
         accumulator.addDateValue(5);
         accumulator.addDateValue(6);
         accumulator.addDateValue(7);
-        System.out.println(">>" + accumulator.m);
+        Assert.assertEquals(4,accumulator.m,0);
     }
 
     static class Accumulator {

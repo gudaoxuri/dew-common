@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,7 +134,7 @@ public interface HttpHelper {
      *             如果content-type是xml时，body只能是Document或Xml的String格式
      *             如果content-type是multipart/form-data时，body只能是File格式
      *             其它情况下，body可以是任意格式
-     *             \     * @return 请求结果
+     * @return 请求结果
      * @throws RTIOException the rtio exception
      */
     String post(String url, Object body) throws RTIOException;
@@ -157,12 +157,13 @@ public interface HttpHelper {
     /**
      * Post请求.
      *
-     * @param url  请求url
-     * @param body 请求体
-     *             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
-     *             如果content-type是xml时，body只能是Document或Xml的String格式
-     *             如果content-type是multipart/form-data时，body只能是File格式
-     *             其它情况下，body可以是任意格式     * @param contentType content-type
+     * @param url         请求url
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是xml时，body只能是Document或Xml的String格式
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
+     * @param contentType content-type
      * @return 请求结果
      * @throws RTIOException the rtio exception
      */
@@ -205,13 +206,13 @@ public interface HttpHelper {
     /**
      * 包含返回扩展信息的Post请求.
      *
-     * @param url  请求url
-     * @param body 请求体
-     *             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
-     *             如果content-type是xml时，body只能是Document或Xml的String格式
-     *             如果content-type是multipart/form-data时，body只能是File格式
-     *             其它情况下，body可以是任意格式
-     *             、     * @param header 请求头
+     * @param url    请求url
+     * @param body   请求体
+     *               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *               如果content-type是xml时，body只能是Document或Xml的String格式
+     *               如果content-type是multipart/form-data时，body只能是File格式
+     *               其它情况下，body可以是任意格式
+     * @param header 请求Header
      * @return 请求结果，包含扩展信息
      * @throws RTIOException the rtio exception
      */
@@ -694,6 +695,7 @@ public interface HttpHelper {
      *                         如果content-type是xml时，body只能是Document或Xml的String格式
      *                         如果content-type是multipart/form-data时，body只能是File格式
      *                         其它情况下，body可以是任意格式
+     * @param header           请求Header
      * @param contentType      content-type
      * @param charset          请求与返回内容编码
      * @param connectTimeoutMS 连接超时时间
@@ -715,6 +717,7 @@ public interface HttpHelper {
      *                         如果content-type是xml时，body只能是Document或Xml的String格式
      *                         如果content-type是multipart/form-data时，body只能是File格式
      *                         其它情况下，body可以是任意格式
+     * @param header           请求Header
      * @param contentType      content-type
      * @param requestCharset   请求内容编码
      * @param responseCharset  返回内容编码，默认等于请求内容编码

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,7 @@ public class FieldHelper {
      * 验证邮箱格式是否合法.
      *
      * @param email 邮件
+     * @return 邮箱是否合法
      */
     public boolean validateEmail(String email) {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
@@ -65,6 +66,7 @@ public class FieldHelper {
      * 验证手机号格式是否合法.
      *
      * @param mobile 手机号
+     * @return 手机号是否合法
      */
     public boolean validateMobile(String mobile) {
         return MOBILE_PATTERN.matcher(mobile).matches();
@@ -74,6 +76,7 @@ public class FieldHelper {
      * 验证身份证是否合法.
      *
      * @param idNumber 身份编号
+     * @return 身份证号验证是否通过
      */
     public boolean validateIdNumber(String idNumber) {
         return IdcardUtils.validateCard(idNumber);
@@ -84,6 +87,7 @@ public class FieldHelper {
      * 验证是否是IPv4.
      *
      * @param str 待校验字符串
+     * @return 是否是IPv4
      */
     public boolean isIPv4Address(String str) {
         return IPV4_PATTERN.matcher(str).matches();
@@ -93,6 +97,7 @@ public class FieldHelper {
      * 验证是否是IPv6.
      *
      * @param str 待校验字符串
+     * @return 是否是IPv6
      */
     public boolean isIPv6Address(String str) {
         return isIPv6StdAddress(str) || isIPv6HexCompressedAddress(str);
@@ -110,6 +115,7 @@ public class FieldHelper {
      * 是否是汉字.
      *
      * @param str 待校验字符串
+     * @return 是否是汉字
      */
     public boolean isChinese(String str) {
         return CHINESE_PATTERN.matcher(str).matches();
@@ -179,7 +185,7 @@ public class FieldHelper {
      * 根据身份编号获取户籍省份.
      *
      * @param idNumber 身份编码
-     * @return 省级编码。
+     * @return 省级编码
      */
     public String getProvinceByIdCard(String idNumber) {
         return IdcardUtils.getProvinceByIdCard(idNumber);

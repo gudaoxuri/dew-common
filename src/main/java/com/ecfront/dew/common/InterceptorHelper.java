@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,6 @@ public class InterceptorHelper {
      * @param input    初始入栈对象
      * @param fun      实际执行方法
      * @return the resp
-     * @tparam E 对象的类型
      */
     public <I, O> Resp<DewInterceptContext<I, O>> process(String category, I input, DewInterceptExec<I, O> fun) {
         return process(category, input, new HashMap<>(), fun);
@@ -92,7 +91,6 @@ public class InterceptorHelper {
      * @param args     初始入栈参数
      * @param fun      实际执行方法
      * @return the resp
-     * @tparam E 对象的类型
      */
     public <I, O> Resp<DewInterceptContext<I, O>> process(String category, I input, Map<String, Object> args, DewInterceptExec<I, O> fun) {
         DewInterceptContext<I, O> context = new DewInterceptContext<>();

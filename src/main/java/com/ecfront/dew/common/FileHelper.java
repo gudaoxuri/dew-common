@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,7 +128,7 @@ public class FileHelper {
      * @param files     要过滤的文件列表
      * @param mathRules Glob过滤规则列表
      * @return 过滤后的文件列表
-     * @link https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
+     * @see <a href="https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob">Glob过滤规则</a>
      */
     public List<String> mathFilter(List<String> files, List<String> mathRules) {
         if (mathRules.isEmpty()) {
@@ -148,7 +148,7 @@ public class FileHelper {
      * @param files     要匹配的文件列表
      * @param mathRules Glob过滤规则列表
      * @return 是否有匹配到的文件
-     * @link https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
+     * @see <a href="https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob">Glob过滤规则</a>
      */
     public boolean anyMath(List<String> files, List<String> mathRules) {
         if (files.isEmpty()) {
@@ -169,7 +169,7 @@ public class FileHelper {
      * @param files     要匹配的文件列表
      * @param mathRules Glob过滤规则列表
      * @return 是否有未匹配到的文件
-     * @link https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
+     * @see <a href="https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob">Glob过滤规则</a>
      */
     public boolean noneMath(List<String> files, List<String> mathRules) {
         if (files.isEmpty()) {

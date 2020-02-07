@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,15 +34,15 @@ public class HttpHelperFactory {
      *
      * @return the http helper
      */
-    static HttpHelper choose() {
+    protected static HttpHelper choose() {
         return choose(200, 20, -1, -1, false, true, BACKEND.AUTO);
     }
 
-    static HttpHelper choose(BACKEND backend) {
+    protected static HttpHelper choose(BACKEND backend) {
         return choose(200, 20, -1, -1, false, true, backend);
     }
 
-    static HttpHelper choose(int timeoutMS, boolean autoRedirect, BACKEND backend) {
+    protected static HttpHelper choose(int timeoutMS, boolean autoRedirect, BACKEND backend) {
         return choose(200, 20, -1, -1, false, true, backend);
     }
 
@@ -63,7 +63,7 @@ public class HttpHelperFactory {
                              boolean autoRedirect, boolean retryAble, HttpHelperFactory.BACKEND backend) {
         switch (backend) {
             case JDK:
-                return new JDKHttpHelper(defaultConnectTimeoutMS, autoRedirect, retryAble);
+                return new JDKHttpHelper(defaultConnectTimeoutMS, autoRedirect);
             case APACHE:
                 return new ApacheHttpHelper(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, autoRedirect, retryAble);
             case AUTO:
@@ -71,7 +71,7 @@ public class HttpHelperFactory {
                 if (DependencyHelper.hasDependency("org.apache.http.impl.client.CloseableHttpClient")) {
                     return new ApacheHttpHelper(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS, autoRedirect, retryAble);
                 }
-                return new JDKHttpHelper(defaultConnectTimeoutMS, autoRedirect, retryAble);
+                return new JDKHttpHelper(defaultConnectTimeoutMS, autoRedirect);
         }
     }
 }

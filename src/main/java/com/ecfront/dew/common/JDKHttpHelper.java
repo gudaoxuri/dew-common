@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,6 @@ public class JDKHttpHelper implements HttpHelper {
     private static final Logger logger = LoggerFactory.getLogger(JDKHttpHelper.class);
 
     private HttpClient httpClient;
-    private boolean retryAble;
     private int defaultConnectTimeoutMS = -1;
     private int defaultSocketTimeoutMS = -1;
     private Consumer preRequestFun;
@@ -65,10 +64,8 @@ public class JDKHttpHelper implements HttpHelper {
      *
      * @param defaultTimeoutMS 默认超时时间
      * @param autoRedirect     302状态下是否自动跳转
-     * @param retryAble        是否重试
      */
-    JDKHttpHelper(int defaultTimeoutMS, boolean autoRedirect, boolean retryAble) {
-        this.retryAble = retryAble;
+    JDKHttpHelper(int defaultTimeoutMS, boolean autoRedirect) {
         try {
             var httpClientBuild = HttpClient.newBuilder()
                     .followRedirects(autoRedirect ? HttpClient.Redirect.ALWAYS : HttpClient.Redirect.NEVER)
@@ -564,13 +561,13 @@ public class JDKHttpHelper implements HttpHelper {
                 STRING, FILE, STREAM, FINAL_BOUNDARY
             }
 
-            PartsSpecification.TYPE type;
-            String name;
-            String value;
-            Path path;
-            Supplier<InputStream> stream;
-            String filename;
-            String contentType;
+            private PartsSpecification.TYPE type;
+            private String name;
+            private String value;
+            private Path path;
+            private Supplier<InputStream> stream;
+            private String filename;
+            private String contentType;
 
         }
 

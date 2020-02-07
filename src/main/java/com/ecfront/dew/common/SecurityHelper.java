@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -364,7 +364,7 @@ public class SecurityHelper {
          *
          * @param algorithm 非对称算法，如 RSA
          * @param length    密钥长度
-         * @return PublicKey -> Base64编码后的值  ， PrivateKey -> Base64编码后的值
+         * @return PublicKey: Base64编码后的值，PrivateKey: Base64编码后的值
          * @throws RTGeneralSecurityException the rt general security exception
          */
         public Map<String, String> generateKeys(String algorithm, int length) throws RTGeneralSecurityException {

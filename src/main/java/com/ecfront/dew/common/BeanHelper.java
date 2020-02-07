@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,6 +78,7 @@ public class BeanHelper {
      * @param <T>       the type parameter
      * @param ori       源Bean
      * @param destClazz 目标Bean类型
+     * @return Copy Result
      */
     public <T> T copyProperties(Object ori, Class<T> destClazz) throws RTGeneralSecurityException {
         try {

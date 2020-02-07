@@ -3,7 +3,7 @@ language: java
 script: mvn clean test -B -V
 
 jdk:
-  - openjdk8
+  - openjdk11
 
 notifications:
   email:

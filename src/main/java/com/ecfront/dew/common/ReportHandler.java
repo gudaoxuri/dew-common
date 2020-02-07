@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,8 @@ public abstract class ReportHandler {
 
     /**
      * 输出每行错误输出数据.
+     *
+     * @param line 输出行内容
      */
     public void errorlog(String line) {
 
@@ -74,6 +76,8 @@ public abstract class ReportHandler {
 
     /**
      * 输出每行标准输出数据.
+     *
+     * @param line 输出行内容
      */
     public void outputlog(String line) {
 

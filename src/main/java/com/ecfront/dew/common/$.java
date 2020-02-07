@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,9 @@ public class $ {
      * Json与Java对象互转.
      * <p>
      * 使用自定义实例ID（用于支持不同Json配置）
+     *
+     * @param instanceId 实例Id
+     * @return 对应实例的Json操作
      */
     public static JsonHelper json(String instanceId) {
         assert instanceId != null && !instanceId.trim().equals("");
@@ -47,6 +50,7 @@ public class $ {
      * Java Bean操作.
      *
      * @param useCache 是否启用缓存，启用后会缓存获取过的字段和方法列表，默认启用
+     * @return 是启用缓存的Bean操作
      */
     public static BeanHelper bean(boolean useCache) {
         return new BeanHelper(useCache);
@@ -79,6 +83,8 @@ public class $ {
 
     /**
      * 时间操作.
+     *
+     * @return 时间操作实例
      */
     public static TimeHelper time() {
         return new TimeHelper();
@@ -108,6 +114,7 @@ public class $ {
      * Http操作.
      *
      * @param backend 指定HTTP Client的实现
+     * @return HTTP操作实例
      */
     public static HttpHelper http(HttpHelperFactory.BACKEND backend) {
         return HttpHelperFactory.choose(backend);
@@ -119,6 +126,7 @@ public class $ {
      * @param timeoutMS    默认超时时间
      * @param autoRedirect 302状态下是否自动跳转
      * @param backend      指定HTTP Client的实现
+     * @return HTTP操作实例
      */
     public static HttpHelper http(int timeoutMS, boolean autoRedirect, HttpHelperFactory.BACKEND backend) {
         return HttpHelperFactory.choose(timeoutMS, autoRedirect, backend);
@@ -127,13 +135,14 @@ public class $ {
     /**
      * Http操作.
      *
-     * @param maxTotal                整个连接池最大连接数
-     * @param maxPerRoute             每个路由（域）的默认最大连接
+     * @param maxTotal                整个连接池最大连接数，仅对Apache HTTP Client有效
+     * @param maxPerRoute             每个路由（域）的默认最大连接，仅对Apache HTTP Client有效
      * @param defaultConnectTimeoutMS 默认连接超时时间
-     * @param defaultSocketTimeoutMS  默认读取超时时间
+     * @param defaultSocketTimeoutMS  默认读取超时时间，仅对Apache HTTP Client有效
      * @param autoRedirect            302状态下是否自动跳转
-     * @param retryAble               是否重试
+     * @param retryAble               是否重试，仅对Apache HTTP Client有效
      * @param backend                 指定HTTP Client的实现
+     * @return HTTP操作实例
      */
     public static HttpHelper http(int maxTotal, int maxPerRoute,
                                   int defaultConnectTimeoutMS, int defaultSocketTimeoutMS,
@@ -164,6 +173,7 @@ public class $ {
      *
      * @param jsFunsCode    JS 脚本
      * @param addCommonCode 是否添加dew-common包到脚本
+     * @return 脚本操作实例
      */
     public static ScriptHelper script(String jsFunsCode, boolean addCommonCode) {
         return ScriptHelper.build(jsFunsCode, addCommonCode);
@@ -175,6 +185,7 @@ public class $ {
      * 包含预编译，适用于脚本复用性的场景，默认添加dew-common包到脚本
      *
      * @param jsFunsCode JS 脚本
+     * @return 脚本操作实例
      */
     public static ScriptHelper script(String jsFunsCode) {
         return ScriptHelper.build(jsFunsCode, true);
@@ -186,6 +197,7 @@ public class $ {
      * 适用于简单的脚本的执行
      *
      * @param jsCode JS 脚本
+     * @return 脚本执行结果
      */
     public static Object eval(String jsCode) {
         return ScriptHelper.eval(jsCode);

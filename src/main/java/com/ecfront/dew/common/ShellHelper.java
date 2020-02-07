@@ -1,5 +1,5 @@
 /*
- * Copyright 2019. the original author or authors.
+ * Copyright 2020. the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ public class ShellHelper {
      * 执行入口，如执行成功，此方法只返回output(标准输出).
      *
      * @param cmd 命令，包含参数
+     * @return 执行结果（每行输出内容）
      */
     public Resp<List<String>> execute(String cmd) {
         return execute(cmd, null);
@@ -57,6 +58,7 @@ public class ShellHelper {
      *
      * @param cmd 命令，包含参数
      * @param env 执行环境
+     * @return 执行结果（每行输出内容）
      */
     public Resp<List<String>> execute(String cmd, Map<String, String> env) {
         ReportHandler reportHandler = new ReportHandler() {
@@ -91,6 +93,7 @@ public class ShellHelper {
      *                      为true时会返回结果到ReportHandler的complete方法中，
      *                      结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
      * @param reportHandler 任务报告实例
+     * @return 执行结果（Future）
      */
     public Future<Void> execute(String cmd,
                                 String successFlag, String progressFlag,
@@ -113,6 +116,7 @@ public class ShellHelper {
      *                      为true时会返回结果到ReportHandler的complete方法中，
      *                      结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
      * @param reportHandler 任务报告实例
+     * @return 执行结果（Future）
      */
     public Future<Void> execute(String cmd, Map<String, String> env,
                                 String successFlag, String progressFlag,
@@ -127,7 +131,7 @@ public class ShellHelper {
         } else {
             processBuilder.command("bash", "-c", cmd);
         }
-        Process process = null;
+        Process process;
         try {
             process = processBuilder.start();
         } catch (IOException e) {
