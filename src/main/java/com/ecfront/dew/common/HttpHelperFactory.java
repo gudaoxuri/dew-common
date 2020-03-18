@@ -24,7 +24,7 @@ package com.ecfront.dew.common;
  */
 public class HttpHelperFactory {
 
-    enum BACKEND {
+    public enum BACKEND {
         APACHE, JDK, AUTO
     }
 
