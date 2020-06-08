@@ -108,47 +108,17 @@ public class $ {
     /**
      * Http操作.
      */
-    public static HttpHelper http = HttpHelperFactory.choose();
-
-    /**
-     * Http操作.
-     *
-     * @param backend 指定HTTP Client的实现
-     * @return HTTP操作实例
-     */
-    public static HttpHelper http(HttpHelperFactory.BACKEND backend) {
-        return HttpHelperFactory.choose(backend);
-    }
+    public static HttpHelper http = new HttpHelper(-1, true);
 
     /**
      * Http操作.
      *
      * @param timeoutMS    默认超时时间
      * @param autoRedirect 302状态下是否自动跳转
-     * @param backend      指定HTTP Client的实现
      * @return HTTP操作实例
      */
-    public static HttpHelper http(int timeoutMS, boolean autoRedirect, HttpHelperFactory.BACKEND backend) {
-        return HttpHelperFactory.choose(timeoutMS, autoRedirect, backend);
-    }
-
-    /**
-     * Http操作.
-     *
-     * @param maxTotal                整个连接池最大连接数，仅对Apache HTTP Client有效
-     * @param maxPerRoute             每个路由（域）的默认最大连接，仅对Apache HTTP Client有效
-     * @param defaultConnectTimeoutMS 默认连接超时时间
-     * @param defaultSocketTimeoutMS  默认读取超时时间，仅对Apache HTTP Client有效
-     * @param autoRedirect            302状态下是否自动跳转
-     * @param retryAble               是否重试，仅对Apache HTTP Client有效
-     * @param backend                 指定HTTP Client的实现
-     * @return HTTP操作实例
-     */
-    public static HttpHelper http(int maxTotal, int maxPerRoute,
-                                  int defaultConnectTimeoutMS, int defaultSocketTimeoutMS,
-                                  boolean autoRedirect, boolean retryAble, HttpHelperFactory.BACKEND backend) {
-        return HttpHelperFactory.choose(maxTotal, maxPerRoute, defaultConnectTimeoutMS, defaultSocketTimeoutMS,
-                autoRedirect, retryAble, backend);
+    public static HttpHelper http(int timeoutMS, boolean autoRedirect) {
+        return new HttpHelper(timeoutMS, autoRedirect);
     }
 
     /**

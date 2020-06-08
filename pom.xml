@@ -26,7 +26,7 @@
     <description>Dew公共模块</description>
     <url>https://github.com/gudaoxuri/dew-common</url>
     <packaging>jar</packaging>
-    <version>2.0.0</version>
+    <version>3.0.0-SNAPSHOT</version>
 
     <properties>
         <java.version>11</java.version>
@@ -38,8 +38,6 @@
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
         <jackson.version>2.11.0</jackson.version>
         <beanutils.version>1.9.4</beanutils.version>
-        <httpclient.version>4.5.12</httpclient.version>
-        <joox.version>1.4.0</joox.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
@@ -50,7 +48,10 @@
         <asciidoctorj.version>2.0.0</asciidoctorj.version>
         <asciidoctorj.pdf.version>1.5.0-alpha.18</asciidoctorj.pdf.version>
         <jruby.version>9.2.7.0</jruby.version>
-        <mainClass></mainClass>
+        <graalvm.version>20.1.0</graalvm.version>
+
+        <mainClass>com.ecfront.dew.common.graalvm.NativeImageTest</mainClass>
+        <imageName>NativeImageTest</imageName>
     </properties>
 
     <dependencies>
@@ -85,23 +86,6 @@
             <version>${jbcrypt.version}</version>
         </dependency>
         <!--$.encrypt dependency end-->
-        <!--$.http dependency begin-->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-            <version>${httpclient.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>joox</artifactId>
-            <version>${joox.version}</version>
-        </dependency>
-        <!--$.http dependency end-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -292,6 +276,49 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>
+                                -agentlib:native-image-agent=config-output-dir=${build.outputDirectory}/META-INF/native-image/
+                            </argLine>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.graalvm.nativeimage</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <version>${graalvm.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>false</skip>
+                            <mainClass>${mainClass}</mainClass>
+                            <imageName>${imageName}</imageName>
+                            <buildArgs>
+                                --no-fallback
+                                --enable-all-security-services
+                                --allow-incomplete-classpath
+                                <!--&#45;&#45;language:js-->
+                                --experimental-options
+                                --js.nashorn-compat=true
+                                -H:ReflectionConfigurationFiles=${build.outputDirectory}/META-INF/native-image/reflect-config.json
+                            </buildArgs>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
