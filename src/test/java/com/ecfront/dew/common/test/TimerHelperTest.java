@@ -14,35 +14,35 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
+package com.ecfront.dew.common.test;
 
+import com.ecfront.dew.common.$;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * The type Script helper test.
+ * The type Timer helper test.
  *
  * @author gudaoxuri
  */
-public class ScriptHelperTest {
+public class TimerHelperTest {
 
     /**
-     * Test script.
+     * Test timer.
      *
      * @throws Exception the exception
      */
     @Test
-    public void testScript() throws Exception {
-        ScriptHelper s1 = $.script("function fun1(param){return param;}");
-        Assert.assertEquals("hi", s1.execute("fun1", "hi"));
+    public void testTimer() throws Exception {
+        int[] i = {0};
+        $.timer.timer(1, () -> Assert.assertEquals(1, i[0]));
+        i[0] = 1;
 
-        ScriptHelper s2 = $.script("function fun2(D){\r\n"
-                + " var data = JSON.parse(D);\n"
-                + " return $.field.getGenderByIdCard(data.idcard);\n"
-                + "}");
-        Assert.assertEquals("M", s2.execute("fun2", "{\"idcard\":\"110101201604016117\"}"));
-
-        Assert.assertEquals(10240, $.eval("1024*10"));
+        String taskId = $.timer.periodic(1, true, () -> i[0]++);
+        Thread.sleep(1500);
+        $.timer.cancel(taskId);
+        Thread.sleep(2000);
+        Assert.assertEquals(3, i[0]);
 
     }
 

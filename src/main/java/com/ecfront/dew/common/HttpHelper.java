@@ -191,7 +191,10 @@ public class HttpHelper {
      * Post请求.
      *
      * @param url  请求url
-     * @param body 请求体             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容             如果content-type是multipart/form-data时，body只能是File格式             其它情况下，body可以是任意格式
+     * @param body 请求体
+     *             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *             如果content-type是multipart/form-data时，body只能是File格式
+     *             其它情况下，body可以是任意格式
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
      */
@@ -203,7 +206,10 @@ public class HttpHelper {
      * Post请求.
      *
      * @param url    请求url
-     * @param body   请求体               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容               如果content-type是multipart/form-data时，body只能是File格式               其它情况下，body可以是任意格式
+     * @param body   请求体
+     *               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *               如果content-type是multipart/form-data时，body只能是File格式
+     *               其它情况下，body可以是任意格式
      * @param header 请求头
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
@@ -216,7 +222,10 @@ public class HttpHelper {
      * Post请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param contentType content-type
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
@@ -229,7 +238,10 @@ public class HttpHelper {
      * Post请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是xml时，body只能是Document或Xml的String格式                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param header      请求头
      * @param contentType content-type
      * @param charset     请求与返回内容编码
@@ -246,7 +258,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Post请求.
      *
      * @param url  请求url
-     * @param body 请求体             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容             如果content-type是multipart/form-data时，body只能是File格式             其它情况下，body可以是任意格式
+     * @param body 请求体
+     *             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *             如果content-type是multipart/form-data时，body只能是File格式
+     *             其它情况下，body可以是任意格式
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
      */
@@ -258,7 +273,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Post请求.
      *
      * @param url    请求url
-     * @param body   请求体               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容               如果content-type是multipart/form-data时，body只能是File格式               其它情况下，body可以是任意格式
+     * @param body   请求体
+     *               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *               如果content-type是multipart/form-data时，body只能是File格式
+     *               其它情况下，body可以是任意格式
      * @param header 请求Header
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
@@ -271,7 +289,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Post请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param contentType content-type
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
@@ -284,7 +305,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Post请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param header      请求头
      * @param contentType content-type
      * @param charset     请求与返回内容编码
@@ -301,7 +325,10 @@ public class HttpHelper {
      * Put请求.
      *
      * @param url  请求url
-     * @param body 请求体             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容             如果content-type是multipart/form-data时，body只能是File格式             其它情况下，body可以是任意格式
+     * @param body 请求体
+     *             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *             如果content-type是multipart/form-data时，body只能是File格式
+     *             其它情况下，body可以是任意格式
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
      */
@@ -313,7 +340,10 @@ public class HttpHelper {
      * Put请求.
      *
      * @param url    请求url
-     * @param body   请求体               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容               如果content-type是multipart/form-data时，body只能是File格式               其它情况下，body可以是任意格式
+     * @param body   请求体
+     *               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *               如果content-type是multipart/form-data时，body只能是File格式
+     *               其它情况下，body可以是任意格式
      * @param header 请求头
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
@@ -326,7 +356,10 @@ public class HttpHelper {
      * Put请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param contentType content-type
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
@@ -339,7 +372,10 @@ public class HttpHelper {
      * Put请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param header      请求头
      * @param contentType content-type
      * @param charset     请求与返回内容编码
@@ -356,7 +392,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Put请求.
      *
      * @param url  请求url
-     * @param body 请求体             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容             如果content-type是multipart/form-data时，body只能是File格式             其它情况下，body可以是任意格式
+     * @param body 请求体
+     *             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *             如果content-type是multipart/form-data时，body只能是File格式
+     *             其它情况下，body可以是任意格式
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
      */
@@ -368,7 +407,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Put请求.
      *
      * @param url    请求url
-     * @param body   请求体               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容               如果content-type是multipart/form-data时，body只能是File格式               其它情况下，body可以是任意格式
+     * @param body   请求体
+     *               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *               如果content-type是multipart/form-data时，body只能是File格式
+     *               其它情况下，body可以是任意格式
      * @param header 请求头
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
@@ -381,7 +423,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Put请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param contentType content-type
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
@@ -394,7 +439,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Put请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param header      请求头
      * @param contentType content-type
      * @param charset     请求与返回内容编码
@@ -411,7 +459,10 @@ public class HttpHelper {
      * Patch请求.
      *
      * @param url  请求url
-     * @param body 请求体             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容             如果content-type是multipart/form-data时，body只能是File格式             其它情况下，body可以是任意格式
+     * @param body 请求体
+     *             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *             如果content-type是multipart/form-data时，body只能是File格式
+     *             其它情况下，body可以是任意格式
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
      */
@@ -423,7 +474,10 @@ public class HttpHelper {
      * Patch请求.
      *
      * @param url    请求url
-     * @param body   请求体               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容               如果content-type是multipart/form-data时，body只能是File格式               其它情况下，body可以是任意格式
+     * @param body   请求体
+     *               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *               如果content-type是multipart/form-data时，body只能是File格式
+     *               其它情况下，body可以是任意格式
      * @param header 请求头
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
@@ -436,7 +490,10 @@ public class HttpHelper {
      * Patch请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param contentType content-type
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
@@ -449,7 +506,10 @@ public class HttpHelper {
      * Patch请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param header      请求头
      * @param contentType content-type
      * @param charset     请求与返回内容编码
@@ -466,7 +526,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Patch请求.
      *
      * @param url  请求url
-     * @param body 请求体             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容             如果content-type是multipart/form-data时，body只能是File格式             其它情况下，body可以是任意格式
+     * @param body 请求体
+     *             如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *             如果content-type是multipart/form-data时，body只能是File格式
+     *             其它情况下，body可以是任意格式
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
      */
@@ -478,7 +541,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Patch请求.
      *
      * @param url    请求url
-     * @param body   请求体               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容               如果content-type是multipart/form-data时，body只能是File格式               其它情况下，body可以是任意格式
+     * @param body   请求体
+     *               如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *               如果content-type是multipart/form-data时，body只能是File格式
+     *               其它情况下，body可以是任意格式
      * @param header 请求头
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
@@ -491,7 +557,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Patch请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param contentType content-type
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
@@ -504,7 +573,10 @@ public class HttpHelper {
      * 包含返回扩展信息的Patch请求.
      *
      * @param url         请求url
-     * @param body        请求体                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                    如果content-type是multipart/form-data时，body只能是File格式                    其它情况下，body可以是任意格式
+     * @param body        请求体
+     *                    如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                    如果content-type是multipart/form-data时，body只能是File格式
+     *                    其它情况下，body可以是任意格式
      * @param header      请求头
      * @param contentType content-type
      * @param charset     请求与返回内容编码
@@ -726,7 +798,10 @@ public class HttpHelper {
      *
      * @param method         http方法
      * @param url            请求url
-     * @param body           请求体                       如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容                       如果content-type是xml时，body只能是Document或Xml的String格式                       如果content-type是multipart/form-data时，body只能是File格式                       其它情况下，body可以是任意格式
+     * @param body           请求体
+     *                       如果content-type是application/x-www-form-urlencoded 且 body是map时，会以form形式提交，即视为表单内容
+     *                       如果content-type是multipart/form-data时，body只能是File格式
+     *                       其它情况下，body可以是任意格式
      * @param header         请求Header
      * @param contentType    content-type
      * @param requestCharset 请求内容编码

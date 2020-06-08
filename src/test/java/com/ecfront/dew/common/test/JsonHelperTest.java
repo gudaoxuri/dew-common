@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
+package com.ecfront.dew.common.test;
 
+import com.ecfront.dew.common.$;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Assert;

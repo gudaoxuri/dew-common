@@ -86,14 +86,15 @@ public class FileHelper {
      * @param encode    编码
      * @return 文件内容
      */
-    public String readAllByClassPath(String classpath, String encode) throws RTIOException {
+    public String readAllByClassPath(String classpath, String encode) throws RTIOException, IOException {
         File file = new File(FileHelper.class.getResource("/").getPath() + classpath);
         if (file.exists()) {
             return readAllByFile(file, encode);
         }
-        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpath);
-        BufferedReader buffer = new BufferedReader(new InputStreamReader(in));
-        return buffer.lines().collect(Collectors.joining("\n"));
+        try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpath);
+             BufferedReader buffer = new BufferedReader(new InputStreamReader(in))) {
+            return buffer.lines().collect(Collectors.joining("\n"));
+        }
     }
 
     /**

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
+package com.ecfront.dew.common.test;
 
+import com.ecfront.dew.common.$;
+import com.ecfront.dew.common.BeanHelper;
 import com.ecfront.dew.common.test.bean.IdxController;
 import com.ecfront.dew.common.test.bean.TestAnnotation;
 import com.ecfront.dew.common.test.bean.User;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * The type Bean helper test.
@@ -35,22 +35,6 @@ import java.util.Objects;
  * @author gudaoxuri
  */
 public class BeanHelperTest {
-
-    /**
-     * Copy properties.
-     *
-     * @throws Exception the exception
-     */
-    @Test
-    public void copyProperties() throws Exception {
-        User ori = new User();
-        ori.setName("张三");
-        User dest = new User();
-        dest.setAge(11);
-        dest.setWorkAge(11);
-        $.bean.copyProperties(dest, ori);
-        Assert.assertTrue(Objects.equals(dest.getName(), "张三") && dest.getAge() == 0 && dest.getWorkAge() == 11);
-    }
 
     /**
      * Find class annotation.
@@ -68,7 +52,7 @@ public class BeanHelperTest {
     public void findFieldInfo() {
         Map<String, BeanHelper.FieldInfo> fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, null);
         Assert.assertEquals(2, fieldsInfo.size());
-        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, new HashSet<Class<? extends Annotation>>() {
+        fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, new HashSet<>() {
             {
                 add(Deprecated.class);
             }
@@ -78,7 +62,7 @@ public class BeanHelperTest {
             {
                 add("parentField");
             }
-        }, new HashSet<Class<? extends Annotation>>() {
+        }, new HashSet<>() {
             {
                 add(Deprecated.class);
             }
@@ -109,7 +93,7 @@ public class BeanHelperTest {
     public void findMethodInfo() {
         List<BeanHelper.MethodInfo> methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, null);
         Assert.assertEquals(methodsInfo.size(), 7);
-        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, new HashSet<Class<? extends Annotation>>() {
+        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, new HashSet<>() {
             {
                 add(TestAnnotation.GET.class);
             }
@@ -119,13 +103,13 @@ public class BeanHelperTest {
             {
                 add("find");
             }
-        }, new HashSet<Class<? extends Annotation>>() {
+        }, new HashSet<>() {
             {
                 add(TestAnnotation.GET.class);
             }
         }, null, null);
         Assert.assertEquals(methodsInfo.size(), 4);
-        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, new HashSet<Class<? extends Annotation>>() {
+        methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, new HashSet<>() {
             {
                 add(TestAnnotation.POST.class);
             }
@@ -135,7 +119,7 @@ public class BeanHelperTest {
             {
                 add("childFind");
             }
-        }, new HashSet<Class<? extends Annotation>>() {
+        }, new HashSet<>() {
             {
                 add(TestAnnotation.POST.class);
             }
@@ -145,11 +129,9 @@ public class BeanHelperTest {
 
     /**
      * Parse rel field and method.
-     *
-     * @throws Exception the exception
      */
     @Test
-    public void parseRelFieldAndMethod() throws Exception {
+    public void parseRelFieldAndMethod() {
         Map<String, Method[]> rel = $.bean.parseRelFieldAndMethod(User.class, null, null, null, null);
         Assert.assertEquals(6, rel.size());
         Assert.assertEquals(2, rel.get("enable").length);
@@ -157,11 +139,9 @@ public class BeanHelperTest {
 
     /**
      * Find values by rel.
-     *
-     * @throws Exception the exception
      */
     @Test
-    public void findValuesByRel() throws Exception {
+    public void findValuesByRel() {
         User user = new User();
         user.setName("张三");
         Map<String, Object> values = $.bean.findValuesByRel(user, $.bean.parseRelFieldAndMethod(User.class, null, null, null, null));
@@ -170,11 +150,9 @@ public class BeanHelperTest {
 
     /**
      * Find values.
-     *
-     * @throws Exception the exception
      */
     @Test
-    public void findValues() throws Exception {
+    public void findValues() {
         User user = new User();
         user.setName("张三");
         Map<String, Object> values = $.bean.findValues(user, null, null, null, null);
@@ -183,11 +161,9 @@ public class BeanHelperTest {
 
     /**
      * Gets value.
-     *
-     * @throws Exception the exception
      */
     @Test
-    public void getValue() throws Exception {
+    public void getValue() {
         User user = new User();
         user.setName("张三");
         Assert.assertEquals("张三", $.bean.getValue(user, "name"));
@@ -197,11 +173,9 @@ public class BeanHelperTest {
 
     /**
      * Sets value.
-     *
-     * @throws Exception the exception
      */
     @Test
-    public void setValue() throws Exception {
+    public void setValue() {
         User user = new User();
         $.bean.setValue(user, "name", "李四");
         $.bean.setValue(user, "name", "张三");

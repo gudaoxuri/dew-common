@@ -14,35 +14,32 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
-
-import org.junit.Assert;
-import org.junit.Test;
+package com.ecfront.dew.common.test;
 
 /**
- * The type Timer helper test.
+ * The type Ext.
  *
  * @author gudaoxuri
  */
-public class TimerHelperTest {
+public class Ext extends Id {
+    private String createTime;
 
     /**
-     * Test timer.
+     * Gets create time.
      *
-     * @throws Exception the exception
+     * @return the create time
      */
-    @Test
-    public void testTimer() throws Exception {
-        int[] i = {0};
-        $.timer.timer(1, () -> Assert.assertEquals(1, i[0]));
-        i[0] = 1;
+    public String getCreateTime() {
+        return createTime;
+    }
 
-        String taskId = $.timer.periodic(1, true, () -> i[0]++);
-        Thread.sleep(1500);
-        $.timer.cancel(taskId);
-        Thread.sleep(2000);
-        Assert.assertEquals(3, i[0]);
-
+    /**
+     * Sets create time.
+     *
+     * @param createTime the create time
+     */
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
 }

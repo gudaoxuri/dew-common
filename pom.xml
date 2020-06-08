@@ -72,13 +72,6 @@
             <version>${jackson.version}</version>
         </dependency>
         <!--$.json dependency end-->
-        <!--$.bean dependency begin-->
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>${beanutils.version}</version>
-        </dependency>
-        <!--$.bean dependency end-->
         <!--$.encrypt dependency begin-->
         <dependency>
             <groupId>org.mindrot</groupId>
@@ -86,6 +79,32 @@
             <version>${jbcrypt.version}</version>
         </dependency>
         <!--$.encrypt dependency end-->
+        <!--$.script dependency begin-->
+        <dependency>
+            <groupId>org.graalvm.sdk</groupId>
+            <artifactId>graal-sdk</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.truffle</groupId>
+            <artifactId>truffle-api</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!--$.script dependency end-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -266,7 +285,6 @@
                             <charset>${project.build.sourceEncoding}</charset>
                             <encoding>${project.build.sourceEncoding}</encoding>
                             <docencoding>${project.build.sourceEncoding}</docencoding>
-                            <additionalparam>-Xdoclint:none</additionalparam>
                         </configuration>
                         <executions>
                             <execution>
@@ -289,7 +307,8 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <argLine>
-                                -agentlib:native-image-agent=config-output-dir=${build.outputDirectory}/META-INF/native-image/
+                                -Dpolyglot.js.nashorn-compat=true
+                                -agentlib:native-image-agent=access-filter-file=${project.basedir}/src/main/resources/META-INF/native-image/com.ecfront.dew/common/agent-access-filter.json,config-output-dir=${project.basedir}/src/main/resources/META-INF/native-image/com.ecfront.dew/common/
                             </argLine>
                         </configuration>
                     </plugin>
@@ -310,13 +329,6 @@
                             <mainClass>${mainClass}</mainClass>
                             <imageName>${imageName}</imageName>
                             <buildArgs>
-                                --no-fallback
-                                --enable-all-security-services
-                                --allow-incomplete-classpath
-                                <!--&#45;&#45;language:js-->
-                                --experimental-options
-                                --js.nashorn-compat=true
-                                -H:ReflectionConfigurationFiles=${build.outputDirectory}/META-INF/native-image/reflect-config.json
                             </buildArgs>
                         </configuration>
                     </plugin>
@@ -326,11 +338,6 @@
     </profiles>
 
     <repositories>
-        <repository>
-            <id>oss-snapshots-repo</id>
-            <name>Sonatype OSS Maven Repository</name>
-            <url>https://oss.sonatype.org/content/groups/public</url>
-        </repository>
         <repository>
             <id>Sonatype OSS Snapshot Repository</id>
             <url>http://oss.sonatype.org/content/repositories/snapshots</url>

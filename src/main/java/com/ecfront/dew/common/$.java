@@ -34,7 +34,7 @@ public class $ {
      * 使用自定义实例ID（用于支持不同Json配置）
      *
      * @param instanceId 实例Id
-     * @return 对应实例的Json操作
+     * @return 对应实例的Json操作 json helper
      */
     public static JsonHelper json(String instanceId) {
         assert instanceId != null && !instanceId.trim().equals("");
@@ -50,7 +50,7 @@ public class $ {
      * Java Bean操作.
      *
      * @param useCache 是否启用缓存，启用后会缓存获取过的字段和方法列表，默认启用
-     * @return 是启用缓存的Bean操作
+     * @return 是启用缓存的Bean操作 bean helper
      */
     public static BeanHelper bean(boolean useCache) {
         return new BeanHelper(useCache);
@@ -84,7 +84,7 @@ public class $ {
     /**
      * 时间操作.
      *
-     * @return 时间操作实例
+     * @return 时间操作实例 time helper
      */
     public static TimeHelper time() {
         return new TimeHelper();
@@ -115,7 +115,7 @@ public class $ {
      *
      * @param timeoutMS    默认超时时间
      * @param autoRedirect 302状态下是否自动跳转
-     * @return HTTP操作实例
+     * @return HTTP操作实例 http helper
      */
     public static HttpHelper http(int timeoutMS, boolean autoRedirect) {
         return new HttpHelper(timeoutMS, autoRedirect);
@@ -141,12 +141,13 @@ public class $ {
      * <p>
      * 包含预编译，适用于脚本复用性的场景
      *
-     * @param jsFunsCode    JS 脚本
-     * @param addCommonCode 是否添加dew-common包到脚本
-     * @return 脚本操作实例
+     * @param scriptKind     the script kind
+     * @param scriptFunsCode the script funs code
+     * @param addCommonCode  是否添加dew-common包到脚本
+     * @return 脚本操作实例 script helper
      */
-    public static ScriptHelper script(String jsFunsCode, boolean addCommonCode) {
-        return ScriptHelper.build(jsFunsCode, addCommonCode);
+    public static ScriptHelper script(ScriptHelper.ScriptKind scriptKind, String scriptFunsCode, boolean addCommonCode) {
+        return ScriptHelper.build(scriptKind, scriptFunsCode, addCommonCode);
     }
 
     /**
@@ -154,11 +155,12 @@ public class $ {
      * <p>
      * 包含预编译，适用于脚本复用性的场景，默认添加dew-common包到脚本
      *
-     * @param jsFunsCode JS 脚本
-     * @return 脚本操作实例
+     * @param scriptKind     the script kind
+     * @param scriptFunsCode the script funs code
+     * @return 脚本操作实例 script helper
      */
-    public static ScriptHelper script(String jsFunsCode) {
-        return ScriptHelper.build(jsFunsCode, true);
+    public static ScriptHelper script(ScriptHelper.ScriptKind scriptKind, String scriptFunsCode) {
+        return ScriptHelper.build(scriptKind, scriptFunsCode, true);
     }
 
     /**
@@ -166,11 +168,12 @@ public class $ {
      * <p>
      * 适用于简单的脚本的执行
      *
-     * @param jsCode JS 脚本
-     * @return 脚本执行结果
+     * @param scriptKind the script kind
+     * @param scriptCode the script code
+     * @return 脚本执行结果 object
      */
-    public static Object eval(String jsCode) {
-        return ScriptHelper.eval(jsCode);
+    public static Object eval(ScriptHelper.ScriptKind scriptKind,String scriptCode) {
+        return ScriptHelper.eval(scriptKind,scriptCode);
     }
 
 }

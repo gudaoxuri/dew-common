@@ -16,9 +16,7 @@
 
 package com.ecfront.dew.common;
 
-import com.ecfront.dew.common.exception.RTGeneralSecurityException;
 import com.ecfront.dew.common.exception.RTReflectiveOperationException;
-import org.apache.commons.beanutils.BeanUtilsBean;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -34,9 +32,7 @@ import java.util.stream.Collectors;
  */
 public class BeanHelper {
 
-    private NullAwareBeanUtilsBean copyPropertiesAdapter;
-
-    private boolean useCache = true;
+    private final boolean useCache;
     private static final Map<String, Map<String, Field>> FIELDS = new WeakHashMap<>();
     private static final Map<String, List<Method>> METHODS = new WeakHashMap<>();
 
@@ -44,9 +40,7 @@ public class BeanHelper {
      * Instantiates a new Bean helper.
      */
     BeanHelper() {
-        if (DependencyHelper.hasDependency("org.apache.commons.beanutils.BeanUtilsBean")) {
-            copyPropertiesAdapter = new NullAwareBeanUtilsBean();
-        }
+        this.useCache = true;
     }
 
     /**
@@ -56,38 +50,6 @@ public class BeanHelper {
      */
     BeanHelper(boolean useCache) {
         this.useCache = useCache;
-    }
-
-    /**
-     * Java Bean Copy.
-     *
-     * @param dest 目标Bean
-     * @param ori  源Bean
-     */
-    public void copyProperties(Object dest, Object ori) throws RTReflectiveOperationException {
-        try {
-            copyPropertiesAdapter.copyProperties(dest, ori);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RTReflectiveOperationException(e);
-        }
-    }
-
-    /**
-     * Java Bean Copy.
-     *
-     * @param <T>       the type parameter
-     * @param ori       源Bean
-     * @param destClazz 目标Bean类型
-     * @return Copy Result
-     */
-    public <T> T copyProperties(Object ori, Class<T> destClazz) throws RTGeneralSecurityException {
-        try {
-            T dest = destClazz.newInstance();
-            copyProperties(dest, ori);
-            return dest;
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RTReflectiveOperationException(e);
-        }
     }
 
     /**
@@ -466,18 +428,6 @@ public class BeanHelper {
                 return "is" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
             }
             return "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
-        }
-    }
-
-    /**
-     * The type Null aware bean utils bean.
-     */
-    static class NullAwareBeanUtilsBean extends BeanUtilsBean {
-        @Override
-        public void copyProperty(Object bean, String name, Object value) throws IllegalAccessException, InvocationTargetException {
-            if (null != value) {
-                super.copyProperty(bean, name, value);
-            }
         }
     }
 

@@ -1,0 +1,25 @@
+{
+  "rules": [
+    {
+      "excludeClasses": "com.ecfront.dew.common.test.**"
+    },
+    {
+      "excludeClasses": "org.apache.maven.surefire.**"
+    },
+    {
+      "excludeClasses": "org.junit.**"
+    },
+    {
+      "excludeClasses": "com.oracle.truffle.**"
+    },
+    {
+      "excludeClasses": "org.graalvm.**"
+    },
+    {
+      "excludeClasses": "junit.framework.**"
+    },
+    {
+      "excludeClasses": "sun.**"
+    }
+  ]
+}

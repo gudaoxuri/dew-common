@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
+package com.ecfront.dew.common.test;
 
+import com.ecfront.dew.common.$;
+import com.ecfront.dew.common.Resp;
 import com.ecfront.dew.common.interceptor.DewInterceptContext;
 import com.ecfront.dew.common.interceptor.DewInterceptor;
 import org.junit.Assert;
@@ -39,7 +41,7 @@ public class InterceptorTest {
         Resp<DewInterceptContext<Obj, Obj>> resp =
                 $.interceptor.process("none", new Obj("1"), new HashMap<>(), context -> {
                     // 业务逻辑，只做简单将input对象copy到output对象
-                    context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
+                    context.setOutput(new Obj(context.getInput().getF()));
                     return Resp.success(context);
                 });
         Assert.assertTrue(resp.ok());
@@ -48,7 +50,7 @@ public class InterceptorTest {
         $.interceptor.register("test", new InterceptorA());
         resp = $.interceptor.process("test", new Obj("1"), new HashMap<>(), context -> {
             // 业务逻辑，只做简单将input对象copy到output对象
-            context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
+            context.setOutput(new Obj(context.getInput().getF()));
             return Resp.success(context);
         });
         Assert.assertTrue(resp.ok());
@@ -58,10 +60,10 @@ public class InterceptorTest {
         $.interceptor.register("test", new InterceptorB());
         resp = $.interceptor.process("test", new Obj("11"), new HashMap<>(), context -> {
             // 业务逻辑，只做简单将input对象copy到output对象
-            context.setOutput($.bean.copyProperties(context.getInput(), Obj.class));
+            context.setOutput(new Obj(context.getInput().getF()));
             return Resp.success(context);
         });
-        Assert.assertTrue(!resp.ok());
+        Assert.assertFalse(resp.ok());
     }
 
 

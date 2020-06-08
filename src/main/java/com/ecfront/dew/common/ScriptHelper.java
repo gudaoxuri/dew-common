@@ -16,10 +16,12 @@
 
 package com.ecfront.dew.common;
 
-import com.ecfront.dew.common.exception.RTReflectiveOperationException;
 import com.ecfront.dew.common.exception.RTScriptException;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Source;
 
-import javax.script.*;
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * The type Script helper.
@@ -28,31 +30,96 @@ import javax.script.*;
  */
 public class ScriptHelper {
 
-    private static final ScriptEngineManager SCRIPT_ENGINE_MANAGER = new ScriptEngineManager();
-    private Invocable invocable;
+    /**
+     * The enum Script kind.
+     */
+    public enum ScriptKind {
+        /**
+         * Js script kind.
+         */
+        JS("js"),
+        /**
+         * Python script kind.
+         */
+        PYTHON("python"),
+        /**
+         * Ruby script kind.
+         */
+        RUBY("ruby"),
+        /**
+         * R script kind.
+         */
+        R("r");
 
-    private ScriptHelper(Invocable invocable) {
-        this.invocable = invocable;
+        private final String code;
+
+        ScriptKind(String code) {
+            this.code = code;
+        }
+
+        /**
+         * Parse script kind.
+         *
+         * @param code the code
+         * @return the script kind
+         */
+        public static ScriptKind parse(String code) {
+            return Arrays.stream(ScriptKind.values())
+                    .filter(item -> item.code.equalsIgnoreCase(code))
+                    .findFirst()
+                    .orElseThrow(() -> new RTScriptException("Script kind {" + code + "} NOT exist."));
+        }
+
+        @Override
+        public String toString() {
+            return code;
+        }
+    }
+
+    private Context context;
+    private ScriptKind scriptKind;
+
+    private ScriptHelper(Context context, ScriptKind scriptKind) {
+        this.context = context;
+        this.scriptKind = scriptKind;
     }
 
     /**
      * Build script helper.
      *
-     * @param jsFunsCode    the js funs code
-     * @param addCommonCode the add common code
+     * @param scriptKind     the script kind
+     * @param scriptFunsCode the script funs code
+     * @param addCommonCode  the add common code
      * @return the script helper
      * @throws RTScriptException the rt script exception
      */
-    public static ScriptHelper build(String jsFunsCode, boolean addCommonCode) throws RTScriptException {
-        Compilable jsEngine = (Compilable) SCRIPT_ENGINE_MANAGER.getEngineByName("nashorn");
-        if (addCommonCode) {
-            jsFunsCode = "var $ = Java.type('com.ecfront.dew.common.$');\r\n" + jsFunsCode;
-        }
+    public static ScriptHelper build(ScriptKind scriptKind, String scriptFunsCode, boolean addCommonCode) throws RTScriptException {
         try {
-            CompiledScript script = jsEngine.compile(jsFunsCode);
-            script.eval();
-            return new ScriptHelper((Invocable) script.getEngine());
-        } catch (ScriptException e) {
+            Context context = Context.newBuilder().build();
+            if (addCommonCode) {
+                switch (scriptKind) {
+                    case JS:
+                        scriptFunsCode = "var $ = Java.type('com.ecfront.dew.common.$')\r\n" + scriptFunsCode;
+                        break;
+                    case PYTHON:
+                        // TODO
+                        scriptFunsCode = "import java\r\n$ = java.type(\"com.ecfront.dew.common.$\")\r\n" + scriptFunsCode;
+                        break;
+                    case RUBY:
+                        // TODO
+                        scriptFunsCode = "$ = Java.type('com.ecfront.dew.common.$')\r\n" + scriptFunsCode;
+                        break;
+                    case R:
+                        // TODO
+                        scriptFunsCode = "$ <- java.type('com.ecfront.dew.common.$')\r\n" + scriptFunsCode;
+                        break;
+                    default:
+                        throw new RTScriptException("Script kind {" + scriptKind.toString() + "} NOT exist.");
+                }
+            }
+            context.eval(Source.newBuilder(scriptKind.toString(), scriptFunsCode, "src.js").build());
+            return new ScriptHelper(context, scriptKind);
+        } catch (IOException e) {
             throw new RTScriptException(e);
         }
     }
@@ -60,35 +127,26 @@ public class ScriptHelper {
     /**
      * Execute.
      *
-     * @param <T>       the type parameter
-     * @param jsFunName the js fun name
-     * @param args      the args
+     * @param <T>     the type parameter
+     * @param funName the fun name
+     * @param args    the args
      * @return the t
-     * @throws RTScriptException              the rt script exception
-     * @throws RTReflectiveOperationException the rt reflective operation exception
      */
-    public <T> T execute(String jsFunName, Object... args) throws RTScriptException, RTReflectiveOperationException {
-        try {
-            return (T) invocable.invokeFunction(jsFunName, args);
-        } catch (ScriptException e) {
-            throw new RTScriptException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RTReflectiveOperationException(e);
-        }
+    public <T> T execute(String funName, Object... args) {
+        return (T) context.getBindings(scriptKind.toString()).getMember(funName).execute(args);
     }
 
     /**
      * Eval object.
      *
-     * @param jsCode the js code
+     * @param scriptKind the script kind
+     * @param scriptCode the script code
      * @return the object
      * @throws RTScriptException the rt script exception
      */
-    public static Object eval(String jsCode) throws RTScriptException {
-        try {
-            return SCRIPT_ENGINE_MANAGER.getEngineByName("nashorn").eval(jsCode);
-        } catch (ScriptException e) {
-            throw new RTScriptException(e);
+    public static Object eval(ScriptKind scriptKind, String scriptCode) {
+        try (Context context = Context.create()) {
+            return context.eval(scriptKind.toString(), scriptCode);
         }
     }
 

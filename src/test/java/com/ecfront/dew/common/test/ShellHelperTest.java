@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
+package com.ecfront.dew.common.test;
 
+import com.ecfront.dew.common.$;
+import com.ecfront.dew.common.ReportHandler;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
+package com.ecfront.dew.common.test;
 
+import com.ecfront.dew.common.$;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,12 +32,10 @@ public class ClassScanHelperTest {
 
     /**
      * Scan.
-     *
-     * @throws Exception the exception
      */
     @Test
-    public void scan() throws Exception {
-        Set<Class<?>> resultInFile = $.clazz.scan("com.ecfront.dew.common.test", new HashSet<Class<? extends Annotation>>() {
+    public void scan() {
+        Set<Class<?>> resultInFile = $.clazz.scan("com.ecfront.dew.common.test", new HashSet<>() {
             {
                 add(Deprecated.class);
             }

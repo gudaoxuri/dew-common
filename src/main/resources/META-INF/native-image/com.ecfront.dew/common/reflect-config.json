@@ -1,0 +1,119 @@
+[
+  {
+    "name": "com.ecfront.dew.common.$",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "com.ecfront.dew.common.FieldHelper",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "com.fasterxml.jackson.core.JsonProcessingException"
+  },
+  {
+    "name": "com.fasterxml.jackson.databind.deser.Deserializers[]"
+  },
+  {
+    "name": "com.fasterxml.jackson.databind.deser.KeyDeserializers[]"
+  },
+  {
+    "name": "com.fasterxml.jackson.databind.deser.ValueInstantiators[]"
+  },
+  {
+    "name": "com.fasterxml.jackson.databind.ext.Java7HandlersImpl",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "com.fasterxml.jackson.databind.ext.Java7SupportImpl",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "com.fasterxml.jackson.databind.ser.Serializers[]"
+  },
+  {
+    "name": "java.io.File"
+  },
+  {
+    "name": "java.io.PrintStream"
+  },
+  {
+    "name": "java.io.Serializable",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.lang.Boolean"
+  },
+  {
+    "name": "java.lang.Class"
+  },
+  {
+    "name": "java.lang.ClassLoader",
+    "methods": [
+      {
+        "name": "setDefaultAssertionStatus",
+        "parameterTypes": [
+          "boolean"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Cloneable",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.lang.Object",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.lang.String"
+  },
+  {
+    "name": "java.lang.Throwable",
+    "fields": [
+      {
+        "name": "cause"
+      }
+    ]
+  },
+  {
+    "name": "java.util.AbstractMap",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.util.HashMap",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.util.HashSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "java.util.List"
+  },
+  {
+    "name": "java.util.Map",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.util.Properties"
+  }
+]

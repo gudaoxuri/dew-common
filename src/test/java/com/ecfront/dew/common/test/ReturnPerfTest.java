@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
+package com.ecfront.dew.common.test;
 
+import com.ecfront.dew.common.Resp;
 import com.ecfront.dew.common.exception.RTException;
 
 import java.time.Instant;

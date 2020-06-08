@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
+package com.ecfront.dew.common.test;
 
-import org.apache.http.client.methods.HttpRequestBase;
+import com.ecfront.dew.common.$;
+import com.ecfront.dew.common.HttpHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
-import java.net.http.HttpRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,13 +113,6 @@ public class HttpHelperTest {
         Assert.assertEquals("AAA", $.json.toJson($.json.toJson(result).get("data").asText()).get("Customer-A").asText());
         Assert.assertEquals("json", $.json.toJson($.json.toJson(result).get("data").asText()).get("Accept").asText());
 
-        $.http.setPreRequest(request -> {
-            if (request instanceof HttpRequestBase) {
-                ((HttpRequestBase) request).setHeader("X-Date", "sssss");
-            } else {
-                ((HttpRequest.Builder) request).setHeader("X-Date", "sssss");
-            }
-        });
         result = $.http.post("https://httpbin.org/post", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
         Assert.assertEquals("1", $.json.toJson(result).get("json").get("a").asText());
 

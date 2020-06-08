@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ecfront.dew.common;
+package com.ecfront.dew.common.test;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
