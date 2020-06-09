@@ -31,6 +31,17 @@ import java.util.List;
  */
 public class FileHelperTest {
 
+    private String currentPath;
+
+    {
+        currentPath = FileHelperTest.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        File file = new File(currentPath);
+        if (file.isFile()) {
+            currentPath = file.getParentFile().getPath();
+        }
+        System.out.println("Current Path:" + currentPath);
+    }
+
     /**
      * Test file.
      *
@@ -45,17 +56,9 @@ public class FileHelperTest {
 
         $.file.copyStreamToPath(
                 Test.class.getResourceAsStream("/LICENSE-junit.txt"),
-                new File(this.getClass().getResource("/").getPath()).getPath() + File.separator + "LICENSE-junit-copy.txt");
-        Assert.assertTrue(new File(this.getClass().getResource("/").getPath() + "LICENSE-junit-copy.txt").exists());
-
-
-        /*File testDestFile =new File(this.getClass().getResource("/").getPath()+"runner"+File.separator);
-        testDestFile.mkdir();
-
-        $.file.copyStreamToPath(Test.class.getResourceAsStream("/junit/runner"),testDestFile.getPath());
-        Assert.assertTrue(new File(this.getClass().getResource("/").getPath()+"runner"+File.separator+"smalllogo.gif").exists());
-        Assert.assertTrue(new File(this.getClass().getResource("/").getPath()+"runner"+File.separator+"TestRunListener").exists());
-        */
+                currentPath + File.separator + "LICENSE-junit-copy.txt");
+        Assert.assertTrue(new File(currentPath + File.separator + "LICENSE-junit-copy.txt").exists());
+        new File(currentPath + File.separator + "LICENSE-junit-copy.txt").delete();
         // Glob Math
         List<String> files = new ArrayList<>() {
             {

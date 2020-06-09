@@ -33,6 +33,17 @@ import java.util.Map;
  */
 public class HttpHelperTest {
 
+    private String currentPath;
+
+    {
+        currentPath = HttpHelperTest.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        File file = new File(currentPath);
+        if (file.isFile()) {
+            currentPath = file.getParentFile().getPath();
+        }
+        System.out.println("Current Path:" + currentPath);
+    }
+
     /**
      * Test http.
      */
@@ -76,9 +87,9 @@ public class HttpHelperTest {
         Assert.assertEquals("onion", $.json.toJson(result).get("form").get("topping").get(1).asText());
         // post - file
         result = $.http.post("https://httpbin.org/post",
-                new File(this.getClass().getResource("/").getPath() + "conf1.json"), "multipart/form-data");
+                new File(currentPath + "/conf1.json"), "multipart/form-data");
         Assert.assertEquals("1", $.json.toJson($.json.toJson(result).get("files").get("conf1.json").asText()).get("a").asText());
-        result = $.http.post("https://httpbin.org/post", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+        result = $.http.post("https://httpbin.org/post", new File(currentPath + "/conf1.json"));
         Assert.assertEquals("1", $.json.toJson(result).get("json").get("a").asText());
         // put - data
         result = $.http.put("https://httpbin.org/put", "some data");
@@ -91,10 +102,10 @@ public class HttpHelperTest {
         }, "application/x-www-form-urlencoded");
         Assert.assertEquals("1", $.json.toJson(result).get("form").get("a").asText());
         // put - file
-        result = $.http.put("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+        result = $.http.put("https://httpbin.org/put", new File(currentPath + "/conf1.json"));
         Assert.assertEquals("1", $.json.toJson(result).get("json").get("a").asText());
         // put with head
-        HttpHelper.ResponseWrap responseWrap = $.http.putWrap("https://httpbin.org/put", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+        HttpHelper.ResponseWrap responseWrap = $.http.putWrap("https://httpbin.org/put", new File(currentPath + "/conf1.json"));
         Assert.assertEquals("1", $.json.toJson(result).get("json").get("a").asText());
         Assert.assertEquals("application/json", responseWrap.head.get("Content-Type").get(0));
         // head
@@ -113,7 +124,7 @@ public class HttpHelperTest {
         Assert.assertEquals("AAA", $.json.toJson($.json.toJson(result).get("data").asText()).get("Customer-A").asText());
         Assert.assertEquals("json", $.json.toJson($.json.toJson(result).get("data").asText()).get("Accept").asText());
 
-        result = $.http.post("https://httpbin.org/post", new File(this.getClass().getResource("/").getPath() + "conf1.json"));
+        result = $.http.post("https://httpbin.org/post", new File(currentPath + "/conf1.json"));
         Assert.assertEquals("1", $.json.toJson(result).get("json").get("a").asText());
 
     }

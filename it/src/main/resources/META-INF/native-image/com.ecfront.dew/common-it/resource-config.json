@@ -1,13 +1,9 @@
 {
   "resources":[
-    {"pattern":"\\QLICENSE-junit.txt\\E"}, 
     {"pattern":"\\QMETA-INF/services/com.oracle.truffle.api.TruffleLanguage$Provider\\E"}, 
     {"pattern":"\\QMETA-INF/services/com.oracle.truffle.api.instrumentation.TruffleInstrument$Provider\\E"}, 
-    {"pattern":"\\QMETA-INF/services/com.oracle.truffle.api.object.LayoutFactory\\E"}, 
     {"pattern":"\\QMETA-INF/services/com.oracle.truffle.js.runtime.Evaluator\\E"}, 
     {"pattern":"\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"}, 
-    {"pattern":"\\QMETA-INF/services/org.graalvm.polyglot.impl.AbstractPolyglotImpl\\E"}, 
-    {"pattern":"\\Q\\E"}, 
     {"pattern":"\\Qcom/ecfront/dew/common/test\\E"}, 
     {"pattern":"\\Qcom/oracle/truffle/nfi/impl/NFILanguageImpl.class\\E"}, 
     {"pattern":"\\Qorg/junit\\E"}

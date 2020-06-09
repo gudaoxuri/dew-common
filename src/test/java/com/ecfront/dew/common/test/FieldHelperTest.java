@@ -68,9 +68,9 @@ public class FieldHelperTest {
         Assert.assertEquals("19990101", $.field.getBirthByIdCard("330102199901015759"));
         Assert.assertEquals("M", $.field.getGenderByIdCard("330102199901015759"));
         Assert.assertEquals("浙江", $.field.getProvinceByIdCard("330102199901015759"));
-        Assert.assertTrue(1 == $.field.getDateByIdCard("330102199901015759"));
-        Assert.assertTrue(1 == $.field.getMonthByIdCard("330102199901015759"));
-        Assert.assertTrue(1999 == $.field.getYearByIdCard("330102199901015759"));
+        Assert.assertEquals(1, (short) $.field.getDateByIdCard("330102199901015759"));
+        Assert.assertEquals(1, (short) $.field.getMonthByIdCard("330102199901015759"));
+        Assert.assertEquals(1999, (short) $.field.getYearByIdCard("330102199901015759"));
     }
 
 

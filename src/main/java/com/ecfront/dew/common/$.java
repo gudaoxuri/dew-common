@@ -168,12 +168,14 @@ public class $ {
      * <p>
      * 适用于简单的脚本的执行
      *
-     * @param scriptKind the script kind
-     * @param scriptCode the script code
+     * @param <T>         the type parameter
+     * @param scriptKind  the script kind
+     * @param returnClazz the return clazz
+     * @param scriptCode  the script code
      * @return 脚本执行结果 object
      */
-    public static Object eval(ScriptHelper.ScriptKind scriptKind,String scriptCode) {
-        return ScriptHelper.eval(scriptKind,scriptCode);
+    public static <T> T eval(ScriptHelper.ScriptKind scriptKind,Class<T> returnClazz,String scriptCode) {
+        return ScriptHelper.eval(scriptKind,returnClazz,scriptCode);
     }
 
 }

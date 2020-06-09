@@ -41,11 +41,9 @@ public class JsonHelperTest {
 
     /**
      * Test path.
-     *
-     * @throws Exception the exception
      */
     @Test
-    public void testPath() throws Exception {
+    public void testPath() {
         JsonNode jsonNode = $.json.toJson("{'a_key':'a_val','child':{'c_key':'c_val'}}");
         Assert.assertEquals("a_val", $.json.path(jsonNode, "a_key").asText());
         Assert.assertEquals("c_val", $.json.path(jsonNode, "child.c_key").asText());
@@ -54,10 +52,9 @@ public class JsonHelperTest {
     /**
      * To json string.
      *
-     * @throws Exception the exception
      */
     @Test
-    public void toJsonString() throws Exception {
+    public void toJsonString()  {
         Assert.assertEquals(
                 "{\"\":{\"a_key\":\"a_val\"}}",
                 $.json.toJsonString($.json.createObjectNode().set("", $.json.createObjectNode().put("a_key", "a_val"))));
@@ -66,10 +63,9 @@ public class JsonHelperTest {
     /**
      * To json.
      *
-     * @throws Exception the exception
      */
     @Test
-    public void toJson() throws Exception {
+    public void toJson()  {
         Assert.assertEquals("a_val",
                 $.json.toJson("{'a_key':'a_val'}").get("a_key").asText());
         Assert.assertEquals("a_val",
@@ -79,10 +75,9 @@ public class JsonHelperTest {
     /**
      * To list.
      *
-     * @throws Exception the exception
      */
     @Test
-    public void toList() throws Exception {
+    public void toList()  {
         TestIdModel model =
                 $.json.toList("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]",
                         TestIdModel.class).get(0);
@@ -95,10 +90,9 @@ public class JsonHelperTest {
     /**
      * To set.
      *
-     * @throws Exception the exception
      */
     @Test
-    public void toSet() throws Exception {
+    public void toSet()  {
         TestIdModel model =
                 $.json.toSet("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]",
                         TestIdModel.class).iterator().next();
@@ -111,10 +105,9 @@ public class JsonHelperTest {
     /**
      * To map.
      *
-     * @throws Exception the exception
      */
     @Test
-    public void toMap() throws Exception {
+    public void toMap()  {
         Map<String, TestIdModel> model =
                 $.json.toMap("{'sunisle':{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}}",
                         String.class, TestIdModel.class);
@@ -128,10 +121,9 @@ public class JsonHelperTest {
     /**
      * To object.
      *
-     * @throws Exception the exception
      */
     @Test
-    public void toObject() throws Exception {
+    public void toObject()  {
         TestIdModel model = $.json.toObject("{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}", TestIdModel.class);
         Assert.assertEquals("sunisle", model.getName());
         Assert.assertEquals("1", model.getCid());
@@ -142,10 +134,9 @@ public class JsonHelperTest {
     /**
      * To generic object.
      *
-     * @throws Exception the exception
      */
     @Test
-    public void toGenericObject() throws Exception {
+    public void toGenericObject() {
         GenericModel model = $.json.toObject(
                 "{'strs':['sunisle'],'exts':[{'createTime':'123456789','cid':'1'}],'extMap':{'a':{'createTime':'123456789','cid':'1'}}}",
                 GenericModel.class);

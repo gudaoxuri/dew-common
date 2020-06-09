@@ -48,10 +48,10 @@
         <asciidoctorj.version>2.0.0</asciidoctorj.version>
         <asciidoctorj.pdf.version>1.5.0-alpha.18</asciidoctorj.pdf.version>
         <jruby.version>9.2.7.0</jruby.version>
-        <graalvm.version>20.1.0</graalvm.version>
 
-        <mainClass>com.ecfront.dew.common.graalvm.NativeImageTest</mainClass>
-        <imageName>NativeImageTest</imageName>
+        <graalvm.version>20.1.0</graalvm.version>
+        <mainClass></mainClass>
+        <imageName></imageName>
     </properties>
 
     <dependencies>
@@ -86,6 +86,7 @@
             <version>${graalvm.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- HotSpot 兼容处理 -->
         <dependency>
             <groupId>org.graalvm.truffle</groupId>
             <artifactId>truffle-api</artifactId>
@@ -300,6 +301,27 @@
         </profile>
         <profile>
             <id>native</id>
+            <dependencies>
+                <!-- 去除 HotSpot 兼容处理 -->
+                <dependency>
+                    <groupId>org.graalvm.truffle</groupId>
+                    <artifactId>truffle-api</artifactId>
+                    <version>${graalvm.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.graalvm.js</groupId>
+                    <artifactId>js</artifactId>
+                    <version>${graalvm.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.graalvm.js</groupId>
+                    <artifactId>js-scriptengine</artifactId>
+                    <version>${graalvm.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>

@@ -34,15 +34,15 @@ public class ScriptHelperTest {
     @Test
     public void testScript() {
         ScriptHelper s1 = $.script(ScriptHelper.ScriptKind.JS, "function fun1(param){return param;}");
-        Assert.assertEquals("hi", s1.execute("fun1", "hi"));
+        Assert.assertEquals("hi", s1.execute("fun1", String.class, "hi"));
 
         ScriptHelper s2 = $.script(ScriptHelper.ScriptKind.JS, "function fun2(D){\r\n"
                 + " var data = JSON.parse(D);\n"
                 + " return $.field.getGenderByIdCard(data.idcard);\n"
                 + "}");
-        Assert.assertEquals("M", s2.execute("fun2", "{\"idcard\":\"110101201604016117\"}"));
+        Assert.assertEquals("M", s2.execute("fun2", String.class, "{\"idcard\":\"110101201604016117\"}"));
 
-        Assert.assertEquals(10240, $.eval(ScriptHelper.ScriptKind.JS, "1024*10"));
+        Assert.assertEquals(10240, (long) $.eval(ScriptHelper.ScriptKind.JS, Long.class, "1024*10"));
 
     }
 

@@ -29,11 +29,9 @@ public class AmountHelperTest {
 
     /**
      * Test convert.
-     *
-     * @throws Exception the exception
      */
     @Test
-    public void testConvert() throws Exception {
+    public void testConvert() {
         Assert.assertEquals("零元整", $.amount.convert("0.00"));
         Assert.assertEquals("壹仟元整", $.amount.convert("1000"));
         Assert.assertEquals("壹仟元整", $.amount.convert("1000.0"));

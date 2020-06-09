@@ -81,13 +81,20 @@ public class FileHelper {
 
     /**
      * 根据classpath读取文件所有内容（jar包外路径优先）.
+     * <p>
+     * IMPORTANT: 此方法不支持 Native Image
      *
      * @param classpath classpath，先找jar外的文件，找不到再去读jar包内文件
      * @param encode    编码
      * @return 文件内容
      */
     public String readAllByClassPath(String classpath, String encode) throws RTIOException, IOException {
-        File file = new File(FileHelper.class.getResource("/").getPath() + classpath);
+        String path = FileHelper.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        File file = new File(path);
+        if (file.isFile()) {
+            file = file.getParentFile();
+        }
+        file = new File(file.getPath() + File.separator + classpath);
         if (file.exists()) {
             return readAllByFile(file, encode);
         }

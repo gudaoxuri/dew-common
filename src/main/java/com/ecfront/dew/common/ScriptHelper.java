@@ -76,8 +76,8 @@ public class ScriptHelper {
         }
     }
 
-    private Context context;
-    private ScriptKind scriptKind;
+    private final Context context;
+    private final ScriptKind scriptKind;
 
     private ScriptHelper(Context context, ScriptKind scriptKind) {
         this.context = context;
@@ -95,11 +95,11 @@ public class ScriptHelper {
      */
     public static ScriptHelper build(ScriptKind scriptKind, String scriptFunsCode, boolean addCommonCode) throws RTScriptException {
         try {
-            Context context = Context.newBuilder().build();
+            Context context = Context.newBuilder().allowAllAccess(true).build();
             if (addCommonCode) {
                 switch (scriptKind) {
                     case JS:
-                        scriptFunsCode = "var $ = Java.type('com.ecfront.dew.common.$')\r\n" + scriptFunsCode;
+                        scriptFunsCode = "const $ = Java.type('com.ecfront.dew.common.$')\r\n" + scriptFunsCode;
                         break;
                     case PYTHON:
                         // TODO
@@ -127,26 +127,29 @@ public class ScriptHelper {
     /**
      * Execute.
      *
-     * @param <T>     the type parameter
-     * @param funName the fun name
-     * @param args    the args
+     * @param <T>         the type parameter
+     * @param funName     the fun name
+     * @param returnClazz the return clazz
+     * @param args        the args
      * @return the t
      */
-    public <T> T execute(String funName, Object... args) {
-        return (T) context.getBindings(scriptKind.toString()).getMember(funName).execute(args);
+    public <T> T execute(String funName, Class<T> returnClazz, Object... args) {
+        return context.getBindings(scriptKind.toString()).getMember(funName).execute(args).as(returnClazz);
     }
 
     /**
      * Eval object.
      *
-     * @param scriptKind the script kind
-     * @param scriptCode the script code
+     * @param <T>         the type parameter
+     * @param scriptKind  the script kind
+     * @param returnClazz the return clazz
+     * @param scriptCode  the script code
      * @return the object
      * @throws RTScriptException the rt script exception
      */
-    public static Object eval(ScriptKind scriptKind, String scriptCode) {
-        try (Context context = Context.create()) {
-            return context.eval(scriptKind.toString(), scriptCode);
+    public static <T> T eval(ScriptKind scriptKind, Class<T> returnClazz, String scriptCode) {
+        try (Context context = Context.newBuilder().allowAllAccess(true).build()) {
+            return context.eval(scriptKind.toString(), scriptCode).as(returnClazz);
         }
     }
 

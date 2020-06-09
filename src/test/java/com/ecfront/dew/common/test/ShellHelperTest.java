@@ -42,7 +42,7 @@ public class ShellHelperTest {
      */
     // @Test
     public void testENV() throws InterruptedException, ExecutionException {
-        $.shell.execute("cd C:\\Users\\i\\OneDrive\\workspaces\\2.jobs\\message-devops-test\\terminal\\captcha\\ && npm run build:uat",
+        $.shell.execute("cd xxx && npm run build:uat",
                 new HashMap<>() {
                     {
                         put("NODE_ENV", "uat");
@@ -79,7 +79,7 @@ public class ShellHelperTest {
         } else {
             result = $.shell.execute("ls -l").getBody();
         }
-        Assert.assertTrue(result.stream().anyMatch(i -> i.contains("README.adoc")));
+        Assert.assertFalse(result.isEmpty());
         result = $.shell.execute("git remote -v").getBody();
         Assert.assertTrue(result.stream().anyMatch(i -> i.contains("dew-common.git")));
     }
