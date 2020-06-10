@@ -49,6 +49,8 @@ public class ClassScanHelper {
     /**
      * 扫描获取指定包下符合条件的class类.
      *
+     * IMPORTANT: 此方法不支持 Native Image https://github.com/oracle/graal/issues/1108
+     *
      * @param basePackage        要扫描的根包名
      * @param includeAnnotations 要包含的注解，默认为全部
      * @param includeNames       要包含的class名称（支持正则），默认为全部

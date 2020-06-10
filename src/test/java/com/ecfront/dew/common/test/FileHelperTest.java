@@ -36,6 +36,7 @@ public class FileHelperTest {
     {
         currentPath = FileHelperTest.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         File file = new File(currentPath);
+        currentPath = file.getPath();
         if (file.isFile()) {
             currentPath = file.getParentFile().getPath();
         }

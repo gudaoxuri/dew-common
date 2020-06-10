@@ -12,106 +12,10 @@
   "allPublicConstructors":true
 },
 {
-  "name":"com.ecfront.dew.common.test.A"
-},
-{
-  "name":"com.ecfront.dew.common.test.ABC"
-},
-{
-  "name":"com.ecfront.dew.common.test.AmountHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.AvgTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.AvgTest$Accumulator"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$1"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$10"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$11"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$12"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$2"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$3"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$4"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$5"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$6"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$7"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$8"
-},
-{
-  "name":"com.ecfront.dew.common.test.BeanHelperTest$9"
-},
-{
-  "name":"com.ecfront.dew.common.test.ClassScanHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.ClassScanHelperTest$1"
-},
-{
-  "name":"com.ecfront.dew.common.test.ClassScanHelperTest$2"
-},
-{
   "name":"com.ecfront.dew.common.test.Ext",
   "allDeclaredFields":true,
   "allDeclaredMethods":true,
   "allDeclaredConstructors":true
-},
-{
-  "name":"com.ecfront.dew.common.test.FallbackHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.FallbackHelperTest$NotFoundException"
-},
-{
-  "name":"com.ecfront.dew.common.test.FieldHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.FileHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.FileHelperTest$1"
-},
-{
-  "name":"com.ecfront.dew.common.test.FileHelperTest$2"
-},
-{
-  "name":"com.ecfront.dew.common.test.FileHelperTest$3"
-},
-{
-  "name":"com.ecfront.dew.common.test.FileHelperTest$4"
-},
-{
-  "name":"com.ecfront.dew.common.test.FileHelperTest$5"
-},
-{
-  "name":"com.ecfront.dew.common.test.FileHelperTest$6"
-},
-{
-  "name":"com.ecfront.dew.common.test.FileHelperTest$7"
 },
 {
   "name":"com.ecfront.dew.common.test.GenericModel",
@@ -120,22 +24,9 @@
   "allDeclaredConstructors":true
 },
 {
-  "name":"com.ecfront.dew.common.test.HttpHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.HttpHelperTest$1"
-},
-{
-  "name":"com.ecfront.dew.common.test.HttpHelperTest$2"
-},
-{
-  "name":"com.ecfront.dew.common.test.HttpHelperTest$3"
-},
-{
-  "name":"com.ecfront.dew.common.test.HttpHelperTest$4"
-},
-{
-  "name":"com.ecfront.dew.common.test.HttpHelperTest$5"
+  "name":"com.ecfront.dew.common.test.HttpHelperTest$5",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
 },
 {
   "name":"com.ecfront.dew.common.test.Id",
@@ -143,57 +34,15 @@
   "allDeclaredMethods":true
 },
 {
-  "name":"com.ecfront.dew.common.test.InterceptorTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.InterceptorTest$InterceptorA"
-},
-{
-  "name":"com.ecfront.dew.common.test.InterceptorTest$InterceptorB"
-},
-{
-  "name":"com.ecfront.dew.common.test.InterceptorTest$Obj"
-},
-{
-  "name":"com.ecfront.dew.common.test.JsonHelperTest"
-},
-{
   "name":"com.ecfront.dew.common.test.JsonHelperTest$1",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
-},
-{
-  "name":"com.ecfront.dew.common.test.ReturnPerfTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.ReturnPerfTest$InvokeException"
-},
-{
-  "name":"com.ecfront.dew.common.test.ScriptHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.SecurityHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.ShellHelperTest"
-},
-{
-  "name":"com.ecfront.dew.common.test.ShellHelperTest$1"
-},
-{
-  "name":"com.ecfront.dew.common.test.ShellHelperTest$2"
-},
-{
-  "name":"com.ecfront.dew.common.test.ShellHelperTest$3"
 },
 {
   "name":"com.ecfront.dew.common.test.TestIdModel",
   "allDeclaredFields":true,
   "allDeclaredMethods":true,
   "allDeclaredConstructors":true
-},
-{
-  "name":"com.ecfront.dew.common.test.TimerHelperTest"
 },
 {
   "name":"com.ecfront.dew.common.test.bean.BaseController",
@@ -204,18 +53,6 @@
   "name":"com.ecfront.dew.common.test.bean.IdxController",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
-},
-{
-  "name":"com.ecfront.dew.common.test.bean.TestAnnotation"
-},
-{
-  "name":"com.ecfront.dew.common.test.bean.TestAnnotation$GET"
-},
-{
-  "name":"com.ecfront.dew.common.test.bean.TestAnnotation$POST"
-},
-{
-  "name":"com.ecfront.dew.common.test.bean.TestAnnotation$RPC"
 },
 {
   "name":"com.ecfront.dew.common.test.bean.User",
@@ -234,15 +71,6 @@
     {"name":"setStatus","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setWorkAge","parameterTypes":["java.lang.Integer"] }
   ]
-},
-{
-  "name":"com.ecfront.dew.common.test.graalvm.NativeImageMain"
-},
-{
-  "name":"com.ecfront.dew.common.test.sub.ABCD"
-},
-{
-  "name":"com.ecfront.dew.common.test.sub.BB"
 },
 {
   "name":"com.fasterxml.jackson.core.JsonProcessingException"
@@ -271,6 +99,9 @@
   "name":"java.io.File"
 },
 {
+  "name":"java.io.File[]"
+},
+{
   "name":"java.io.PrintStream"
 },
 {
@@ -281,6 +112,15 @@
   "name":"java.lang.Boolean"
 },
 {
+  "name":"java.lang.Boolean[]"
+},
+{
+  "name":"java.lang.Byte[]"
+},
+{
+  "name":"java.lang.Character[]"
+},
+{
   "name":"java.lang.Class"
 },
 {
@@ -288,8 +128,23 @@
   "methods":[{"name":"setDefaultAssertionStatus","parameterTypes":["boolean"] }]
 },
 {
+  "name":"java.lang.Class[]"
+},
+{
   "name":"java.lang.Cloneable",
   "allDeclaredMethods":true
+},
+{
+  "name":"java.lang.Double[]"
+},
+{
+  "name":"java.lang.Float[]"
+},
+{
+  "name":"java.lang.Integer[]"
+},
+{
+  "name":"java.lang.Long[]"
 },
 {
   "name":"java.lang.Object",
@@ -297,16 +152,47 @@
   "allDeclaredMethods":true
 },
 {
+  "name":"java.lang.Short[]"
+},
+{
   "name":"java.lang.String"
 },
 {
+  "name":"java.lang.String[]"
+},
+{
   "name":"java.lang.Throwable",
-  "fields":[{"name":"cause"}]
+  "fields":[{"name":"cause"}],
+  "methods":[{"name":"initCause","parameterTypes":["java.lang.Throwable"] }]
+},
+{
+  "name":"java.math.BigDecimal[]"
+},
+{
+  "name":"java.math.BigInteger[]"
+},
+{
+  "name":"java.net.URL[]"
+},
+{
+  "name":"java.sql.Date[]"
+},
+{
+  "name":"java.sql.Time[]"
+},
+{
+  "name":"java.sql.Timestamp[]"
 },
 {
   "name":"java.util.AbstractMap",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
+},
+{
+  "name":"java.util.Calendar[]"
+},
+{
+  "name":"java.util.Date[]"
 },
 {
   "name":"java.util.HashMap",
@@ -329,777 +215,27 @@
   "name":"java.util.Properties"
 },
 {
-  "name":"org.junit.After"
+  "name":"org.apache.commons.beanutils.BeanUtilsBean"
 },
 {
-  "name":"org.junit.AfterClass"
+  "name":"org.apache.commons.logging.LogFactory"
 },
 {
-  "name":"org.junit.Assert"
+  "name":"org.apache.commons.logging.impl.Jdk14Logger",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"org.junit.Assume"
+  "name":"org.apache.commons.logging.impl.Log4JLogger"
 },
 {
-  "name":"org.junit.AssumptionViolatedException"
+  "name":"org.apache.commons.logging.impl.LogFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.junit.Before"
-},
-{
-  "name":"org.junit.BeforeClass"
-},
-{
-  "name":"org.junit.ClassRule"
-},
-{
-  "name":"org.junit.ComparisonFailure"
-},
-{
-  "name":"org.junit.ComparisonFailure$1"
-},
-{
-  "name":"org.junit.ComparisonFailure$ComparisonCompactor"
-},
-{
-  "name":"org.junit.ComparisonFailure$ComparisonCompactor$DiffExtractor"
-},
-{
-  "name":"org.junit.FixMethodOrder"
-},
-{
-  "name":"org.junit.Ignore"
-},
-{
-  "name":"org.junit.Rule"
-},
-{
-  "name":"org.junit.Test"
-},
-{
-  "name":"org.junit.Test$None"
-},
-{
-  "name":"org.junit.experimental.ParallelComputer"
-},
-{
-  "name":"org.junit.experimental.ParallelComputer$1"
-},
-{
-  "name":"org.junit.experimental.categories.Categories"
-},
-{
-  "name":"org.junit.experimental.categories.Categories$CategoryFilter"
-},
-{
-  "name":"org.junit.experimental.categories.Categories$ExcludeCategory"
-},
-{
-  "name":"org.junit.experimental.categories.Categories$IncludeCategory"
-},
-{
-  "name":"org.junit.experimental.categories.Category"
-},
-{
-  "name":"org.junit.experimental.categories.CategoryFilterFactory"
-},
-{
-  "name":"org.junit.experimental.categories.CategoryValidator"
-},
-{
-  "name":"org.junit.experimental.categories.ExcludeCategories"
-},
-{
-  "name":"org.junit.experimental.categories.ExcludeCategories$ExcludesAny"
-},
-{
-  "name":"org.junit.experimental.categories.IncludeCategories"
-},
-{
-  "name":"org.junit.experimental.categories.IncludeCategories$IncludesAny"
-},
-{
-  "name":"org.junit.experimental.max.CouldNotReadCoreException"
-},
-{
-  "name":"org.junit.experimental.max.MaxCore"
-},
-{
-  "name":"org.junit.experimental.max.MaxCore$1"
-},
-{
-  "name":"org.junit.experimental.max.MaxCore$1$1"
-},
-{
-  "name":"org.junit.experimental.max.MaxHistory"
-},
-{
-  "name":"org.junit.experimental.max.MaxHistory$1"
-},
-{
-  "name":"org.junit.experimental.max.MaxHistory$RememberingListener"
-},
-{
-  "name":"org.junit.experimental.max.MaxHistory$TestComparator"
-},
-{
-  "name":"org.junit.experimental.results.FailureList"
-},
-{
-  "name":"org.junit.experimental.results.PrintableResult"
-},
-{
-  "name":"org.junit.experimental.results.ResultMatchers"
-},
-{
-  "name":"org.junit.experimental.results.ResultMatchers$1"
-},
-{
-  "name":"org.junit.experimental.results.ResultMatchers$2"
-},
-{
-  "name":"org.junit.experimental.results.ResultMatchers$3"
-},
-{
-  "name":"org.junit.experimental.runners.Enclosed"
-},
-{
-  "name":"org.junit.experimental.theories.DataPoint"
-},
-{
-  "name":"org.junit.experimental.theories.DataPoints"
-},
-{
-  "name":"org.junit.experimental.theories.FromDataPoints"
-},
-{
-  "name":"org.junit.experimental.theories.ParameterSignature"
-},
-{
-  "name":"org.junit.experimental.theories.ParameterSupplier"
-},
-{
-  "name":"org.junit.experimental.theories.ParametersSuppliedBy"
-},
-{
-  "name":"org.junit.experimental.theories.PotentialAssignment"
-},
-{
-  "name":"org.junit.experimental.theories.PotentialAssignment$1"
-},
-{
-  "name":"org.junit.experimental.theories.PotentialAssignment$CouldNotGenerateValueException"
-},
-{
-  "name":"org.junit.experimental.theories.Theories"
-},
-{
-  "name":"org.junit.experimental.theories.Theories$TheoryAnchor"
-},
-{
-  "name":"org.junit.experimental.theories.Theories$TheoryAnchor$1"
-},
-{
-  "name":"org.junit.experimental.theories.Theories$TheoryAnchor$1$1"
-},
-{
-  "name":"org.junit.experimental.theories.Theories$TheoryAnchor$2"
-},
-{
-  "name":"org.junit.experimental.theories.Theory"
-},
-{
-  "name":"org.junit.experimental.theories.internal.AllMembersSupplier"
-},
-{
-  "name":"org.junit.experimental.theories.internal.AllMembersSupplier$1"
-},
-{
-  "name":"org.junit.experimental.theories.internal.AllMembersSupplier$MethodParameterValue"
-},
-{
-  "name":"org.junit.experimental.theories.internal.Assignments"
-},
-{
-  "name":"org.junit.experimental.theories.internal.BooleanSupplier"
-},
-{
-  "name":"org.junit.experimental.theories.internal.EnumSupplier"
-},
-{
-  "name":"org.junit.experimental.theories.internal.ParameterizedAssertionError"
-},
-{
-  "name":"org.junit.experimental.theories.internal.SpecificDataPointsSupplier"
-},
-{
-  "name":"org.junit.experimental.theories.suppliers.TestedOn"
-},
-{
-  "name":"org.junit.experimental.theories.suppliers.TestedOnSupplier"
-},
-{
-  "name":"org.junit.internal.ArrayComparisonFailure"
-},
-{
-  "name":"org.junit.internal.AssumptionViolatedException"
-},
-{
-  "name":"org.junit.internal.Classes"
-},
-{
-  "name":"org.junit.internal.ComparisonCriteria"
-},
-{
-  "name":"org.junit.internal.ExactComparisonCriteria"
-},
-{
-  "name":"org.junit.internal.InexactComparisonCriteria"
-},
-{
-  "name":"org.junit.internal.JUnitSystem"
-},
-{
-  "name":"org.junit.internal.MethodSorter"
-},
-{
-  "name":"org.junit.internal.MethodSorter$1"
-},
-{
-  "name":"org.junit.internal.MethodSorter$2"
-},
-{
-  "name":"org.junit.internal.RealSystem"
-},
-{
-  "name":"org.junit.internal.TextListener"
-},
-{
-  "name":"org.junit.internal.Throwables"
-},
-{
-  "name":"org.junit.internal.builders.AllDefaultPossibilitiesBuilder"
-},
-{
-  "name":"org.junit.internal.builders.AnnotatedBuilder"
-},
-{
-  "name":"org.junit.internal.builders.IgnoredBuilder"
-},
-{
-  "name":"org.junit.internal.builders.IgnoredClassRunner"
-},
-{
-  "name":"org.junit.internal.builders.JUnit3Builder"
-},
-{
-  "name":"org.junit.internal.builders.JUnit4Builder"
-},
-{
-  "name":"org.junit.internal.builders.NullBuilder"
-},
-{
-  "name":"org.junit.internal.builders.SuiteMethodBuilder"
-},
-{
-  "name":"org.junit.internal.matchers.StacktracePrintingMatcher"
-},
-{
-  "name":"org.junit.internal.matchers.ThrowableCauseMatcher"
-},
-{
-  "name":"org.junit.internal.matchers.ThrowableMessageMatcher"
-},
-{
-  "name":"org.junit.internal.matchers.TypeSafeMatcher"
-},
-{
-  "name":"org.junit.internal.requests.ClassRequest"
-},
-{
-  "name":"org.junit.internal.requests.FilterRequest"
-},
-{
-  "name":"org.junit.internal.requests.SortingRequest"
-},
-{
-  "name":"org.junit.internal.runners.ClassRoadie"
-},
-{
-  "name":"org.junit.internal.runners.ErrorReportingRunner"
-},
-{
-  "name":"org.junit.internal.runners.FailedBefore"
-},
-{
-  "name":"org.junit.internal.runners.InitializationError"
-},
-{
-  "name":"org.junit.internal.runners.JUnit38ClassRunner"
-},
-{
-  "name":"org.junit.internal.runners.JUnit38ClassRunner$1"
-},
-{
-  "name":"org.junit.internal.runners.JUnit38ClassRunner$OldTestClassAdaptingListener"
-},
-{
-  "name":"org.junit.internal.runners.JUnit4ClassRunner"
-},
-{
-  "name":"org.junit.internal.runners.JUnit4ClassRunner$1"
-},
-{
-  "name":"org.junit.internal.runners.JUnit4ClassRunner$2"
-},
-{
-  "name":"org.junit.internal.runners.MethodRoadie"
-},
-{
-  "name":"org.junit.internal.runners.MethodRoadie$1"
-},
-{
-  "name":"org.junit.internal.runners.MethodRoadie$1$1"
-},
-{
-  "name":"org.junit.internal.runners.MethodRoadie$2"
-},
-{
-  "name":"org.junit.internal.runners.MethodValidator"
-},
-{
-  "name":"org.junit.internal.runners.SuiteMethod"
-},
-{
-  "name":"org.junit.internal.runners.TestClass"
-},
-{
-  "name":"org.junit.internal.runners.TestMethod"
-},
-{
-  "name":"org.junit.internal.runners.model.EachTestNotifier"
-},
-{
-  "name":"org.junit.internal.runners.model.MultipleFailureException"
-},
-{
-  "name":"org.junit.internal.runners.model.ReflectiveCallable"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$1"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$Builder"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$DeclaringClassMustBePublic"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$FieldMustBeARule"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$FieldMustBeATestRule"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$MemberMustBeNonStaticOrAlsoClassRule"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$MemberMustBePublic"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$MemberMustBeStatic"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$MethodMustBeARule"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$MethodMustBeATestRule"
-},
-{
-  "name":"org.junit.internal.runners.rules.RuleMemberValidator$RuleValidator"
-},
-{
-  "name":"org.junit.internal.runners.rules.ValidationError"
-},
-{
-  "name":"org.junit.internal.runners.statements.ExpectException"
-},
-{
-  "name":"org.junit.internal.runners.statements.Fail"
-},
-{
-  "name":"org.junit.internal.runners.statements.FailOnTimeout"
-},
-{
-  "name":"org.junit.internal.runners.statements.FailOnTimeout$1"
-},
-{
-  "name":"org.junit.internal.runners.statements.FailOnTimeout$Builder"
-},
-{
-  "name":"org.junit.internal.runners.statements.FailOnTimeout$CallableStatement"
-},
-{
-  "name":"org.junit.internal.runners.statements.InvokeMethod"
-},
-{
-  "name":"org.junit.internal.runners.statements.RunAfters"
-},
-{
-  "name":"org.junit.internal.runners.statements.RunBefores"
-},
-{
-  "name":"org.junit.matchers.JUnitMatchers"
-},
-{
-  "name":"org.junit.rules.DisableOnDebug"
-},
-{
-  "name":"org.junit.rules.ErrorCollector"
-},
-{
-  "name":"org.junit.rules.ErrorCollector$1"
-},
-{
-  "name":"org.junit.rules.ExpectedException"
-},
-{
-  "name":"org.junit.rules.ExpectedException$ExpectedExceptionStatement"
-},
-{
-  "name":"org.junit.rules.ExpectedExceptionMatcherBuilder"
-},
-{
-  "name":"org.junit.rules.ExternalResource"
-},
-{
-  "name":"org.junit.rules.ExternalResource$1"
-},
-{
-  "name":"org.junit.rules.MethodRule"
-},
-{
-  "name":"org.junit.rules.RuleChain"
-},
-{
-  "name":"org.junit.rules.RunRules"
-},
-{
-  "name":"org.junit.rules.Stopwatch"
-},
-{
-  "name":"org.junit.rules.Stopwatch$1"
-},
-{
-  "name":"org.junit.rules.Stopwatch$Clock"
-},
-{
-  "name":"org.junit.rules.Stopwatch$InternalWatcher"
-},
-{
-  "name":"org.junit.rules.TemporaryFolder"
-},
-{
-  "name":"org.junit.rules.TestName"
-},
-{
-  "name":"org.junit.rules.TestRule"
-},
-{
-  "name":"org.junit.rules.TestWatcher"
-},
-{
-  "name":"org.junit.rules.TestWatcher$1"
-},
-{
-  "name":"org.junit.rules.TestWatchman"
-},
-{
-  "name":"org.junit.rules.TestWatchman$1"
-},
-{
-  "name":"org.junit.rules.Timeout"
-},
-{
-  "name":"org.junit.rules.Timeout$1"
-},
-{
-  "name":"org.junit.rules.Timeout$Builder"
-},
-{
-  "name":"org.junit.rules.Verifier"
-},
-{
-  "name":"org.junit.rules.Verifier$1"
-},
-{
-  "name":"org.junit.runner.Computer"
-},
-{
-  "name":"org.junit.runner.Computer$1"
-},
-{
-  "name":"org.junit.runner.Describable"
-},
-{
-  "name":"org.junit.runner.Description"
-},
-{
-  "name":"org.junit.runner.FilterFactories"
-},
-{
-  "name":"org.junit.runner.FilterFactory"
-},
-{
-  "name":"org.junit.runner.FilterFactory$FilterNotCreatedException"
-},
-{
-  "name":"org.junit.runner.FilterFactoryParams"
-},
-{
-  "name":"org.junit.runner.JUnitCommandLineParseResult"
-},
-{
-  "name":"org.junit.runner.JUnitCommandLineParseResult$CommandLineParserError"
-},
-{
-  "name":"org.junit.runner.JUnitCore"
-},
-{
-  "name":"org.junit.runner.Request"
-},
-{
-  "name":"org.junit.runner.Request$1"
-},
-{
-  "name":"org.junit.runner.Result"
-},
-{
-  "name":"org.junit.runner.Result$1"
-},
-{
-  "name":"org.junit.runner.Result$Listener"
-},
-{
-  "name":"org.junit.runner.Result$SerializedForm"
+  "name":"org.apache.commons.logging.impl.WeakHashtable",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"org.junit.runner.RunWith"
-},
-{
-  "name":"org.junit.runner.Runner"
-},
-{
-  "name":"org.junit.runner.manipulation.Filter"
-},
-{
-  "name":"org.junit.runner.manipulation.Filter$1"
-},
-{
-  "name":"org.junit.runner.manipulation.Filter$2"
-},
-{
-  "name":"org.junit.runner.manipulation.Filter$3"
-},
-{
-  "name":"org.junit.runner.manipulation.Filterable"
-},
-{
-  "name":"org.junit.runner.manipulation.NoTestsRemainException"
-},
-{
-  "name":"org.junit.runner.manipulation.Sortable"
-},
-{
-  "name":"org.junit.runner.manipulation.Sorter"
-},
-{
-  "name":"org.junit.runner.manipulation.Sorter$1"
-},
-{
-  "name":"org.junit.runner.notification.Failure"
-},
-{
-  "name":"org.junit.runner.notification.RunListener"
-},
-{
-  "name":"org.junit.runner.notification.RunListener$ThreadSafe"
-},
-{
-  "name":"org.junit.runner.notification.RunNotifier"
-},
-{
-  "name":"org.junit.runner.notification.RunNotifier$1"
-},
-{
-  "name":"org.junit.runner.notification.RunNotifier$2"
-},
-{
-  "name":"org.junit.runner.notification.RunNotifier$3"
-},
-{
-  "name":"org.junit.runner.notification.RunNotifier$4"
-},
-{
-  "name":"org.junit.runner.notification.RunNotifier$5"
-},
-{
-  "name":"org.junit.runner.notification.RunNotifier$6"
-},
-{
-  "name":"org.junit.runner.notification.RunNotifier$7"
-},
-{
-  "name":"org.junit.runner.notification.RunNotifier$SafeNotifier"
-},
-{
-  "name":"org.junit.runner.notification.StoppedByUserException"
-},
-{
-  "name":"org.junit.runner.notification.SynchronizedRunListener"
-},
-{
-  "name":"org.junit.runners.AllTests"
-},
-{
-  "name":"org.junit.runners.BlockJUnit4ClassRunner"
-},
-{
-  "name":"org.junit.runners.BlockJUnit4ClassRunner$1"
-},
-{
-  "name":"org.junit.runners.JUnit4"
-},
-{
-  "name":"org.junit.runners.MethodSorters"
-},
-{
-  "name":"org.junit.runners.Parameterized"
-},
-{
-  "name":"org.junit.runners.Parameterized$Parameter"
-},
-{
-  "name":"org.junit.runners.Parameterized$Parameters"
-},
-{
-  "name":"org.junit.runners.Parameterized$UseParametersRunnerFactory"
-},
-{
-  "name":"org.junit.runners.ParentRunner"
-},
-{
-  "name":"org.junit.runners.ParentRunner$1"
-},
-{
-  "name":"org.junit.runners.ParentRunner$2"
-},
-{
-  "name":"org.junit.runners.ParentRunner$3"
-},
-{
-  "name":"org.junit.runners.ParentRunner$4"
-},
-{
-  "name":"org.junit.runners.Suite"
-},
-{
-  "name":"org.junit.runners.Suite$SuiteClasses"
-},
-{
-  "name":"org.junit.runners.model.Annotatable"
-},
-{
-  "name":"org.junit.runners.model.FrameworkField"
-},
-{
-  "name":"org.junit.runners.model.FrameworkMember"
-},
-{
-  "name":"org.junit.runners.model.FrameworkMethod"
-},
-{
-  "name":"org.junit.runners.model.FrameworkMethod$1"
-},
-{
-  "name":"org.junit.runners.model.InitializationError"
-},
-{
-  "name":"org.junit.runners.model.MultipleFailureException"
-},
-{
-  "name":"org.junit.runners.model.NoGenericTypeParametersValidator"
-},
-{
-  "name":"org.junit.runners.model.RunnerBuilder"
-},
-{
-  "name":"org.junit.runners.model.RunnerScheduler"
-},
-{
-  "name":"org.junit.runners.model.Statement"
-},
-{
-  "name":"org.junit.runners.model.TestClass"
-},
-{
-  "name":"org.junit.runners.model.TestClass$1"
-},
-{
-  "name":"org.junit.runners.model.TestClass$FieldComparator"
-},
-{
-  "name":"org.junit.runners.model.TestClass$MethodComparator"
-},
-{
-  "name":"org.junit.runners.model.TestTimedOutException"
-},
-{
-  "name":"org.junit.runners.parameterized.BlockJUnit4ClassRunnerWithParameters"
-},
-{
-  "name":"org.junit.runners.parameterized.BlockJUnit4ClassRunnerWithParametersFactory"
-},
-{
-  "name":"org.junit.runners.parameterized.ParametersRunnerFactory"
-},
-{
-  "name":"org.junit.runners.parameterized.TestWithParameters"
-},
-{
-  "name":"org.junit.validator.AnnotationValidator"
-},
-{
-  "name":"org.junit.validator.AnnotationValidatorFactory"
-},
-{
-  "name":"org.junit.validator.AnnotationsValidator"
-},
-{
-  "name":"org.junit.validator.AnnotationsValidator$1"
-},
-{
-  "name":"org.junit.validator.AnnotationsValidator$AnnotatableValidator"
-},
-{
-  "name":"org.junit.validator.AnnotationsValidator$ClassValidator"
-},
-{
-  "name":"org.junit.validator.AnnotationsValidator$FieldValidator"
-},
-{
-  "name":"org.junit.validator.AnnotationsValidator$MethodValidator"
-},
-{
-  "name":"org.junit.validator.PublicClassValidator"
-},
-{
-  "name":"org.junit.validator.TestClassValidator"
-},
-{
-  "name":"org.junit.validator.ValidateWith"
 }
 ]

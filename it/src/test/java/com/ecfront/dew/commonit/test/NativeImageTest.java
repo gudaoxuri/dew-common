@@ -26,9 +26,16 @@ import org.junit.Test;
  */
 public class NativeImageTest {
 
+    /**
+     * Test native image.
+     *
+     * @throws Exception the exception
+     */
     @Test
-    public void testAll() throws Exception {
-        NativeImageMain.main(new String[]{});
+    public void testNativeImage() throws Exception {
+        if (System.getProperty("java.vm.vendor").contains("GraalVM")) {
+            NativeImageMain.main(new String[]{});
+        }
     }
 
 }

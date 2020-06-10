@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * The type Bean helper test.
@@ -35,6 +36,22 @@ import java.util.Map;
  * @author gudaoxuri
  */
 public class BeanHelperTest {
+
+    /**
+     * Copy properties.
+     *
+     * @throws Exception the exception
+     */
+    @Test
+    public void copyProperties() {
+        User ori = new User();
+        ori.setName("张三");
+        User dest = new User();
+        dest.setAge(11);
+        dest.setWorkAge(11);
+        $.bean.copyProperties(dest, ori);
+        Assert.assertTrue(Objects.equals(dest.getName(), "张三") && dest.getAge() == 0 && dest.getWorkAge() == 11);
+    }
 
     /**
      * Find class annotation.

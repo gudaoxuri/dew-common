@@ -38,6 +38,7 @@ public class HttpHelperTest {
     {
         currentPath = HttpHelperTest.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         File file = new File(currentPath);
+        currentPath = file.getPath();
         if (file.isFile()) {
             currentPath = file.getParentFile().getPath();
         }

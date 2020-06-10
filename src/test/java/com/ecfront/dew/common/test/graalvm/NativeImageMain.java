@@ -36,6 +36,7 @@ public class NativeImageMain {
         System.out.println("Test by Main...");
         new AmountHelperTest().testConvert();
         new AvgTest().test();
+        new BeanHelperTest().copyProperties();
         new BeanHelperTest().findClassAnnotation();
         new BeanHelperTest().findFieldInfo();
         new BeanHelperTest().findMethodInfo();
