@@ -17,12 +17,12 @@
 package com.ecfront.dew.common;
 
 import com.ecfront.dew.common.exception.RTException;
+import com.ecfront.dew.common.exception.RTGeneralSecurityException;
 import com.ecfront.dew.common.exception.RTIOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLParameters;
+import javax.net.ssl.*;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.URI;
@@ -35,7 +35,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Consumer;
@@ -54,6 +57,21 @@ public class HttpHelper {
     private HttpClient httpClient;
     private Consumer preRequestFun;
 
+    private static class DefaultTrustManager implements X509TrustManager {
+        @Override
+        public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+    }
+
     /**
      * 初始化.
      *
@@ -62,16 +80,18 @@ public class HttpHelper {
      */
     HttpHelper(int defaultTimeoutMS, boolean autoRedirect) {
         try {
+            SSLContext ctx = SSLContext.getInstance("TLS");
+            ctx.init(new KeyManager[0], new TrustManager[]{new DefaultTrustManager()}, new SecureRandom());
             var httpClientBuild = HttpClient.newBuilder()
                     .followRedirects(autoRedirect ? HttpClient.Redirect.ALWAYS : HttpClient.Redirect.NEVER)
-                    .sslContext(SSLContext.getDefault())
+                    .sslContext(ctx)
                     .sslParameters(new SSLParameters());
             if (defaultTimeoutMS != -1 && defaultTimeoutMS != 0) {
                 httpClientBuild.connectTimeout(Duration.ofMillis(defaultTimeoutMS));
             }
             httpClient = httpClientBuild.build();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            throw new RTGeneralSecurityException(e);
         }
     }
 
