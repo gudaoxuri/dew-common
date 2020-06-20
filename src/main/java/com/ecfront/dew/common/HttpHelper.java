@@ -79,6 +79,8 @@ public class HttpHelper {
      * @param autoRedirect     302状态下是否自动跳转
      */
     HttpHelper(int defaultTimeoutMS, boolean autoRedirect) {
+        final Properties props = System.getProperties();
+        props.setProperty("jdk.internal.httpclient.disableHostnameVerification", Boolean.TRUE.toString());
         try {
             SSLContext ctx = SSLContext.getInstance("TLS");
             ctx.init(new KeyManager[0], new TrustManager[]{new DefaultTrustManager()}, new SecureRandom());
