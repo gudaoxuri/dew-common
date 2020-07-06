@@ -19,6 +19,7 @@ package com.ecfront.dew.common;
 import com.ecfront.dew.common.exception.RTIOException;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +32,9 @@ import java.util.stream.Stream;
  */
 public class FileHelper {
 
+    /**
+     * Instantiates a new File helper.
+     */
     FileHelper() {
     }
 
@@ -40,10 +44,23 @@ public class FileHelper {
      * @param pathName 文件路径名
      * @param encode   编码
      * @return 文件内容
+     * @throws RTIOException the rtio exception
      */
     public String readAllByPathName(String pathName, String encode) throws RTIOException {
+        return readAllByPathName(pathName, Charset.forName(encode));
+    }
+
+    /**
+     * 根据文件路径名读取文件所有内容.
+     *
+     * @param pathName 文件路径名
+     * @param encode   编码
+     * @return 文件内容
+     * @throws RTIOException the rtio exception
+     */
+    public String readAllByPathName(String pathName, Charset encode) throws RTIOException {
         try {
-            return new String(Files.readAllBytes(Paths.get(pathName)), encode);
+            return Files.readString(Paths.get(pathName), encode);
         } catch (IOException e) {
             throw new RTIOException(e);
         }
@@ -54,11 +71,24 @@ public class FileHelper {
      *
      * @param file   文件
      * @param encode 编码
-     * @return 文件内容
+     * @return 文件内容 string
+     * @throws RTIOException the rtio exception
      */
     public String readAllByFile(File file, String encode) throws RTIOException {
+        return readAllByFile(file, Charset.forName(encode));
+    }
+
+    /**
+     * 根据文件读取文件所有内容.
+     *
+     * @param file   文件
+     * @param encode 编码
+     * @return 文件内容
+     * @throws RTIOException the rtio exception
+     */
+    public String readAllByFile(File file, Charset encode) throws RTIOException {
         try {
-            return new String(Files.readAllBytes(file.toPath()), encode);
+            return Files.readString(file.toPath(), encode);
         } catch (IOException e) {
             throw new RTIOException(e);
         }
@@ -70,10 +100,23 @@ public class FileHelper {
      * @param path   文件路径
      * @param encode 编码
      * @return 文件内容
+     * @throws RTIOException the rtio exception
      */
     public String readAllByPath(Path path, String encode) throws RTIOException {
+        return readAllByPath(path, Charset.forName(encode));
+    }
+
+    /**
+     * 根据文件路径读取文件所有内容.
+     *
+     * @param path   文件路径
+     * @param encode 编码
+     * @return 文件内容
+     * @throws RTIOException the rtio exception
+     */
+    public String readAllByPath(Path path, Charset encode) throws RTIOException {
         try {
-            return new String(Files.readAllBytes(path), encode);
+            return Files.readString(path, encode);
         } catch (IOException e) {
             throw new RTIOException(e);
         }
@@ -86,15 +129,33 @@ public class FileHelper {
      * @param classpath classpath，先找jar外的文件，找不到再去读jar包内文件
      * @param encode    编码
      * @return 文件内容
+     * @throws RTIOException the rtio exception
      */
-    public String readAllByClassPath(String classpath, String encode) throws RTIOException, IOException {
+    public String readAllByClassPath(String classpath, String encode) throws RTIOException {
+        return readAllByClassPath(classpath, Charset.forName(encode));
+    }
+
+    /**
+     * 根据classpath读取文件所有内容（jar包外路径优先）.
+     * <p>
+     *
+     * @param classpath classpath，先找jar外的文件，找不到再去读jar包内文件
+     * @param encode    编码
+     * @return 文件内容
+     * @throws RTIOException the rtio exception
+     */
+    public String readAllByClassPath(String classpath, Charset encode) throws RTIOException {
         File file = new File(ClassLoader.getSystemResource("") + classpath);
         if (file.exists()) {
             return readAllByFile(file, encode);
         }
-        try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpath);
-             BufferedReader buffer = new BufferedReader(new InputStreamReader(in))) {
-            return buffer.lines().collect(Collectors.joining("\n"));
+        try {
+            try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpath);
+                 BufferedReader buffer = new BufferedReader(new InputStreamReader(in))) {
+                return buffer.lines().collect(Collectors.joining("\n"));
+            }
+        } catch (IOException e) {
+            throw new RTIOException(e);
         }
     }
 
@@ -104,6 +165,7 @@ public class FileHelper {
      * @param source   流，支持jar内文件复制
      *                 e.g. Test.class.getResourceAsStream("/LICENSE-junit.txt")
      * @param destPath 磁盘路径
+     * @throws RTIOException the rtio exception
      */
     public void copyStreamToPath(InputStream source, String destPath) throws RTIOException {
         try {
@@ -117,7 +179,7 @@ public class FileHelper {
     /**
      * 判断是否是Windows系统.
      *
-     * @return 是否是Windows系统
+     * @return 是否是Windows系统 boolean
      */
     public boolean isWindows() {
         return System.getProperty("os.name", "linux").toLowerCase().startsWith("windows");
@@ -129,7 +191,7 @@ public class FileHelper {
      *
      * @param files     要过滤的文件列表
      * @param mathRules Glob过滤规则列表
-     * @return 过滤后的文件列表
+     * @return 过滤后的文件列表 list
      * @see <a href="https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob">Glob过滤规则</a>
      */
     public List<String> mathFilter(List<String> files, List<String> mathRules) {
@@ -149,7 +211,7 @@ public class FileHelper {
      *
      * @param files     要匹配的文件列表
      * @param mathRules Glob过滤规则列表
-     * @return 是否有匹配到的文件
+     * @return 是否有匹配到的文件 boolean
      * @see <a href="https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob">Glob过滤规则</a>
      */
     public boolean anyMath(List<String> files, List<String> mathRules) {
@@ -170,7 +232,7 @@ public class FileHelper {
      *
      * @param files     要匹配的文件列表
      * @param mathRules Glob过滤规则列表
-     * @return 是否有未匹配到的文件
+     * @return 是否有未匹配到的文件 boolean
      * @see <a href="https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob">Glob过滤规则</a>
      */
     public boolean noneMath(List<String> files, List<String> mathRules) {
