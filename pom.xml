@@ -156,10 +156,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <compilerArgs>
+                        <arg>--add-exports=java.net.http/jdk.internal.net.http.common=ALL-UNNAMED</arg>
+                        <arg>--add-opens=java.net.http/jdk.internal.net.http.common=ALL-UNNAMED</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>--add-opens java.net.http/jdk.internal.net.http.common=ALL-UNNAMED</argLine>
                 </configuration>
             </plugin>
             <plugin>

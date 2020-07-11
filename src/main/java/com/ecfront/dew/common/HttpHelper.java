@@ -19,11 +19,15 @@ package com.ecfront.dew.common;
 import com.ecfront.dew.common.exception.RTException;
 import com.ecfront.dew.common.exception.RTGeneralSecurityException;
 import com.ecfront.dew.common.exception.RTIOException;
+import com.ecfront.dew.common.exception.RTReflectiveOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.*;
 import java.io.*;
+import java.lang.management.ManagementFactory;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,7 +45,7 @@ import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -54,8 +58,8 @@ public class HttpHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpHelper.class);
 
-    private HttpClient httpClient;
-    private Consumer preRequestFun;
+    private final HttpClient httpClient;
+    private Function<PreRequestContext, PreRequestContext> preRequestFun;
 
     private static class DefaultTrustManager implements X509TrustManager {
         @Override
@@ -81,6 +85,30 @@ public class HttpHelper {
     HttpHelper(int defaultTimeoutMS, boolean autoRedirect) {
         final Properties props = System.getProperties();
         props.setProperty("jdk.internal.httpclient.disableHostnameVerification", Boolean.TRUE.toString());
+        var allowAllHeaders = ManagementFactory.getRuntimeMXBean().getInputArguments().stream()
+                .anyMatch(arg -> arg.contains("--add-opens=java.net.http/jdk.internal.net.http.common"));
+        if (allowAllHeaders) {
+            /**
+             * 解决JDK11对请求头限制的Bug.
+             * <p>
+             * 如果请求头有包含 "connection", "content-length", "date", "expect", "from", "host", "upgrade", "via", "warning" 字段，
+             * 则需要调用此方法解除限制。
+             * <p>
+             * NOTE: 需要在运行参数中添加 --add-opens java.net.http/jdk.internal.net.http.common=ALL-UNNAMED
+             *
+             * @return the resp
+             * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8213696">JDK-8213696</a>
+             */
+            try {
+                var disallowedHeads = jdk.internal.net.http.common.Utils.class.getDeclaredField("DISALLOWED_HEADERS_SET");
+                var modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.setInt(disallowedHeads, disallowedHeads.getModifiers() & ~Modifier.FINAL);
+                $.bean.setValue(null, disallowedHeads, new HashSet<String>());
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new RTReflectiveOperationException(e);
+            }
+        }
         try {
             SSLContext ctx = SSLContext.getInstance("TLS");
             ctx.init(new KeyManager[0], new TrustManager[]{new DefaultTrustManager()}, new SecureRandom());
@@ -100,10 +128,9 @@ public class HttpHelper {
     /**
      * 设置请求前置拦截器.
      *
-     * @param <T>           传入参数类型
      * @param preRequestFun 拦截处理方法
      */
-    public <T> void setPreRequest(Consumer<T> preRequestFun) {
+    public void setPreRequest(Function<PreRequestContext, PreRequestContext> preRequestFun) {
         this.preRequestFun = preRequestFun;
     }
 
@@ -902,7 +929,17 @@ public class HttpHelper {
                 throw new RTIOException(e);
             }
         }
-
+        if (!header.containsKey("Content-Type")) {
+            header.put("Content-Type", contentType);
+        }
+        if (preRequestFun != null) {
+            var preRequestContext = preRequestFun.apply(new PreRequestContext(method.toUpperCase(), url, entity, header, timeoutMS));
+            method = preRequestContext.getMethod();
+            url = preRequestContext.getUrl();
+            entity = preRequestContext.getEntity();
+            header = preRequestContext.getHeader();
+            timeoutMS = preRequestContext.getTimeoutMS();
+        }
         var builder = HttpRequest.newBuilder();
         switch (method.toUpperCase()) {
             case "GET":
@@ -938,18 +975,12 @@ public class HttpHelper {
         for (Map.Entry<String, String> entry : header.entrySet()) {
             builder.setHeader(entry.getKey(), entry.getValue());
         }
-        if (!header.containsKey("Content-Type")) {
-            builder.setHeader("Content-Type", contentType);
-        }
         try {
             builder.uri(new URI(url));
         } catch (URISyntaxException e) {
             throw new RTException("The URL [" + url + "] is NOT valid.");
         }
         logger.trace("HTTP [" + method + "]" + url);
-        if (preRequestFun != null) {
-            preRequestFun.accept(builder);
-        }
         var httpRequest = builder.build();
         try {
             var httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -965,6 +996,118 @@ public class HttpHelper {
         } catch (IOException | InterruptedException e) {
             logger.warn("HTTP [" + httpRequest.method() + "] " + url + " ERROR.");
             throw new RTIOException(e);
+        }
+    }
+
+    /**
+     * 前置处理上下文.
+     *
+     * @author gudaoxuri
+     */
+    public static class PreRequestContext {
+
+        private String method;
+        private String url;
+        private HttpRequest.BodyPublisher entity;
+        private Map<String, String> header;
+        private int timeoutMS;
+
+        private PreRequestContext(String method, String url, HttpRequest.BodyPublisher entity, Map<String, String> header, int timeoutMS) {
+            this.method = method;
+            this.url = url;
+            this.entity = entity;
+            this.header = header;
+            this.timeoutMS = timeoutMS;
+        }
+
+        /**
+         * Gets method.
+         *
+         * @return the method
+         */
+        public String getMethod() {
+            return method;
+        }
+
+        /**
+         * Sets method.
+         *
+         * @param method the method
+         */
+        public void setMethod(String method) {
+            this.method = method;
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+            return url;
+        }
+
+        /**
+         * Sets url.
+         *
+         * @param url the url
+         */
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        /**
+         * Gets entity.
+         *
+         * @return the entity
+         */
+        public HttpRequest.BodyPublisher getEntity() {
+            return entity;
+        }
+
+        /**
+         * Sets entity.
+         *
+         * @param entity the entity
+         */
+        public void setEntity(HttpRequest.BodyPublisher entity) {
+            this.entity = entity;
+        }
+
+        /**
+         * Gets header.
+         *
+         * @return the header
+         */
+        public Map<String, String> getHeader() {
+            return header;
+        }
+
+        /**
+         * Sets header.
+         *
+         * @param header the header
+         */
+        public void setHeader(Map<String, String> header) {
+            this.header = header;
+        }
+
+        /**
+         * Gets timeout ms.
+         *
+         * @return the timeout ms
+         */
+        public int getTimeoutMS() {
+            return timeoutMS;
+        }
+
+        /**
+         * Sets timeout ms.
+         *
+         * @param timeoutMS the timeout ms
+         */
+        public void setTimeoutMS(int timeoutMS) {
+            this.timeoutMS = timeoutMS;
         }
     }
 

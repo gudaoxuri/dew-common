@@ -82,10 +82,13 @@ public class BeanHelper {
      */
     public <T> T copyProperties(Object ori, Class<T> destClazz) throws RTGeneralSecurityException {
         try {
-            T dest = destClazz.newInstance();
+            T dest = destClazz.getDeclaredConstructor().newInstance();
             copyProperties(dest, ori);
             return dest;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException
+                | IllegalAccessException
+                | InvocationTargetException
+                | NoSuchMethodException e) {
             throw new RTReflectiveOperationException(e);
         }
     }

@@ -57,6 +57,7 @@ public class HttpHelperTest {
             {
                 put("Customer-A", "AAA");
                 put("Accept", "json");
+                put("Date", "xx");
             }
         });
         Assert.assertEquals("AAA", $.json.toJson(result).get("headers").get("Customer-A").asText());
