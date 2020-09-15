@@ -111,7 +111,7 @@ public class IdcardUtils {
             try {
                 birthDate = new SimpleDateFormat("yyMMdd").parse(birthday);
             } catch (ParseException e) {
-                e.printStackTrace();
+                throw new RTException(e);
             }
             Calendar cal = Calendar.getInstance();
             if (birthDate != null) {
@@ -197,7 +197,7 @@ public class IdcardUtils {
             try {
                 birthDate = new SimpleDateFormat("yy").parse(birthCode.substring(0, 2));
             } catch (ParseException e) {
-                e.printStackTrace();
+                throw new RTException(e);
             }
             Calendar cal = Calendar.getInstance();
             if (birthDate != null) {
@@ -224,7 +224,7 @@ public class IdcardUtils {
                 iArr[i] = Integer.parseInt(String.valueOf(ca[i]));
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            throw new RTException(e);
         }
         return iArr;
     }
