@@ -145,17 +145,44 @@ public class FileHelper {
      * @throws RTIOException the rtio exception
      */
     public String readAllByClassPath(String classpath, Charset encode) throws RTIOException {
-        File file = new File(ClassLoader.getSystemResource("") + classpath);
-        if (file.exists()) {
-            return readAllByFile(file, encode);
-        }
-        try {
-            try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpath);
-                 BufferedReader buffer = new BufferedReader(new InputStreamReader(in))) {
-                return buffer.lines().collect(Collectors.joining("\n"));
+        var path = ClassLoader.getSystemResource("");
+        if (path != null) {
+            File file = new File(path + classpath);
+            if (file.exists()) {
+                return readAllByFile(file, encode);
             }
-        } catch (IOException e) {
-            throw new RTIOException(e);
+        }
+        File file = new File(FileHelper.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        if (file.isFile()) {
+            file = file.getParentFile();
+            file = new File(file.getPath() + File.separator + classpath);
+            if (file.exists()) {
+                return readAllByFile(file, encode);
+            }
+        }
+        InputStream in = null;
+        BufferedReader buffer = null;
+        try {
+            in = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpath);
+            if (in == null) {
+                in = this.getClass().getResourceAsStream(classpath);
+            }
+            if (in == null) {
+                return null;
+            }
+            buffer = new BufferedReader(new InputStreamReader(in));
+            return buffer.lines().collect(Collectors.joining("\n"));
+        } finally {
+            try {
+                if (buffer != null) {
+                    buffer.close();
+                }
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                throw new RTIOException(e);
+            }
         }
     }
 

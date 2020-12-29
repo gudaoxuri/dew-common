@@ -18,8 +18,12 @@ package com.ecfront.dew.common.test;
 
 import com.ecfront.dew.common.$;
 import com.ecfront.dew.common.ScriptHelper;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Source;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * The type Script helper test.
@@ -43,7 +47,25 @@ public class ScriptHelperTest {
         Assert.assertEquals("M", s2.execute("fun2", String.class, "{\"idcard\":\"110101201604016117\"}"));
 
         Assert.assertEquals(10240, (long) $.eval(ScriptHelper.ScriptKind.JS, Long.class, "1024*10"));
+    }
 
+    /**
+     * Test eval.
+     *
+     * @throws IOException the io exception
+     */
+    @Test
+    public void testEval() throws IOException {
+        Context context = Context.newBuilder().allowAllAccess(true).build();
+        context.eval(Source.create("js", "function fun1(param){return param;}"));
+        context.eval(Source.newBuilder("js", "function fun2(param){return param;}", "src.js").build());
+        context.eval(Source.create("js", "function fun3(param){return param;}"));
+        var result = context.getBindings("js").getMember("fun1").execute("aa").as(String.class);
+        Assert.assertEquals("aa", result);
+        result = context.getBindings("js").getMember("fun2").execute("aaa").as(String.class);
+        Assert.assertEquals("aaa", result);
+        result = context.getBindings("js").getMember("fun3").execute("aaa").as(String.class);
+        Assert.assertEquals("aaa", result);
     }
 
 }

@@ -384,8 +384,7 @@ public class BeanHelper {
         try {
             return field.get(obj);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            return null;
+            throw new RTGeneralSecurityException(e);
         }
     }
 
@@ -428,7 +427,7 @@ public class BeanHelper {
         try {
             field.set(obj, value);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new RTGeneralSecurityException(e);
         }
     }
 

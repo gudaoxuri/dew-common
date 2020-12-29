@@ -26,7 +26,7 @@
     <description>Dew公共模块</description>
     <url>https://github.com/gudaoxuri/dew-common</url>
     <packaging>jar</packaging>
-    <version>3.0.0-beta2</version>
+    <version>3.0.0-beta3</version>
 
     <properties>
         <java.version>11</java.version>
