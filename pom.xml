@@ -40,7 +40,7 @@
         <beanutils.version>1.9.4</beanutils.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
 
         <asciidoctor.maven.plugin.version>2.1.0</asciidoctor.maven.plugin.version>
         <asciidoctorj.version>2.4.1</asciidoctorj.version>
