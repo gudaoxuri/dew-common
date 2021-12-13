@@ -52,9 +52,9 @@ public class FallbackHelper {
      * @param groupName       组名，全局唯一
      * @param normalProcessor 正常方法，抛异常时进入失败方法
      * @param errorProcessor  失败方法
-     * @return the e
+     * @return 正常的结果
      */
-    public <E> E execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor) {
+    public <E> E execute(String groupName, NormalProcessor<E> normalProcessor, ErrorProcessor<E> errorProcessor) {
         return execute(groupName, normalProcessor, errorProcessor, new DefaultFallbackStrategy(), new ArrayList<>());
     }
 
@@ -66,10 +66,9 @@ public class FallbackHelper {
      * @param normalProcessor  正常方法，抛异常时进入失败方法
      * @param errorProcessor   失败方法
      * @param fallbackStrategy 降级策略
-     * @return the e
+     * @return 正常的结果
      */
-    public <E> E execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
-                         FallbackStrategy fallbackStrategy) {
+    public <E> E execute(String groupName, NormalProcessor<E> normalProcessor, ErrorProcessor<E> errorProcessor, FallbackStrategy fallbackStrategy) {
         return execute(groupName, normalProcessor, errorProcessor, fallbackStrategy, new ArrayList<>());
     }
 
@@ -81,9 +80,9 @@ public class FallbackHelper {
      * @param normalProcessor       正常方法，抛异常时进入失败方法
      * @param errorProcessor        失败方法
      * @param excludeFallbackErrors 不做降级处理的异常集合（视为业务上正常的错误）
-     * @return the e
+     * @return 正常的结果
      */
-    public <E> E execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
+    public <E> E execute(String groupName, NormalProcessor<E> normalProcessor, ErrorProcessor<E> errorProcessor,
                          Class<? extends Throwable>... excludeFallbackErrors) {
         return execute(groupName, normalProcessor, errorProcessor, new DefaultFallbackStrategy(), Arrays.asList(excludeFallbackErrors));
     }
@@ -97,49 +96,109 @@ public class FallbackHelper {
      * @param errorProcessor        失败方法
      * @param fallbackStrategy      降级策略
      * @param excludeFallbackErrors 不做降级处理的异常集合（视为业务上正常的错误）
-     * @return the e
+     * @return 正常的结果
      */
-    public <E> E execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
-                         FallbackStrategy fallbackStrategy, Class<? extends Throwable>... excludeFallbackErrors) {
+    public <E> E execute(String groupName, NormalProcessor<E> normalProcessor, ErrorProcessor<E> errorProcessor, FallbackStrategy fallbackStrategy,
+                         Class<? extends Throwable>... excludeFallbackErrors) {
         return execute(groupName, normalProcessor, errorProcessor, fallbackStrategy, Arrays.asList(excludeFallbackErrors));
     }
 
-    /**
-     * 带降级的处理方法.
-     *
-     * @param groupName             组名，全局唯一
-     * @param normalProcessor       正常方法，抛异常时进入失败方法
-     * @param errorProcessor        失败方法
-     * @param fallbackStrategy      降级策略
-     * @param excludeFallbackErrors 不做降级处理的异常集合（视为业务上正常的错误）
-     */
-    private <E> E execute(String groupName, NormalProcessor normalProcessor, ErrorProcessor errorProcessor,
+    private <E> E execute(String groupName, NormalProcessor<E> normalProcessor, ErrorProcessor<E> errorProcessor,
                           FallbackStrategy fallbackStrategy, List<Class<? extends Throwable>> excludeFallbackErrors) {
         CONTAINER.putIfAbsent(groupName, new FallbackInfo());
         FallbackInfo fallbackInfo = CONTAINER.get(groupName);
         fallbackInfo.request();
         if (fallbackStrategy.check(fallbackInfo)) {
             try {
-                E result = (E) normalProcessor.execute();
+                E result = normalProcessor.execute();
                 fallbackInfo.success();
                 return result;
             } catch (Throwable e) {
                 if (!excludeFallbackErrors.contains(e.getClass())) {
                     fallbackInfo.error();
-                    return (E) errorProcessor.execute(e, fallbackInfo);
+                    return errorProcessor.execute(e, fallbackInfo);
                 } else {
                     fallbackInfo.success();
                     throw new RTException(e);
                 }
             }
         } else {
-            return (E) errorProcessor.execute(
-                    new FallbackException(String.format("%s has %s errors , last success is %s",
-                            groupName,
-                            fallbackInfo.getErrorTimes(),
-                            fallbackInfo.getLastGreenTime().format(DATE_TIME_FORMATTER))),
-                    fallbackInfo);
+            return errorProcessor.execute(new FallbackException(String.format("%s has %s errors , last success is %s", groupName,
+                    fallbackInfo.getErrorTimes(), fallbackInfo.getLastGreenTime().format(DATE_TIME_FORMATTER))), fallbackInfo);
         }
+    }
+
+    /**
+     * The enum Fallback status.
+     */
+    public enum FallbackStatus {
+        /**
+         * Green fallback status.
+         */
+        GREEN,
+        /**
+         * Yellow fallback status.
+         */
+        YELLOW,
+        /**
+         * Red fallback status.
+         */
+        RED
+    }
+
+    /**
+     * 降级策略.
+     *
+     * @author gudaoxuri
+     */
+    @FunctionalInterface
+    public interface FallbackStrategy {
+
+        /**
+         * Check boolean.
+         *
+         * @param info the info
+         * @return the boolean
+         */
+        boolean check(FallbackInfo info);
+
+    }
+
+    /**
+     * The interface Error processor.
+     *
+     * @param <E> the type parameter
+     */
+    @FunctionalInterface
+    public interface ErrorProcessor<E> {
+
+        /**
+         * Execute e.
+         *
+         * @param e            the e
+         * @param fallbackInfo the fallback info
+         * @return the e
+         */
+        E execute(Throwable e, FallbackHelper.FallbackInfo fallbackInfo);
+
+    }
+
+    /**
+     * The interface Normal processor.
+     *
+     * @param <E> the type parameter
+     */
+    @FunctionalInterface
+    public interface NormalProcessor<E> {
+
+        /**
+         * Execute e.
+         *
+         * @return the e
+         * @throws Throwable the throwable
+         */
+        E execute() throws Throwable;
+
     }
 
     /**
@@ -154,30 +213,6 @@ public class FallbackHelper {
         private AtomicInteger requestTimes = new AtomicInteger(0);
         private AtomicInteger successTimes = new AtomicInteger(0);
         private AtomicInteger errorTimes = new AtomicInteger(0);
-
-        /**
-         * Sets status.
-         *
-         * @param status the status
-         */
-        public void setStatus(FallbackStatus status) {
-            this.status = status;
-            switch (status) {
-                case GREEN:
-                    initLastGreenTime();
-                    initRequestTimes();
-                    initSuccessTimes();
-                    initErrorTimes();
-                    break;
-                case YELLOW:
-                    initLastYellowTime();
-                    break;
-                case RED:
-                    initLastRedTime();
-                    break;
-                default:
-            }
-        }
 
         /**
          * Request.
@@ -252,6 +287,30 @@ public class FallbackHelper {
         }
 
         /**
+         * Sets status.
+         *
+         * @param status the status
+         */
+        public void setStatus(FallbackStatus status) {
+            this.status = status;
+            switch (status) {
+                case GREEN:
+                    initLastGreenTime();
+                    initRequestTimes();
+                    initSuccessTimes();
+                    initErrorTimes();
+                    break;
+                case YELLOW:
+                    initLastYellowTime();
+                    break;
+                case RED:
+                    initLastRedTime();
+                    break;
+                default:
+            }
+        }
+
+        /**
          * Gets request times.
          *
          * @return the request times
@@ -307,24 +366,6 @@ public class FallbackHelper {
     }
 
     /**
-     * The enum Fallback status.
-     */
-    public enum FallbackStatus {
-        /**
-         * Green fallback status.
-         */
-        GREEN,
-        /**
-         * Yellow fallback status.
-         */
-        YELLOW,
-        /**
-         * Red fallback status.
-         */
-        RED
-    }
-
-    /**
      * The type Fallback exception.
      */
     public static class FallbackException extends RTException {
@@ -337,24 +378,6 @@ public class FallbackHelper {
         public FallbackException(String message) {
             super(message);
         }
-
-    }
-
-    /**
-     * 降级策略.
-     *
-     * @author gudaoxuri
-     */
-    @FunctionalInterface
-    public interface FallbackStrategy {
-
-        /**
-         * Check boolean.
-         *
-         * @param info the info
-         * @return the boolean
-         */
-        boolean check(FallbackInfo info);
 
     }
 
@@ -408,43 +431,6 @@ public class FallbackHelper {
                     return true;
             }
         }
-    }
-
-    /**
-     * The interface Error processor.
-     *
-     * @param <E> the type parameter
-     */
-    @FunctionalInterface
-    public interface ErrorProcessor<E> {
-
-        /**
-         * Execute e.
-         *
-         * @param e            the e
-         * @param fallbackInfo the fallback info
-         * @return the e
-         */
-        E execute(Throwable e, FallbackHelper.FallbackInfo fallbackInfo);
-
-    }
-
-    /**
-     * The interface Normal processor.
-     *
-     * @param <E> the type parameter
-     */
-    @FunctionalInterface
-    public interface NormalProcessor<E> {
-
-        /**
-         * Execute e.
-         *
-         * @return the e
-         * @throws Throwable the throwable
-         */
-        E execute() throws Throwable;
-
     }
 
 

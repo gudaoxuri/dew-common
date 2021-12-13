@@ -18,8 +18,8 @@ package com.ecfront.dew.common.test;
 
 import com.ecfront.dew.common.$;
 import com.ecfront.dew.common.FallbackHelper;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * The type Fallback helper test.
@@ -36,7 +36,7 @@ public class FallbackHelperTest {
         String result = $.fallback.execute("testGetUser",
                 this::getUserNormal,
                 this::getUserError);
-        Assert.assertEquals("-1", result);
+        Assertions.assertEquals("-1", result);
     }
 
     /**
@@ -45,14 +45,14 @@ public class FallbackHelperTest {
     @Test
     public void testGetUserWithStrategy() {
         for (int i = 0; i < 10; i++) {
-            Assert.assertEquals("-1", getUserWithStrategy());
+            Assertions.assertEquals("-1", getUserWithStrategy());
         }
-        Assert.assertEquals("-2", getUserWithStrategy());
-        Assert.assertEquals("-2", getUserWithStrategy());
-        Assert.assertEquals("-2", getUserWithStrategy());
-        Assert.assertEquals("-2", getUserWithStrategy());
-        Assert.assertEquals("-2", getUserWithStrategy());
-        Assert.assertEquals("-1", getUserWithStrategy());
+        Assertions.assertEquals("-2", getUserWithStrategy());
+        Assertions.assertEquals("-2", getUserWithStrategy());
+        Assertions.assertEquals("-2", getUserWithStrategy());
+        Assertions.assertEquals("-2", getUserWithStrategy());
+        Assertions.assertEquals("-2", getUserWithStrategy());
+        Assertions.assertEquals("-1", getUserWithStrategy());
     }
 
     private String getUserWithStrategy() {
@@ -80,7 +80,7 @@ public class FallbackHelperTest {
                     this::getUserError, NotFoundException.class);
         } catch (Throwable e) {
             if (e.getCause().getClass() != NotFoundException.class) {
-                Assert.fail();
+                Assertions.fail();
             }
         }
     }

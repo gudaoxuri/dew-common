@@ -20,8 +20,8 @@ import com.ecfront.dew.common.$;
 import com.ecfront.dew.common.Resp;
 import com.ecfront.dew.common.interceptor.DewInterceptContext;
 import com.ecfront.dew.common.interceptor.DewInterceptor;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
@@ -38,14 +38,13 @@ public class InterceptorTest {
     @Test
     public void testInterceptor() {
         // 没有注册拦截器的情况
-        Resp<DewInterceptContext<Obj, Obj>> resp =
-                $.interceptor.process("none", new Obj("1"), new HashMap<>(), context -> {
-                    // 业务逻辑，只做简单将input对象copy到output对象
-                    context.setOutput(new Obj(context.getInput().getF()));
-                    return Resp.success(context);
-                });
-        Assert.assertTrue(resp.ok());
-        Assert.assertEquals("1", resp.getBody().getOutput().getF());
+        Resp<DewInterceptContext<Obj, Obj>> resp = $.interceptor.process("none", new Obj("1"), new HashMap<>(), context -> {
+            // 业务逻辑，只做简单将input对象copy到output对象
+            context.setOutput(new Obj(context.getInput().getF()));
+            return Resp.success(context);
+        });
+        Assertions.assertTrue(resp.ok());
+        Assertions.assertEquals("1", resp.getBody().getOutput().getF());
         // 注册了一个拦截器A
         $.interceptor.register("test", new InterceptorA());
         resp = $.interceptor.process("test", new Obj("1"), new HashMap<>(), context -> {
@@ -53,9 +52,9 @@ public class InterceptorTest {
             context.setOutput(new Obj(context.getInput().getF()));
             return Resp.success(context);
         });
-        Assert.assertTrue(resp.ok());
-        Assert.assertEquals("2", resp.getBody().getInput().getF());
-        Assert.assertEquals("3", resp.getBody().getOutput().getF());
+        Assertions.assertTrue(resp.ok());
+        Assertions.assertEquals("2", resp.getBody().getInput().getF());
+        Assertions.assertEquals("3", resp.getBody().getOutput().getF());
         // 注册了另一个拦截器B，假设B执行会报错
         $.interceptor.register("test", new InterceptorB());
         resp = $.interceptor.process("test", new Obj("11"), new HashMap<>(), context -> {
@@ -63,7 +62,7 @@ public class InterceptorTest {
             context.setOutput(new Obj(context.getInput().getF()));
             return Resp.success(context);
         });
-        Assert.assertFalse(resp.ok());
+        Assertions.assertFalse(resp.ok());
     }
 
 
@@ -110,7 +109,7 @@ public class InterceptorTest {
     /**
      * The type Interceptor a.
      */
-    public class InterceptorA implements DewInterceptor<Obj, Obj> {
+    public static class InterceptorA implements DewInterceptor<Obj, Obj> {
 
         @Override
         public String getCategory() {
@@ -139,7 +138,7 @@ public class InterceptorTest {
     /**
      * The type Interceptor b.
      */
-    public class InterceptorB implements DewInterceptor<Obj, Obj> {
+    public static class InterceptorB implements DewInterceptor<Obj, Obj> {
 
         @Override
         public String getCategory() {

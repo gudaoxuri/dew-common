@@ -27,7 +27,10 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author gudaoxuri
  */
-public class ReturnPerfTest {
+public final class ReturnPerfTest {
+
+    private ReturnPerfTest() {
+    }
 
     /**
      * Gets user by user id limit by app id with exception.
@@ -59,7 +62,7 @@ public class ReturnPerfTest {
          * @param code    the code
          * @param message the message
          */
-        public InvokeException(String code, String message) {
+        InvokeException(String code, String message) {
             super("{\"code\":\"" + code + "\",\"message\":\"" + message + "\"}");
         }
     }

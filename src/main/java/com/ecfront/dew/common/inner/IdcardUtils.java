@@ -30,7 +30,10 @@ import java.util.Map;
  *
  * @author Based By June  http://www.oschina.net/code/snippet_1611_2881
  */
-public class IdcardUtils {
+public final class IdcardUtils {
+
+    private IdcardUtils() {
+    }
 
     /**
      * 中国公民身份证号码最小长度.
@@ -45,7 +48,7 @@ public class IdcardUtils {
     /**
      * 每位加权因子.
      */
-    private static final int[] power = {
+    private static final int[] POWER = {
             7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2
     };
 
@@ -53,44 +56,44 @@ public class IdcardUtils {
      * 最低年限.
      */
     private static final int MIN = 1930;
-    private static Map<String, String> cityCodes = new HashMap<>();
+    private static final Map<String, String> CITY_CODES = new HashMap<>();
 
     static {
-        cityCodes.put("11", "北京");
-        cityCodes.put("12", "天津");
-        cityCodes.put("13", "河北");
-        cityCodes.put("14", "山西");
-        cityCodes.put("15", "内蒙古");
-        cityCodes.put("21", "辽宁");
-        cityCodes.put("22", "吉林");
-        cityCodes.put("23", "黑龙江");
-        cityCodes.put("31", "上海");
-        cityCodes.put("32", "江苏");
-        cityCodes.put("33", "浙江");
-        cityCodes.put("34", "安徽");
-        cityCodes.put("35", "福建");
-        cityCodes.put("36", "江西");
-        cityCodes.put("37", "山东");
-        cityCodes.put("41", "河南");
-        cityCodes.put("42", "湖北");
-        cityCodes.put("43", "湖南");
-        cityCodes.put("44", "广东");
-        cityCodes.put("45", "广西");
-        cityCodes.put("46", "海南");
-        cityCodes.put("50", "重庆");
-        cityCodes.put("51", "四川");
-        cityCodes.put("52", "贵州");
-        cityCodes.put("53", "云南");
-        cityCodes.put("54", "西藏");
-        cityCodes.put("61", "陕西");
-        cityCodes.put("62", "甘肃");
-        cityCodes.put("63", "青海");
-        cityCodes.put("64", "宁夏");
-        cityCodes.put("65", "新疆");
-        cityCodes.put("71", "台湾");
-        cityCodes.put("81", "香港");
-        cityCodes.put("82", "澳门");
-        cityCodes.put("91", "国外");
+        CITY_CODES.put("11", "北京");
+        CITY_CODES.put("12", "天津");
+        CITY_CODES.put("13", "河北");
+        CITY_CODES.put("14", "山西");
+        CITY_CODES.put("15", "内蒙古");
+        CITY_CODES.put("21", "辽宁");
+        CITY_CODES.put("22", "吉林");
+        CITY_CODES.put("23", "黑龙江");
+        CITY_CODES.put("31", "上海");
+        CITY_CODES.put("32", "江苏");
+        CITY_CODES.put("33", "浙江");
+        CITY_CODES.put("34", "安徽");
+        CITY_CODES.put("35", "福建");
+        CITY_CODES.put("36", "江西");
+        CITY_CODES.put("37", "山东");
+        CITY_CODES.put("41", "河南");
+        CITY_CODES.put("42", "湖北");
+        CITY_CODES.put("43", "湖南");
+        CITY_CODES.put("44", "广东");
+        CITY_CODES.put("45", "广西");
+        CITY_CODES.put("46", "海南");
+        CITY_CODES.put("50", "重庆");
+        CITY_CODES.put("51", "四川");
+        CITY_CODES.put("52", "贵州");
+        CITY_CODES.put("53", "云南");
+        CITY_CODES.put("54", "西藏");
+        CITY_CODES.put("61", "陕西");
+        CITY_CODES.put("62", "甘肃");
+        CITY_CODES.put("63", "青海");
+        CITY_CODES.put("64", "宁夏");
+        CITY_CODES.put("65", "新疆");
+        CITY_CODES.put("71", "台湾");
+        CITY_CODES.put("81", "香港");
+        CITY_CODES.put("82", "澳门");
+        CITY_CODES.put("91", "国外");
     }
 
     /**
@@ -107,7 +110,7 @@ public class IdcardUtils {
         if (isNum(idCard)) {
             // 获取出生年月日
             String birthday = idCard.substring(6, 12);
-            Date birthDate = null;
+            Date birthDate;
             try {
                 birthDate = new SimpleDateFormat("yyMMdd").parse(birthday);
             } catch (ParseException e) {
@@ -189,11 +192,11 @@ public class IdcardUtils {
         }
         if (isNum(idCard)) {
             String proCode = idCard.substring(0, 2);
-            if (cityCodes.get(proCode) == null) {
+            if (CITY_CODES.get(proCode) == null) {
                 return false;
             }
             String birthCode = idCard.substring(6, 12);
-            Date birthDate = null;
+            Date birthDate;
             try {
                 birthDate = new SimpleDateFormat("yy").parse(birthCode.substring(0, 2));
             } catch (ParseException e) {
@@ -231,11 +234,11 @@ public class IdcardUtils {
 
     private static int getPowerSum(int[] iArr) {
         int iSum = 0;
-        if (power.length == iArr.length) {
+        if (POWER.length == iArr.length) {
             for (int i = 0; i < iArr.length; i++) {
-                for (int j = 0; j < power.length; j++) {
+                for (int j = 0; j < POWER.length; j++) {
                     if (i == j) {
-                        iSum = iSum + iArr[i] * power[j];
+                        iSum = iSum + iArr[i] * POWER[j];
                     }
                 }
             }
@@ -358,7 +361,7 @@ public class IdcardUtils {
      * @return 生日(dd)
      */
     public static Short getDateByIdCard(String idCard) {
-        Integer len = idCard.length();
+        int len = idCard.length();
         if (len < CHINA_ID_MIN_LENGTH) {
             return null;
         } else if (len == CHINA_ID_MIN_LENGTH) {
@@ -400,7 +403,7 @@ public class IdcardUtils {
         if (len == CHINA_ID_MIN_LENGTH || len == CHINA_ID_MAX_LENGTH) {
             sProvinNum = idCard.substring(0, 2);
         }
-        sProvince = cityCodes.get(sProvinNum);
+        sProvince = CITY_CODES.get(sProvinNum);
         return sProvince;
     }
 

@@ -83,69 +83,6 @@ public class Resp<E> implements Serializable {
     }
 
     /**
-     * Gets code.
-     *
-     * @return the code
-     */
-    public String getCode() {
-        return code;
-    }
-
-    /**
-     * Sets code.
-     *
-     * @param code the code
-     */
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    /**
-     * Gets message.
-     *
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * Sets message.
-     *
-     * @param message the message
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    /**
-     * Gets body.
-     *
-     * @return the body
-     */
-    public E getBody() {
-        return body;
-    }
-
-    /**
-     * Sets body.
-     *
-     * @param body the body
-     */
-    public void setBody(E body) {
-        this.body = body;
-    }
-
-    /**
-     * 返回是否成功.
-     *
-     * @return the boolean
-     */
-    public boolean ok() {
-        return Objects.equals(this.code, StandardCode.SUCCESS.toString());
-    }
-
-    /**
      * 返回成功.
      *
      * @param <E>  the type parameter
@@ -338,19 +275,6 @@ public class Resp<E> implements Serializable {
     }
 
     /**
-     * 声明返回需要降级.
-     *
-     * @return the resp
-     */
-    public Resp fallback() {
-        if (true) {
-            throw new FallbackException(this);
-        }
-        // 使用返回值是为了保持结构统一
-        return this;
-    }
-
-    /**
      * 响应body转换，将body类型A转换成类型B.
      *
      * @param <E>       the type parameter
@@ -465,6 +389,82 @@ public class Resp<E> implements Serializable {
             }
         }
         return new Resp<>(resp.getCode(), resp.getMessage(), body);
+    }
+
+    /**
+     * Gets code.
+     *
+     * @return the code
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * Sets code.
+     *
+     * @param code the code
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
+     * Gets message.
+     *
+     * @return the message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * Sets message.
+     *
+     * @param message the message
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    /**
+     * Gets body.
+     *
+     * @return the body
+     */
+    public E getBody() {
+        return body;
+    }
+
+    /**
+     * Sets body.
+     *
+     * @param body the body
+     */
+    public void setBody(E body) {
+        this.body = body;
+    }
+
+    /**
+     * 返回是否成功.
+     *
+     * @return the boolean
+     */
+    public boolean ok() {
+        return Objects.equals(this.code, StandardCode.SUCCESS.toString());
+    }
+
+    /**
+     * 声明返回需要降级.
+     *
+     * @return the resp
+     */
+    public Resp fallback() {
+        if (true) {
+            throw new FallbackException(this);
+        }
+        // 使用返回值是为了保持结构统一
+        return this;
     }
 
     /**

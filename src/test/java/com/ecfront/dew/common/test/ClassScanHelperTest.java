@@ -17,8 +17,8 @@
 package com.ecfront.dew.common.test;
 
 import com.ecfront.dew.common.$;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,13 +40,13 @@ public class ClassScanHelperTest {
                 add(Deprecated.class);
             }
         }, null);
-        Assert.assertEquals(2, resultInFile.size());
+        Assertions.assertEquals(2, resultInFile.size());
         Set<Class<?>> resultInJar = $.clazz.scan("org.junit", null, new HashSet<>() {
             {
                 add("Before\\w*");
             }
         });
-        Assert.assertEquals(4, resultInJar.size());
+        Assertions.assertEquals(4, resultInJar.size());
     }
 
 }

@@ -18,8 +18,8 @@ package com.ecfront.dew.common.test;
 
 import com.ecfront.dew.common.$;
 import com.ecfront.dew.common.ReportHandler;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,27 +42,26 @@ public class ShellHelperTest {
      */
     // @Test
     public void testENV() throws InterruptedException, ExecutionException {
-        $.shell.execute("cd xxx && npm run build:uat",
-                new HashMap<>() {
-                    {
-                        put("NODE_ENV", "uat");
-                    }
-                }, null, null, false, new ReportHandler() {
-                    @Override
-                    public void outputlog(String line) {
-                        System.out.println("O:" + line);
-                    }
+        $.shell.execute("cd xxx && npm run build:uat", new HashMap<>() {
+            {
+                put("NODE_ENV", "uat");
+            }
+        }, null, null, false, new ReportHandler() {
+            @Override
+            public void outputlog(String line) {
+                System.out.println("O:" + line);
+            }
 
-                    @Override
-                    public void fail(String message) {
-                        System.out.println("F:" + message);
-                    }
+            @Override
+            public void fail(String message) {
+                System.out.println("F:" + message);
+            }
 
-                    @Override
-                    public void errorlog(String line) {
-                        System.out.println("E:" + line);
-                    }
-                }).get();
+            @Override
+            public void errorlog(String line) {
+                System.out.println("E:" + line);
+            }
+        }).get();
     }
 
     /**
@@ -71,7 +70,7 @@ public class ShellHelperTest {
     @Test
     public void test() {
         // Error test
-        Assert.assertTrue($.shell.execute("abc").getMessage().contains("Abnormal termination"));
+        Assertions.assertTrue($.shell.execute("abc").getMessage().contains("Abnormal termination"));
         // Normal test
         List<String> result;
         if ($.file.isWindows()) {
@@ -79,9 +78,9 @@ public class ShellHelperTest {
         } else {
             result = $.shell.execute("ls -l").getBody();
         }
-        Assert.assertFalse(result.isEmpty());
+        Assertions.assertFalse(result.isEmpty());
         result = $.shell.execute("git remote -v").getBody();
-        Assert.assertTrue(result.stream().anyMatch(i -> i.contains("dew-common.git")));
+        Assertions.assertTrue(result.stream().anyMatch(i -> i.contains("dew-common.git")));
     }
 
     /**
@@ -97,8 +96,7 @@ public class ShellHelperTest {
             final List<String> statusResult = new ArrayList<>();
             CountDownLatch cdl = new CountDownLatch(1);
             String testFilePath = this.getClass().getResource("/").getPath();
-            $.shell.execute(
-                    testFilePath + "shell-test.sh", // 执行脚本
+            $.shell.execute(testFilePath + "shell-test.sh", // 执行脚本
                     "done!", // 成功标识，只要捕捉到此标识就视为成功，为null时不会调用ReportHandler的success方法
                     "step", // 进度标识，只要捕捉到此标识就更新进度，格式为 <progressFlag>空格<progress>,如： progress 40，为null时不会调用ReportHandler的progress方法
                     true, // 是否返回结果（输出内容，包含标准输出stdout及错误输出stderr），为true时会返回结果到ReportHandler的complete方法中，结果暂存于内存中，对输出内容过多的脚本需要考虑占用内存的大小
@@ -121,15 +119,15 @@ public class ShellHelperTest {
 
                         @Override
                         public void complete(List<String> output, List<String> error) {
-                            Assert.assertEquals("Start", statusResult.get(0));
-                            Assert.assertEquals("Progress:10", statusResult.get(1));
-                            Assert.assertEquals("Progress:70", statusResult.get(2));
-                            Assert.assertEquals("Success", statusResult.get(3));
+                            Assertions.assertEquals("Start", statusResult.get(0));
+                            Assertions.assertEquals("Progress:10", statusResult.get(1));
+                            Assertions.assertEquals("Progress:70", statusResult.get(2));
+                            Assertions.assertEquals("Success", statusResult.get(3));
 
-                            Assert.assertEquals("Hello", output.get(1));
-                            Assert.assertEquals("World", output.get(3));
+                            Assertions.assertEquals("Hello", output.get(1));
+                            Assertions.assertEquals("World", output.get(3));
 
-                            Assert.assertEquals("some error", error.get(0));
+                            Assertions.assertEquals("some error", error.get(0));
                             cdl.countDown();
                         }
                     });

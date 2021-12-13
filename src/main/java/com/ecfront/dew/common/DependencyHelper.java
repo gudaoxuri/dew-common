@@ -21,7 +21,10 @@ package com.ecfront.dew.common;
  *
  * @author gudaoxuri
  */
-public class DependencyHelper {
+public final class DependencyHelper {
+
+    private DependencyHelper() {
+    }
 
     /**
      * Has dependency boolean.

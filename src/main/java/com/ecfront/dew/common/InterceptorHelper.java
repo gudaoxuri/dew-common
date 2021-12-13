@@ -34,14 +34,44 @@ import java.util.Map;
  */
 public class InterceptorHelper {
 
-    private static Logger logger = LoggerFactory.getLogger(InterceptorHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InterceptorHelper.class);
 
-    private static Map<String, List<DewInterceptor<?, ?>>> CONTAINER = new HashMap<>();
+    private static final Map<String, List<DewInterceptor<?, ?>>> CONTAINER = new HashMap<>();
 
     /**
      * Instantiates a new Interceptor helper.
      */
     InterceptorHelper() {
+    }
+
+    private static <I, O> Resp<DewInterceptContext<I, O>> doProcess(DewInterceptContext<I, O> context,
+                                                                    List<DewInterceptor<?, ?>> interceptors, boolean isBefore) {
+        Resp<DewInterceptContext<I, O>> result = Resp.success(context);
+        for (DewInterceptor<?, ?> interceptor : interceptors) {
+            LOGGER.trace("[DewInterceptorProcessor] Process interceptor [{}]:{}-{}",
+                    interceptor.getCategory(), interceptor.getName(), isBefore ? "before" : "after");
+            DewInterceptor<I, O> interceptorE = (DewInterceptor<I, O>) interceptor;
+            try {
+                if (isBefore) {
+                    result = interceptorE.before(context);
+                } else {
+                    result = interceptorE.after(context);
+                }
+                if (!result.ok()) {
+                    LOGGER.warn("[DewInterceptorProcessor] Process interceptor error [{}]:{}-{},[{}]{}",
+                            interceptor.getCategory(), interceptor.getName(), isBefore ? "before" : "after", result.getCode(), result.getMessage());
+                    interceptorE.error(context);
+                    return result;
+                }
+            } catch (Throwable e) {
+                result = Resp.serverError(e.getMessage());
+                LOGGER.error("[DewInterceptorProcessor] Process interceptor error [{}]:{}-{},[{}]{}",
+                        interceptor.getCategory(), interceptor.getName(), isBefore ? "before" : "after", result.getCode(), result.getMessage());
+                interceptorE.error(context);
+                return result;
+            }
+        }
+        return result;
     }
 
     /**
@@ -96,7 +126,7 @@ public class InterceptorHelper {
         DewInterceptContext<I, O> context = new DewInterceptContext<>();
         context.setInput(input);
         context.setArgs(args);
-        logger.debug("[DewInterceptorProcessor] Process [{}]", category);
+        LOGGER.debug("[DewInterceptorProcessor] Process [{}]", category);
         if (!CONTAINER.containsKey(category)) {
             return fun.exec(context);
         }
@@ -110,36 +140,6 @@ public class InterceptorHelper {
             return execR;
         }
         return doProcess(execR.getBody(), interceptors, false);
-    }
-
-    private static <I, O> Resp<DewInterceptContext<I, O>> doProcess(DewInterceptContext<I, O> context,
-                                                                    List<DewInterceptor<?, ?>> interceptors, boolean isBefore) {
-        Resp<DewInterceptContext<I, O>> result = Resp.success(context);
-        for (DewInterceptor<?, ?> interceptor : interceptors) {
-            logger.trace("[DewInterceptorProcessor] Process interceptor [{}]:{}-{}",
-                    interceptor.getCategory(), interceptor.getName(), isBefore ? "before" : "after");
-            DewInterceptor<I, O> interceptorE = (DewInterceptor<I, O>) interceptor;
-            try {
-                if (isBefore) {
-                    result = interceptorE.before(context);
-                } else {
-                    result = interceptorE.after(context);
-                }
-                if (!result.ok()) {
-                    logger.warn("[DewInterceptorProcessor] Process interceptor error [{}]:{}-{},[{}]{}",
-                            interceptor.getCategory(), interceptor.getName(), isBefore ? "before" : "after", result.getCode(), result.getMessage());
-                    interceptorE.error(context);
-                    return result;
-                }
-            } catch (Throwable e) {
-                result = Resp.serverError(e.getMessage());
-                logger.error("[DewInterceptorProcessor] Process interceptor error [{}]:{}-{},[{}]{}",
-                        interceptor.getCategory(), interceptor.getName(), isBefore ? "before" : "after", result.getCode(), result.getMessage());
-                interceptorE.error(context);
-                return result;
-            }
-        }
-        return result;
     }
 
 }

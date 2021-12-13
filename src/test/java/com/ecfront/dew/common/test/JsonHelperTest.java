@@ -19,8 +19,8 @@ package com.ecfront.dew.common.test;
 import com.ecfront.dew.common.$;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -37,7 +37,7 @@ import java.util.Optional;
  */
 public class JsonHelperTest {
 
-    private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Test path.
@@ -45,106 +45,96 @@ public class JsonHelperTest {
     @Test
     public void testPath() {
         JsonNode jsonNode = $.json.toJson("{'a_key':'a_val','child':{'c_key':'c_val'}}");
-        Assert.assertEquals("a_val", $.json.path(jsonNode, "a_key").asText());
-        Assert.assertEquals("c_val", $.json.path(jsonNode, "child.c_key").asText());
+        Assertions.assertEquals("a_val", $.json.path(jsonNode, "a_key").asText());
+        Assertions.assertEquals("c_val", $.json.path(jsonNode, "child.c_key").asText());
     }
 
     /**
      * To json string.
-     *
      */
     @Test
-    public void toJsonString()  {
-        Assert.assertEquals(
-                "{\"\":{\"a_key\":\"a_val\"}}",
+    public void toJsonString() {
+        Assertions.assertEquals("{\"\":{\"a_key\":\"a_val\"}}",
                 $.json.toJsonString($.json.createObjectNode().set("", $.json.createObjectNode().put("a_key", "a_val"))));
     }
 
     /**
      * To json.
-     *
      */
     @Test
-    public void toJson()  {
-        Assert.assertEquals("a_val",
-                $.json.toJson("{'a_key':'a_val'}").get("a_key").asText());
-        Assert.assertEquals("a_val",
-                $.json.toJson("{\r\n'a_key':'a_val' // 注释\r\n}").get("a_key").asText());
+    public void toJson() {
+        Assertions.assertEquals("a_val", $.json.toJson("{'a_key':'a_val'}").get("a_key").asText());
+        Assertions.assertEquals("a_val", $.json.toJson("{\r\n'a_key':'a_val' // 注释\r\n}").get("a_key").asText());
     }
 
     /**
      * To list.
-     *
      */
     @Test
-    public void toList()  {
+    public void toList() {
         TestIdModel model =
-                $.json.toList("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]",
-                        TestIdModel.class).get(0);
-        Assert.assertEquals("sunisle", model.getName());
-        Assert.assertEquals("1", model.getCid());
-        Assert.assertEquals("123456789", model.getCreateTime());
-        Assert.assertEquals("2016-07-12 12:00:00", df.format(model.getDate()));
+                $.json.toList("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]", TestIdModel.class).get(0);
+        Assertions.assertEquals("sunisle", model.getName());
+        Assertions.assertEquals("1", model.getCid());
+        Assertions.assertEquals("123456789", model.getCreateTime());
+        Assertions.assertEquals("2016-07-12 12:00:00", DF.format(model.getDate()));
     }
 
     /**
      * To set.
-     *
      */
     @Test
-    public void toSet()  {
+    public void toSet() {
         TestIdModel model =
-                $.json.toSet("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]",
-                        TestIdModel.class).iterator().next();
-        Assert.assertEquals("sunisle", model.getName());
-        Assert.assertEquals("1", model.getCid());
-        Assert.assertEquals("123456789", model.getCreateTime());
-        Assert.assertEquals("2016-07-12 12:00:00", df.format(model.getDate()));
+                $.json.toSet("[{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}]", TestIdModel.class)
+                        .iterator().next();
+        Assertions.assertEquals("sunisle", model.getName());
+        Assertions.assertEquals("1", model.getCid());
+        Assertions.assertEquals("123456789", model.getCreateTime());
+        Assertions.assertEquals("2016-07-12 12:00:00", DF.format(model.getDate()));
     }
 
     /**
      * To map.
-     *
      */
     @Test
-    public void toMap()  {
+    public void toMap() {
         Map<String, TestIdModel> model =
                 $.json.toMap("{'sunisle':{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}}",
                         String.class, TestIdModel.class);
-        Assert.assertEquals("sunisle", model.keySet().iterator().next());
+        Assertions.assertEquals("sunisle", model.keySet().iterator().next());
         TestIdModel val = model.get("sunisle");
-        Assert.assertEquals("1", val.getCid());
-        Assert.assertEquals("123456789", val.getCreateTime());
-        Assert.assertEquals("2016-07-12 12:00:00", df.format(val.getDate()));
+        Assertions.assertEquals("1", val.getCid());
+        Assertions.assertEquals("123456789", val.getCreateTime());
+        Assertions.assertEquals("2016-07-12 12:00:00", DF.format(val.getDate()));
     }
 
     /**
      * To object.
-     *
      */
     @Test
-    public void toObject()  {
+    public void toObject() {
         TestIdModel model = $.json.toObject("{'name':'sunisle','createTime':123456789,'cid':'1','date':'2016-07-12 12:00:00'}", TestIdModel.class);
-        Assert.assertEquals("sunisle", model.getName());
-        Assert.assertEquals("1", model.getCid());
-        Assert.assertEquals("123456789", model.getCreateTime());
-        Assert.assertEquals("2016-07-12 12:00:00", df.format(model.getDate()));
+        Assertions.assertEquals("sunisle", model.getName());
+        Assertions.assertEquals("1", model.getCid());
+        Assertions.assertEquals("123456789", model.getCreateTime());
+        Assertions.assertEquals("2016-07-12 12:00:00", DF.format(model.getDate()));
     }
 
     /**
      * To generic object.
-     *
      */
     @Test
     public void toGenericObject() {
-        GenericModel model = $.json.toObject(
-                "{'strs':['sunisle'],'exts':[{'createTime':'123456789','cid':'1'}],'extMap':{'a':{'createTime':'123456789','cid':'1'}}}",
-                GenericModel.class);
-        Assert.assertEquals("sunisle", model.getStrs().get(0));
-        Assert.assertEquals("1", model.getExts().get(0).getCid());
-        Assert.assertEquals("123456789", model.getExts().get(0).getCreateTime());
-        Assert.assertEquals("1", model.getExtMap().get("a").getCid());
-        Assert.assertEquals("123456789", model.getExtMap().get("a").getCreateTime());
+        GenericModel model =
+                $.json.toObject(
+                        "{'strs':['sunisle'],'exts':[{'createTime':'123456789','cid':'1'}],'extMap':{'a':{'createTime':'123456789','cid':'1'}}}",
+                        GenericModel.class);
+        Assertions.assertEquals("sunisle", model.getStrs().get(0));
+        Assertions.assertEquals("1", model.getExts().get(0).getCid());
+        Assertions.assertEquals("123456789", model.getExts().get(0).getCreateTime());
+        Assertions.assertEquals("1", model.getExtMap().get("a").getCid());
+        Assertions.assertEquals("123456789", model.getExtMap().get("a").getCreateTime());
     }
 
     /**
@@ -157,9 +147,9 @@ public class JsonHelperTest {
         model.setLocalDate(LocalDate.now());
         model.setLocalTime(LocalTime.now());
         TestIdModel model2 = $.json.toObject($.json.toJsonString(model), TestIdModel.class);
-        Assert.assertTrue(model.getLocalDateTime().isEqual(model2.getLocalDateTime()));
-        Assert.assertTrue(model.getLocalDate().isEqual(model2.getLocalDate()));
-        Assert.assertEquals(model.getLocalTime().toString(), model2.getLocalTime().toString());
+        Assertions.assertTrue(model.getLocalDateTime().isEqual(model2.getLocalDateTime()));
+        Assertions.assertTrue(model.getLocalDate().isEqual(model2.getLocalDate()));
+        Assertions.assertEquals(model.getLocalTime().toString(), model2.getLocalTime().toString());
     }
 
     /**
@@ -169,12 +159,12 @@ public class JsonHelperTest {
     public void testOptional() {
         TestIdModel model = new TestIdModel();
         TestIdModel model2 = $.json.toObject($.json.toJsonString(model), TestIdModel.class);
-        Assert.assertTrue(!model2.getOpt().isPresent());
+        Assertions.assertFalse(model2.getOpt().isPresent());
 
         model = new TestIdModel();
-        model.setOpt(Optional.ofNullable(null));
+        model.setOpt(Optional.empty());
         model2 = $.json.toObject($.json.toJsonString(model), TestIdModel.class);
-        Assert.assertTrue(!model2.getOpt().isPresent());
+        Assertions.assertFalse(model2.getOpt().isPresent());
 
         model = new TestIdModel();
         model.setOpt(Optional.of(new HashMap<>() {
@@ -183,7 +173,7 @@ public class JsonHelperTest {
             }
         }));
         model2 = $.json.toObject($.json.toJsonString(model), TestIdModel.class);
-        Assert.assertEquals("001", model2.getOpt().get().get("h"));
+        Assertions.assertEquals("001", model2.getOpt().get().get("h"));
     }
 
     /**
@@ -192,14 +182,14 @@ public class JsonHelperTest {
     @Test
     public void customMapper() {
         // Normal operation
-        Assert.assertEquals("1", $.json.toJson("{'a':'1'}").get("a").asText());
+        Assertions.assertEquals("1", $.json.toJson("{'a':'1'}").get("a").asText());
         // Custom Mapper operation
         $.json("otherInst").getMapper().configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, false);
         try {
             $.json("otherInst").toJson("{'a':'1'}");
-            Assert.fail();
+            Assertions.fail();
         } catch (RuntimeException e) {
-            Assert.assertTrue(e.getMessage().contains("com.fasterxml.jackson.core.JsonParseException: Unexpected character"));
+            Assertions.assertTrue(e.getMessage().contains("com.fasterxml.jackson.core.JsonParseException: Unexpected character"));
         }
     }
 

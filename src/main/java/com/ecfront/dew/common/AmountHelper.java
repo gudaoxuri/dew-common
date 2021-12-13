@@ -33,46 +33,6 @@ public class AmountHelper {
     private static final String[] U1 = {"", "拾", "佰", "仟"};
     private static final String[] U2 = {"", "万", "亿"};
 
-    /**
-     * 将金额（整数部分等于或少于12位，小数部分2位）转换为中文大写形式.
-     *
-     * @param amount 金额数字
-     * @return 中文大写 string
-     * @throws IllegalArgumentException the illegal argument exception
-     */
-    public String convert(String amount) throws IllegalArgumentException {
-        amount = amount.replace(",", "");
-        String[] amountArray = amount.split("\\.");
-        if (amountArray.length != 2) {
-            amount = amount + ".00";
-        } else {
-            if (amountArray[1].length() == 1) {
-                amount = amount + "0";
-            }
-        }
-        if (amount.equals("0.00")) {
-            return "零元整";
-        }
-        Matcher matcher = AMOUNT_PATTERN.matcher(amount);
-        if (!matcher.find()) {
-            throw new IllegalArgumentException("输入金额有误.");
-        }
-        String integer = matcher.group(1); // 整数部分
-        String fraction = matcher.group(2); // 小数部分
-        StringBuilder sb = new StringBuilder("");
-        if (!integer.equals("0")) {
-            sb.append(integer2rmb(integer)).append(UNITS[0]); // 整数部分
-        }
-        if (fraction.equals("00")) {
-            sb.append(UNITS[3]); // 添加[整]
-        } else if (fraction.startsWith("0") && integer.equals("0")) {
-            sb.append(fraction2rmb(fraction).substring(1)); // 去掉分前面的[零]
-        } else {
-            sb.append(fraction2rmb(fraction)); // 小数部分
-        }
-        return sb.toString();
-    }
-
     // 将金额小数部分转换为中文大写
     private static String fraction2rmb(String fraction) {
         char jiao = fraction.charAt(0); // 角
@@ -111,6 +71,46 @@ public class AmountHelper {
             }
         }
         return buffer.reverse().toString();
+    }
+
+    /**
+     * 将金额（整数部分等于或少于12位，小数部分2位）转换为中文大写形式.
+     *
+     * @param amount 金额数字
+     * @return 中文大写 string
+     * @throws IllegalArgumentException the illegal argument exception
+     */
+    public String convert(String amount) throws IllegalArgumentException {
+        amount = amount.replace(",", "");
+        String[] amountArray = amount.split("\\.");
+        if (amountArray.length != 2) {
+            amount = amount + ".00";
+        } else {
+            if (amountArray[1].length() == 1) {
+                amount = amount + "0";
+            }
+        }
+        if (amount.equals("0.00")) {
+            return "零元整";
+        }
+        Matcher matcher = AMOUNT_PATTERN.matcher(amount);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException("输入金额有误.");
+        }
+        String integer = matcher.group(1); // 整数部分
+        String fraction = matcher.group(2); // 小数部分
+        StringBuilder sb = new StringBuilder();
+        if (!integer.equals("0")) {
+            sb.append(integer2rmb(integer)).append(UNITS[0]); // 整数部分
+        }
+        if (fraction.equals("00")) {
+            sb.append(UNITS[3]); // 添加[整]
+        } else if (fraction.startsWith("0") && integer.equals("0")) {
+            sb.append(fraction2rmb(fraction).substring(1)); // 去掉分前面的[零]
+        } else {
+            sb.append(fraction2rmb(fraction)); // 小数部分
+        }
+        return sb.toString();
     }
 
 }

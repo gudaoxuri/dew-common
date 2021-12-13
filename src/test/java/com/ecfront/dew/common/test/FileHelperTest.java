@@ -17,12 +17,14 @@
 package com.ecfront.dew.common.test;
 
 import com.ecfront.dew.common.$;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The type File helper test.
@@ -45,20 +47,17 @@ public class FileHelperTest {
 
     /**
      * Test file.
-     *
-     * @throws Exception the exception
      */
     @Test
-    public void testFile() throws Exception {
+    public void testFile() {
         String conf = $.file.readAllByClassPath("conf1.json", "UTF-8");
-        Assert.assertTrue(conf.contains("1"));
+        assertTrue(conf.contains("1"));
         conf = $.file.readAllByClassPath("conf/conf2.json", "UTF-8");
-        Assert.assertTrue(conf.contains("2"));
+        assertTrue(conf.contains("2"));
 
-        $.file.copyStreamToPath(
-                Test.class.getResourceAsStream("/LICENSE-junit.txt"),
-                currentPath + File.separator + "LICENSE-junit-copy.txt");
-        Assert.assertTrue(new File(currentPath + File.separator + "LICENSE-junit-copy.txt").exists());
+        $.file.copyStreamToPath(Test.class.getResourceAsStream("/META-INF/LICENSE.md"), currentPath + File.separator + "LICENSE-junit-copy" +
+                ".txt");
+        assertTrue(new File(currentPath + File.separator + "LICENSE-junit-copy.txt").exists());
         new File(currentPath + File.separator + "LICENSE-junit-copy.txt").delete();
         // Glob Math
         List<String> files = new ArrayList<>() {
@@ -75,38 +74,38 @@ public class FileHelperTest {
             }
         };
         List<String> matchFiles = $.file.mathFilter(files, new ArrayList<>());
-        Assert.assertEquals(files.size(), matchFiles.size());
+        assertEquals(files.size(), matchFiles.size());
         matchFiles = $.file.mathFilter(files, new ArrayList<>() {
             {
                 add("/models/*.xml");
             }
         });
-        Assert.assertEquals(1, matchFiles.size());
+        assertEquals(1, matchFiles.size());
         matchFiles = $.file.mathFilter(files, new ArrayList<>() {
             {
                 add("**/*.xml");
             }
         });
-        Assert.assertEquals(3, matchFiles.size());
+        assertEquals(3, matchFiles.size());
         matchFiles = $.file.mathFilter(files, new ArrayList<>() {
             {
                 add("**/*.xml");
                 add("**/*.{java,yml}");
             }
         });
-        Assert.assertEquals(7, matchFiles.size());
+        assertEquals(7, matchFiles.size());
         matchFiles = $.file.mathFilter(files, new ArrayList<>() {
             {
                 add("**/java/**");
             }
         });
-        Assert.assertEquals(2, matchFiles.size());
-        Assert.assertTrue($.file.anyMath(files, new ArrayList<>() {
+        assertEquals(2, matchFiles.size());
+        assertTrue($.file.anyMath(files, new ArrayList<>() {
             {
                 add("**/java/**");
             }
         }));
-        Assert.assertTrue($.file.noneMath(files, new ArrayList<>() {
+        assertTrue($.file.noneMath(files, new ArrayList<>() {
             {
                 add("**/java/*");
             }

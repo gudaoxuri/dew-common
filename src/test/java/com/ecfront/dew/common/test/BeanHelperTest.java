@@ -21,8 +21,8 @@ import com.ecfront.dew.common.BeanHelper;
 import com.ecfront.dew.common.test.bean.IdxController;
 import com.ecfront.dew.common.test.bean.TestAnnotation;
 import com.ecfront.dew.common.test.bean.User;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -39,8 +39,6 @@ public class BeanHelperTest {
 
     /**
      * Copy properties.
-     *
-     * @throws Exception the exception
      */
     @Test
     public void copyProperties() {
@@ -50,7 +48,7 @@ public class BeanHelperTest {
         dest.setAge(11);
         dest.setWorkAge(11);
         $.bean.copyProperties(dest, ori);
-        Assert.assertTrue(Objects.equals(dest.getName(), "张三") && dest.getAge() == 0 && dest.getWorkAge() == 11);
+        Assertions.assertTrue(Objects.equals(dest.getName(), "张三") && dest.getAge() == 0 && dest.getWorkAge() == 11);
     }
 
     /**
@@ -59,7 +57,7 @@ public class BeanHelperTest {
     @Test
     public void findClassAnnotation() {
         TestAnnotation.RPC ann = $.bean.getClassAnnotation(IdxController.class, TestAnnotation.RPC.class);
-        Assert.assertEquals("/idx/", ann.path());
+        Assertions.assertEquals("/idx/", ann.path());
     }
 
     /**
@@ -68,13 +66,13 @@ public class BeanHelperTest {
     @Test
     public void findFieldInfo() {
         Map<String, BeanHelper.FieldInfo> fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, null);
-        Assert.assertEquals(2, fieldsInfo.size());
+        Assertions.assertEquals(2, fieldsInfo.size());
         fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, new HashSet<>() {
             {
                 add(Deprecated.class);
             }
         }, null, null);
-        Assert.assertEquals(1, fieldsInfo.size());
+        Assertions.assertEquals(1, fieldsInfo.size());
         fieldsInfo = $.bean.findFieldsInfo(IdxController.class, new HashSet<>() {
             {
                 add("parentField");
@@ -84,13 +82,13 @@ public class BeanHelperTest {
                 add(Deprecated.class);
             }
         }, null, null);
-        Assert.assertEquals(0, fieldsInfo.size());
+        Assertions.assertEquals(0, fieldsInfo.size());
         fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, null, new HashSet<>() {
             {
                 add(Deprecated.class);
             }
         });
-        Assert.assertEquals(1, fieldsInfo.size());
+        Assertions.assertEquals(1, fieldsInfo.size());
         fieldsInfo = $.bean.findFieldsInfo(IdxController.class, null, null, new HashSet<>() {
             {
                 add("parentField");
@@ -100,7 +98,7 @@ public class BeanHelperTest {
                 add(TestAnnotation.RPC.class);
             }
         });
-        Assert.assertEquals(1, fieldsInfo.size());
+        Assertions.assertEquals(1, fieldsInfo.size());
     }
 
     /**
@@ -109,13 +107,13 @@ public class BeanHelperTest {
     @Test
     public void findMethodInfo() {
         List<BeanHelper.MethodInfo> methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, null);
-        Assert.assertEquals(methodsInfo.size(), 7);
+        Assertions.assertEquals(methodsInfo.size(), 7);
         methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, new HashSet<>() {
             {
                 add(TestAnnotation.GET.class);
             }
         }, null, null);
-        Assert.assertEquals(methodsInfo.size(), 6);
+        Assertions.assertEquals(methodsInfo.size(), 6);
         methodsInfo = $.bean.findMethodsInfo(IdxController.class, new HashSet<>() {
             {
                 add("find");
@@ -125,13 +123,13 @@ public class BeanHelperTest {
                 add(TestAnnotation.GET.class);
             }
         }, null, null);
-        Assert.assertEquals(methodsInfo.size(), 4);
+        Assertions.assertEquals(methodsInfo.size(), 4);
         methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, null, new HashSet<>() {
             {
                 add(TestAnnotation.POST.class);
             }
         });
-        Assert.assertEquals(methodsInfo.size(), 3);
+        Assertions.assertEquals(methodsInfo.size(), 3);
         methodsInfo = $.bean.findMethodsInfo(IdxController.class, null, null, new HashSet<>() {
             {
                 add("childFind");
@@ -141,7 +139,7 @@ public class BeanHelperTest {
                 add(TestAnnotation.POST.class);
             }
         });
-        Assert.assertEquals(methodsInfo.size(), 1);
+        Assertions.assertEquals(methodsInfo.size(), 1);
     }
 
     /**
@@ -150,8 +148,8 @@ public class BeanHelperTest {
     @Test
     public void parseRelFieldAndMethod() {
         Map<String, Method[]> rel = $.bean.parseRelFieldAndMethod(User.class, null, null, null, null);
-        Assert.assertEquals(6, rel.size());
-        Assert.assertEquals(2, rel.get("enable").length);
+        Assertions.assertEquals(6, rel.size());
+        Assertions.assertEquals(2, rel.get("enable").length);
     }
 
     /**
@@ -162,7 +160,7 @@ public class BeanHelperTest {
         User user = new User();
         user.setName("张三");
         Map<String, Object> values = $.bean.findValuesByRel(user, $.bean.parseRelFieldAndMethod(User.class, null, null, null, null));
-        Assert.assertEquals("张三", values.get("name"));
+        Assertions.assertEquals("张三", values.get("name"));
     }
 
     /**
@@ -173,7 +171,7 @@ public class BeanHelperTest {
         User user = new User();
         user.setName("张三");
         Map<String, Object> values = $.bean.findValues(user, null, null, null, null);
-        Assert.assertEquals("张三", values.get("name"));
+        Assertions.assertEquals("张三", values.get("name"));
     }
 
     /**
@@ -183,9 +181,9 @@ public class BeanHelperTest {
     public void getValue() {
         User user = new User();
         user.setName("张三");
-        Assert.assertEquals("张三", $.bean.getValue(user, "name"));
+        Assertions.assertEquals("张三", $.bean.getValue(user, "name"));
         user.setName("李四");
-        Assert.assertEquals("李四", $.bean.getValue(user, "name"));
+        Assertions.assertEquals("李四", $.bean.getValue(user, "name"));
     }
 
     /**
@@ -196,7 +194,7 @@ public class BeanHelperTest {
         User user = new User();
         $.bean.setValue(user, "name", "李四");
         $.bean.setValue(user, "name", "张三");
-        Assert.assertEquals("张三", user.getName());
+        Assertions.assertEquals("张三", user.getName());
     }
 
 }

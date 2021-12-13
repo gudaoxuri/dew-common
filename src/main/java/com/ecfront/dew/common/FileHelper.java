@@ -227,8 +227,7 @@ public class FileHelper {
         }
         List<PathMatcher> matchers = convertGlobMatchers(mathRules);
         return convertPaths(files)
-                .filter(path -> matchers.stream()
-                        .anyMatch(mather -> mather.matches(path)))
+                .filter(path -> matchers.stream().anyMatch(mather -> mather.matches(path)))
                 .map(Path::toString)
                 .collect(Collectors.toList());
     }
@@ -249,9 +248,7 @@ public class FileHelper {
             return true;
         }
         List<PathMatcher> matchers = convertGlobMatchers(mathRules);
-        return convertPaths(files)
-                .anyMatch(path -> matchers.stream()
-                        .anyMatch(mather -> mather.matches(path)));
+        return convertPaths(files).anyMatch(path -> matchers.stream().anyMatch(mather -> mather.matches(path)));
     }
 
     /**
@@ -270,19 +267,15 @@ public class FileHelper {
             return false;
         }
         List<PathMatcher> matchers = convertGlobMatchers(mathRules);
-        return convertPaths(files)
-                .anyMatch(path -> matchers.stream()
-                        .noneMatch(mather -> mather.matches(path)));
+        return convertPaths(files).anyMatch(path -> matchers.stream().noneMatch(mather -> mather.matches(path)));
     }
 
     private List<PathMatcher> convertGlobMatchers(List<String> mathRules) {
-        return mathRules.stream()
-                .map(rule -> FileSystems.getDefault().getPathMatcher("glob:" + rule))
-                .collect(Collectors.toList());
+        return mathRules.stream().map(rule -> FileSystems.getDefault().getPathMatcher("glob:" + rule)).collect(Collectors.toList());
     }
 
     private Stream<Path> convertPaths(List<String> files) {
-        return files.stream().map(path -> Paths.get(path));
+        return files.stream().map(Paths::get);
     }
 
 }

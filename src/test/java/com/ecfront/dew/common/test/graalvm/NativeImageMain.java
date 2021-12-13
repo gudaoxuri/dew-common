@@ -25,6 +25,9 @@ import com.ecfront.dew.common.test.*;
  */
 public class NativeImageMain {
 
+    private NativeImageMain() {
+    }
+
     /**
      * The entry point of application.
      *

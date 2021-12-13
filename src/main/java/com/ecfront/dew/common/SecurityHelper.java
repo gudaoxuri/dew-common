@@ -45,12 +45,6 @@ import java.util.Objects;
 public class SecurityHelper {
 
     /**
-     * Instantiates a new Security helper.
-     */
-    SecurityHelper() {
-    }
-
-    /**
      * The Symmetric.
      */
     public Symmetric symmetric = new Symmetric();
@@ -62,6 +56,11 @@ public class SecurityHelper {
      * The Digest.
      */
     public Digest digest = new Digest();
+    /**
+     * Instantiates a new Security helper.
+     */
+    SecurityHelper() {
+    }
 
     /**
      * Base64 转 数组.
@@ -137,6 +136,42 @@ public class SecurityHelper {
         return new String(Base64.getEncoder().encode(str.getBytes(encode)), encode);
     }
 
+    /**
+     * Byte[] to hex.
+     *
+     * @param buf the buf
+     * @return the string
+     */
+    public String byte2HexStr(byte[] buf) {
+        var sb = new StringBuilder();
+        for (byte abuf : buf) {
+            var hex = Integer.toHexString(abuf & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            sb.append(hex);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Hex string to byte[].
+     *
+     * @param hexStr the hex str
+     * @return the byte [ ]
+     */
+    public byte[] hexStr2Byte(String hexStr) {
+        if (hexStr.length() < 1) {
+            return null;
+        }
+        var result = new byte[hexStr.length() / 2];
+        for (int i = 0; i < hexStr.length() / 2; i++) {
+            var high = Integer.parseInt(hexStr.substring(i << 1, (i << 1) + 1), 16);
+            var low = Integer.parseInt(hexStr.substring((i << 1) + 1, (i << 1) + 2), 16);
+            result[i] = (byte) ((high << 4) + low);
+        }
+        return result;
+    }
 
     /**
      * 摘要.
@@ -154,12 +189,10 @@ public class SecurityHelper {
          * @throws RTGeneralSecurityException the rt general security exception
          */
         public String digest(String text, String algorithm) throws RTGeneralSecurityException {
-            switch (algorithm.toLowerCase()) {
-                case "bcrypt":
-                    return BCrypt.hashpw(text, BCrypt.gensalt());
-                default:
-                    return byte2HexStr(digest(text.getBytes(StandardCharsets.UTF_8), algorithm));
+            if ("bcrypt".equalsIgnoreCase(algorithm)) {
+                return BCrypt.hashpw(text, BCrypt.gensalt());
             }
+            return byte2HexStr(digest(text.getBytes(StandardCharsets.UTF_8), algorithm));
         }
 
         /**
@@ -171,17 +204,15 @@ public class SecurityHelper {
          * @throws RTGeneralSecurityException the rt general security exception
          */
         public byte[] digest(byte[] text, String algorithm) throws RTGeneralSecurityException {
-            switch (algorithm.toLowerCase()) {
-                case "bcrypt":
-                    return BCrypt.hashpw(new String(text, StandardCharsets.UTF_8), BCrypt.gensalt()).getBytes(StandardCharsets.UTF_8);
-                default:
-                    try {
-                        MessageDigest md = MessageDigest.getInstance(algorithm);
-                        md.update(text);
-                        return md.digest();
-                    } catch (NoSuchAlgorithmException e) {
-                        throw new RTGeneralSecurityException(e);
-                    }
+            if ("bcrypt".equalsIgnoreCase(algorithm)) {
+                return BCrypt.hashpw(new String(text, StandardCharsets.UTF_8), BCrypt.gensalt()).getBytes(StandardCharsets.UTF_8);
+            }
+            try {
+                var md = MessageDigest.getInstance(algorithm);
+                md.update(text);
+                return md.digest();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RTGeneralSecurityException(e);
             }
         }
 
@@ -209,7 +240,7 @@ public class SecurityHelper {
          */
         public byte[] digest(byte[] text, byte[] secretKey, String algorithm) throws RTGeneralSecurityException {
             try {
-                Mac mac = Mac.getInstance(algorithm);
+                var mac = Mac.getInstance(algorithm);
                 mac.init(new SecretKeySpec(secretKey, algorithm));
                 return mac.doFinal(text);
             } catch (NoSuchAlgorithmException | InvalidKeyException e) {
@@ -229,13 +260,10 @@ public class SecurityHelper {
          */
         public boolean validate(String text, String ciphertext, String algorithm) {
             boolean result;
-            switch (algorithm.toLowerCase()) {
-                case "bcrypt":
-                    result = BCrypt.checkpw(text, ciphertext);
-                    break;
-                default:
-                    result = Objects.equals(digest(text, algorithm), ciphertext);
-                    break;
+            if ("bcrypt".equalsIgnoreCase(algorithm)) {
+                result = BCrypt.checkpw(text, ciphertext);
+            } else {
+                result = Objects.equals(digest(text, algorithm), ciphertext);
             }
             return result;
         }
@@ -255,44 +283,6 @@ public class SecurityHelper {
         }
 
     }
-
-    /**
-     * Byte[] to hex.
-     *
-     * @param buf the buf
-     * @return the string
-     */
-    public String byte2HexStr(byte[] buf) {
-        StringBuilder sb = new StringBuilder();
-        for (byte abuf : buf) {
-            String hex = Integer.toHexString(abuf & 0xFF);
-            if (hex.length() == 1) {
-                hex = '0' + hex;
-            }
-            sb.append(hex);
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Hex string to byte[].
-     *
-     * @param hexStr the hex str
-     * @return the byte [ ]
-     */
-    public byte[] hexStr2Byte(String hexStr) {
-        if (hexStr.length() < 1) {
-            return null;
-        }
-        byte[] result = new byte[hexStr.length() / 2];
-        for (int i = 0; i < hexStr.length() / 2; i++) {
-            int high = Integer.parseInt(hexStr.substring(i << 1, (i << 1) + 1), 16);
-            int low = Integer.parseInt(hexStr.substring((i << 1) + 1, (i << 1) + 2), 16);
-            result[i] = (byte) ((high << 4) + low);
-        }
-        return result;
-    }
-
 
     /**
      * 对称加密.
@@ -315,12 +305,12 @@ public class SecurityHelper {
                 throw new RTGeneralSecurityException(String.format("%s must input password", algorithm));
             }
             try {
-                KeyGenerator kgen = KeyGenerator.getInstance(algorithm);
-                SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+                var kgen = KeyGenerator.getInstance(algorithm);
+                var secureRandom = SecureRandom.getInstance("SHA1PRNG");
                 secureRandom.setSeed(password.getBytes(StandardCharsets.UTF_8));
                 kgen.init(128, secureRandom);
-                SecretKeySpec key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
-                Cipher cipher = Cipher.getInstance(algorithm);
+                var key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
+                var cipher = Cipher.getInstance(algorithm);
                 cipher.init(Cipher.ENCRYPT_MODE, key);
                 return byte2HexStr(cipher.doFinal(strSrc.getBytes(StandardCharsets.UTF_8)));
             } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
@@ -339,12 +329,12 @@ public class SecurityHelper {
          */
         public String decrypt(String strEncrypted, String password, String algorithm) throws RTGeneralSecurityException {
             try {
-                KeyGenerator kgen = KeyGenerator.getInstance(algorithm);
-                SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+                var kgen = KeyGenerator.getInstance(algorithm);
+                var secureRandom = SecureRandom.getInstance("SHA1PRNG");
                 secureRandom.setSeed(password.getBytes(StandardCharsets.UTF_8));
                 kgen.init(128, secureRandom);
-                SecretKeySpec key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
-                Cipher cipher = Cipher.getInstance(algorithm);
+                var key = new SecretKeySpec(kgen.generateKey().getEncoded(), algorithm);
+                var cipher = Cipher.getInstance(algorithm);
                 cipher.init(Cipher.DECRYPT_MODE, key);
                 return new String(cipher.doFinal(hexStr2Byte(strEncrypted)), StandardCharsets.UTF_8);
             } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
@@ -369,9 +359,9 @@ public class SecurityHelper {
          */
         public Map<String, String> generateKeys(String algorithm, int length) throws RTGeneralSecurityException {
             try {
-                KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm);
+                var keyPairGenerator = KeyPairGenerator.getInstance(algorithm);
                 keyPairGenerator.initialize(length);
-                KeyPair keyPair = keyPairGenerator.generateKeyPair();
+                var keyPair = keyPairGenerator.generateKeyPair();
                 return new HashMap<>() {
                     {
                         put("PublicKey", encodeBytesToBase64(keyPair.getPublic().getEncoded()));
@@ -392,8 +382,8 @@ public class SecurityHelper {
          * @throws RTGeneralSecurityException the rt general security exception
          */
         public PrivateKey getPrivateKey(String key, String algorithm) throws RTGeneralSecurityException {
-            byte[] privateKey = decodeBase64ToBytes(key);
-            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKey);
+            var privateKey = decodeBase64ToBytes(key);
+            var spec = new PKCS8EncodedKeySpec(privateKey);
             try {
                 return KeyFactory.getInstance(algorithm).generatePrivate(spec);
             } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -410,8 +400,8 @@ public class SecurityHelper {
          * @throws RTGeneralSecurityException the rt general security exception
          */
         public PublicKey getPublicKey(String key, String algorithm) throws RTGeneralSecurityException {
-            byte[] privateKey = decodeBase64ToBytes(key);
-            X509EncodedKeySpec spec = new X509EncodedKeySpec(privateKey);
+            var privateKey = decodeBase64ToBytes(key);
+            var spec = new X509EncodedKeySpec(privateKey);
             try {
                 return KeyFactory.getInstance(algorithm).generatePublic(spec);
             } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -431,7 +421,7 @@ public class SecurityHelper {
          */
         public byte[] encrypt(byte[] data, Key key, int keyLength, String algorithm) throws RTGeneralSecurityException {
             try {
-                Cipher cipher = Cipher.getInstance(algorithm);
+                var cipher = Cipher.getInstance(algorithm);
                 cipher.init(Cipher.ENCRYPT_MODE, key);
                 return packageCipher(data, cipher, keyLength / 8 - 11, data.length);
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
@@ -451,7 +441,7 @@ public class SecurityHelper {
          */
         public byte[] decrypt(byte[] data, Key key, int keyLength, String algorithm) throws RTGeneralSecurityException {
             try {
-                Cipher cipher = Cipher.getInstance(algorithm);
+                var cipher = Cipher.getInstance(algorithm);
                 cipher.init(Cipher.DECRYPT_MODE, key);
                 return packageCipher(data, cipher, keyLength / 8, data.length);
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
@@ -460,7 +450,7 @@ public class SecurityHelper {
         }
 
         private byte[] packageCipher(byte[] data, Cipher cipher, int maxLength, int inputLength) throws RTGeneralSecurityException, RTIOException {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            var out = new ByteArrayOutputStream();
             int offSet = 0;
             byte[] cache;
             int i = 0;
@@ -475,7 +465,7 @@ public class SecurityHelper {
                     i++;
                     offSet = i * maxLength;
                 }
-                byte[] decryptedData = out.toByteArray();
+                var decryptedData = out.toByteArray();
                 out.close();
                 return decryptedData;
             } catch (IllegalBlockSizeException | BadPaddingException e) {
@@ -496,7 +486,7 @@ public class SecurityHelper {
          */
         public byte[] sign(PrivateKey key, byte[] data, String algorithm) throws RTGeneralSecurityException {
             try {
-                Signature signer = Signature.getInstance(algorithm);
+                var signer = Signature.getInstance(algorithm);
                 signer.initSign(key);
                 signer.update(data);
                 return signer.sign();
@@ -517,7 +507,7 @@ public class SecurityHelper {
          */
         public boolean verify(PublicKey key, byte[] data, byte[] signature, String algorithm) throws RTGeneralSecurityException {
             try {
-                Signature verifier = Signature.getInstance(algorithm);
+                var verifier = Signature.getInstance(algorithm);
                 verifier.initVerify(key);
                 verifier.update(data);
                 return verifier.verify(signature);

@@ -33,13 +33,7 @@ import java.util.Map;
  */
 public class MimeHelper {
 
-    /**
-     * Instantiates a new Mime helper.
-     */
-    MimeHelper() {
-    }
-
-    private static Map<String, List<String>> types = new HashMap<>() {
+    private static final Map<String, List<String>> TYPES = new HashMap<>() {
         {
             put("office", new ArrayList<>() {
                 {
@@ -105,52 +99,30 @@ public class MimeHelper {
             });
         }
     };
-
     /**
      * The Type office.
      */
-    public final List<String> typeOffice = types.get("office");
+    public final List<String> typeOffice = TYPES.get("office");
     /**
      * The Type txt.
      */
-    public final List<String> typeTxt = types.get("txt");
+    public final List<String> typeTxt = TYPES.get("txt");
     /**
      * The Type compress.
      */
-    public final List<String> typeCompress = types.get("compress");
+    public final List<String> typeCompress = TYPES.get("compress");
     /**
      * The Type image.
      */
-    public final List<String> typeImage = types.get("image");
+    public final List<String> typeImage = TYPES.get("image");
     /**
      * The Type audio.
      */
-    public final List<String> typeAudio = types.get("audio");
+    public final List<String> typeAudio = TYPES.get("audio");
     /**
      * The Type video.
      */
-    public final List<String> typeVideo = types.get("video");
-
-    /**
-     * Gets content type.
-     *
-     * @param file the file
-     * @return the content type
-     */
-    public String getContentType(File file) {
-        String[] nameSplit = file.getName().split("\\.");
-        if (nameSplit.length > 1 && mimeTypes.containsKey(nameSplit[nameSplit.length - 1].toLowerCase())) {
-            return mimeTypes.get(nameSplit[nameSplit.length - 1].toLowerCase());
-        }
-        String contentType;
-        try {
-            contentType = Files.probeContentType(file.toPath());
-        } catch (IOException e) {
-            throw new RTException(e);
-        }
-        return contentType;
-    }
-
+    public final List<String> typeVideo = TYPES.get("video");
     private final Map<String, String> mimeTypes = new HashMap<>() {
         {
             put("kar", "audio/midi");
@@ -312,6 +284,32 @@ public class MimeHelper {
             put("vcf", "text/x-vcard");
         }
     };
+
+    /**
+     * Instantiates a new Mime helper.
+     */
+    MimeHelper() {
+    }
+
+    /**
+     * Gets content type.
+     *
+     * @param file the file
+     * @return the content type
+     */
+    public String getContentType(File file) {
+        String[] nameSplit = file.getName().split("\\.");
+        if (nameSplit.length > 1 && mimeTypes.containsKey(nameSplit[nameSplit.length - 1].toLowerCase())) {
+            return mimeTypes.get(nameSplit[nameSplit.length - 1].toLowerCase());
+        }
+        String contentType;
+        try {
+            contentType = Files.probeContentType(file.toPath());
+        } catch (IOException e) {
+            throw new RTException(e);
+        }
+        return contentType;
+    }
 
     /**
      * The enum Mime.
@@ -499,7 +497,7 @@ public class MimeHelper {
          */
         RMVB("application/vnd.rn-realmedia-vbr");
 
-        private String flag;
+        private final String flag;
 
         Mime(String flag) {
             this.flag = flag;

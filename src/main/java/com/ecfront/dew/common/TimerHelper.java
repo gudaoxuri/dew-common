@@ -30,9 +30,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class TimerHelper {
 
-    private static ScheduledThreadPoolExecutor ex = new ScheduledThreadPoolExecutor(1);
+    private static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(1);
 
-    private static Map<String, ScheduledFuture<?>> CONTAINER = new HashMap<>();
+    private static final Map<String, ScheduledFuture<?>> CONTAINER = new HashMap<>();
 
     /**
      * Instantiates a new Timer helper.
@@ -53,9 +53,9 @@ public class TimerHelper {
         String id = UUID.randomUUID().toString();
         ScheduledFuture<?> future;
         if (fixedRate) {
-            future = ex.scheduleAtFixedRate(fun, delaySec, periodSec, TimeUnit.SECONDS);
+            future = EXECUTOR.scheduleAtFixedRate(fun, delaySec, periodSec, TimeUnit.SECONDS);
         } else {
-            future = ex.scheduleWithFixedDelay(fun, delaySec, periodSec, TimeUnit.SECONDS);
+            future = EXECUTOR.scheduleWithFixedDelay(fun, delaySec, periodSec, TimeUnit.SECONDS);
         }
         CONTAINER.put(id, future);
         return id;
@@ -92,7 +92,7 @@ public class TimerHelper {
      * @param fun      执行的方法
      */
     public void timer(long delaySec, Runnable fun) {
-        ex.schedule(fun, delaySec, TimeUnit.SECONDS);
+        EXECUTOR.schedule(fun, delaySec, TimeUnit.SECONDS);
     }
 
 }

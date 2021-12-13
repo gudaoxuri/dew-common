@@ -71,7 +71,7 @@ public enum StandardCode {
      */
     UNKNOWN("-1");
 
-    private String code;
+    private final String code;
 
     StandardCode(String code) {
         this.code = code;

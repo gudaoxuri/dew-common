@@ -20,8 +20,8 @@ import com.ecfront.dew.common.$;
 import com.ecfront.dew.common.ScriptHelper;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -38,15 +38,13 @@ public class ScriptHelperTest {
     @Test
     public void testScript() {
         ScriptHelper s1 = $.script(ScriptHelper.ScriptKind.JS, "function fun1(param){return param;}");
-        Assert.assertEquals("hi", s1.execute("fun1", String.class, "hi"));
+        Assertions.assertEquals("hi", s1.execute("fun1", String.class, "hi"));
 
-        ScriptHelper s2 = $.script(ScriptHelper.ScriptKind.JS, "function fun2(D){\r\n"
-                + " var data = JSON.parse(D);\n"
-                + " return $.field.getGenderByIdCard(data.idcard);\n"
-                + "}");
-        Assert.assertEquals("M", s2.execute("fun2", String.class, "{\"idcard\":\"110101201604016117\"}"));
+        ScriptHelper s2 = $.script(ScriptHelper.ScriptKind.JS,
+                "function fun2(D){\r\n" + " var data = JSON.parse(D);\n" + " return $.field.getGenderByIdCard(data.idcard);\n" + "}");
+        Assertions.assertEquals("M", s2.execute("fun2", String.class, "{\"idcard\":\"110101201604016117\"}"));
 
-        Assert.assertEquals(10240, (long) $.eval(ScriptHelper.ScriptKind.JS, Long.class, "1024*10"));
+        Assertions.assertEquals(10240, (long) $.eval(ScriptHelper.ScriptKind.JS, Long.class, "1024*10"));
     }
 
     /**
@@ -61,11 +59,11 @@ public class ScriptHelperTest {
         context.eval(Source.newBuilder("js", "function fun2(param){return param;}", "src.js").build());
         context.eval(Source.create("js", "function fun3(param){return param;}"));
         var result = context.getBindings("js").getMember("fun1").execute("aa").as(String.class);
-        Assert.assertEquals("aa", result);
+        Assertions.assertEquals("aa", result);
         result = context.getBindings("js").getMember("fun2").execute("aaa").as(String.class);
-        Assert.assertEquals("aaa", result);
+        Assertions.assertEquals("aaa", result);
         result = context.getBindings("js").getMember("fun3").execute("aaa").as(String.class);
-        Assert.assertEquals("aaa", result);
+        Assertions.assertEquals("aaa", result);
     }
 
 }

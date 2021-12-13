@@ -34,11 +34,10 @@ import java.util.stream.Collectors;
  */
 public class BeanHelper {
 
-    private NullAwareBeanUtilsBean copyPropertiesAdapter;
-
-    private boolean useCache = true;
     private static final Map<String, Map<String, Field>> FIELDS = new WeakHashMap<>();
     private static final Map<String, List<Method>> METHODS = new WeakHashMap<>();
+    private NullAwareBeanUtilsBean copyPropertiesAdapter;
+    private boolean useCache = true;
 
     /**
      * Instantiates a new Bean helper.
@@ -451,7 +450,7 @@ public class BeanHelper {
     private String packageMethodNameByField(Field field, boolean isSet) {
         if (isSet) {
             if (field.getType() == boolean.class && field.getName().startsWith("is") && field.getName().length() > 3) {
-                Character c = field.getName().substring(2, 1).toCharArray()[0];
+                char c = field.getName().substring(2, 1).toCharArray()[0];
                 if (c >= 'A' && c <= 'Z') {
                     return "set" + field.getName().substring(2);
                 }
@@ -460,7 +459,7 @@ public class BeanHelper {
         } else {
             if (field.getType() == boolean.class) {
                 if (field.getName().startsWith("is") && field.getName().length() > 3) {
-                    Character c = field.getName().substring(2, 1).toCharArray()[0];
+                    char c = field.getName().substring(2, 1).toCharArray()[0];
                     if (c >= 'A' && c <= 'Z') {
                         return field.getName();
                     }

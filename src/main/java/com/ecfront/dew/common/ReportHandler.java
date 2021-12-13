@@ -33,26 +33,56 @@ public abstract class ReportHandler {
     private List<String> output = new ArrayList<>();
     private List<String> error = new ArrayList<>();
 
+    /**
+     * 是否成功
+     *
+     * @return 是否成功
+     */
     public final boolean isSuccess() {
         return isSuccess;
     }
 
+    /**
+     * 是否失败
+     *
+     * @return 是否失败
+     */
     public final boolean isFail() {
         return isFail;
     }
 
+    /**
+     * 获取失败原因
+     *
+     * @return 失败原因
+     */
     public final String getFailMessage() {
         return failMessage;
     }
 
+    /**
+     * 获取进度
+     *
+     * @return 进度
+     */
     public final int getProgress() {
         return progress;
     }
 
+    /**
+     * 获取输出内容
+     *
+     * @return 输出内容
+     */
     public final List<String> getOutput() {
         return output;
     }
 
+    /**
+     * 获取错误信息
+     *
+     * @return 错误信息
+     */
     public final List<String> getError() {
         return error;
     }

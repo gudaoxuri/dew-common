@@ -26,6 +26,7 @@ import java.lang.annotation.Annotation;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,49 +45,6 @@ public class ClassScanHelper {
      * Instantiates a new Class scan helper.
      */
     ClassScanHelper() {
-    }
-
-    /**
-     * 扫描获取指定包下符合条件的class类.
-     *
-     * IMPORTANT: 此方法不支持 Native Image https://github.com/oracle/graal/issues/1108
-     *
-     * @param basePackage        要扫描的根包名
-     * @param includeAnnotations 要包含的注解，默认为全部
-     * @param includeNames       要包含的class名称（支持正则），默认为全部
-     * @return 符合条件的class类集合 set
-     */
-    public Set<Class<?>> scan(String basePackage,
-                              Set<Class<? extends Annotation>> includeAnnotations, Set<String> includeNames) throws RTIOException {
-        Set<Class<?>> result = new HashSet<>();
-        String packageDir = basePackage.replace('.', '/');
-        try {
-            Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageDir);
-            while (urls.hasMoreElements()) {
-                URL url = urls.nextElement();
-                switch (url.getProtocol()) {
-                    case "file":
-                        result.addAll(
-                                findAndAddClassesByFile(
-                                        basePackage, new File(URLDecoder.decode(url.getFile(), "UTF-8")),
-                                        includeAnnotations, includeNames)
-                        );
-                        break;
-                    case "jar":
-                        result.addAll(
-                                findAndAddClassesByJar(
-                                        ((JarURLConnection) url.openConnection()).getJarFile(),
-                                        packageDir, includeAnnotations, includeNames)
-                        );
-                        break;
-                    default:
-                        break;
-                }
-            }
-        } catch (IOException e) {
-            throw new RTException(e);
-        }
-        return result;
     }
 
     private static Set<Class<?>> findAndAddClassesByFile(String currentPackage, File currentFile,
@@ -172,6 +130,49 @@ public class ClassScanHelper {
             }
         }
         return false;
+    }
+
+    /**
+     * 扫描获取指定包下符合条件的class类.
+     * <p>
+     * IMPORTANT: 此方法不支持 Native Image https://github.com/oracle/graal/issues/1108
+     *
+     * @param basePackage        要扫描的根包名
+     * @param includeAnnotations 要包含的注解，默认为全部
+     * @param includeNames       要包含的class名称（支持正则），默认为全部
+     * @return 符合条件的class类集合 set
+     */
+    public Set<Class<?>> scan(String basePackage,
+                              Set<Class<? extends Annotation>> includeAnnotations, Set<String> includeNames) throws RTIOException {
+        Set<Class<?>> result = new HashSet<>();
+        String packageDir = basePackage.replace('.', '/');
+        try {
+            Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageDir);
+            while (urls.hasMoreElements()) {
+                URL url = urls.nextElement();
+                switch (url.getProtocol()) {
+                    case "file":
+                        result.addAll(
+                                findAndAddClassesByFile(
+                                        basePackage, new File(URLDecoder.decode(url.getFile(), StandardCharsets.UTF_8)),
+                                        includeAnnotations, includeNames)
+                        );
+                        break;
+                    case "jar":
+                        result.addAll(
+                                findAndAddClassesByJar(
+                                        ((JarURLConnection) url.openConnection()).getJarFile(),
+                                        packageDir, includeAnnotations, includeNames)
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            throw new RTException(e);
+        }
+        return result;
     }
 
 }

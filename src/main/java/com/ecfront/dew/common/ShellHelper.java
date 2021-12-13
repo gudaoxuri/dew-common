@@ -36,9 +36,9 @@ import java.util.concurrent.*;
  */
 public class ShellHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShellHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShellHelper.class);
 
-    private static final ExecutorService pool = Executors.newCachedThreadPool();
+    private static final ExecutorService POOL = Executors.newCachedThreadPool();
 
     ShellHelper() {
     }
@@ -61,7 +61,7 @@ public class ShellHelper {
      * @return 执行结果（每行输出内容）
      */
     public Resp<List<String>> execute(String cmd, Map<String, String> env) {
-        ReportHandler reportHandler = new ReportHandler() {
+        var reportHandler = new ReportHandler() {
         };
         try {
             execute(cmd, env, null, null, true, reportHandler).get();
@@ -72,10 +72,10 @@ public class ShellHelper {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            logger.error("Execute fail: ", e);
+            LOGGER.error("Execute fail: ", e);
             return Resp.customFail("", e.getMessage());
         } catch (Exception e) {
-            logger.error("Execute fail: ", e);
+            LOGGER.error("Execute fail: ", e);
             return Resp.customFail("", e.getMessage());
         }
     }
@@ -137,19 +137,19 @@ public class ShellHelper {
         } catch (IOException e) {
             throw new RTIOException(e);
         }
-        return pool.submit(new ProcessReadTask(process, cmd,
+        return POOL.submit(new ProcessReadTask(process, cmd,
                 successFlag, progressFlag, returnResult, reportHandler));
     }
 
     private static class ProcessReadTask implements Callable<Void> {
-        private Process process;
-        private InputStream errorStream;
-        private InputStream outputStream;
-        private String cmd;
-        private String successFlag;
-        private String progressFlag;
-        private boolean returnResult;
-        private ReportHandler reportHandler;
+        private final Process process;
+        private final InputStream errorStream;
+        private final InputStream outputStream;
+        private final String cmd;
+        private final String successFlag;
+        private final String progressFlag;
+        private final boolean returnResult;
+        private final ReportHandler reportHandler;
 
         ProcessReadTask(Process process, String cmd, String successFlag, String progressFlag, boolean returnResult, ReportHandler reportHandler) {
             this.process = process;
@@ -164,9 +164,9 @@ public class ShellHelper {
 
         @Override
         public Void call() throws InterruptedException, ExecutionException {
-            Future<List<String>> outputResultF = pool.submit(
+            Future<List<String>> outputResultF = POOL.submit(
                     new ProcessReader(outputStream, successFlag, progressFlag, returnResult, reportHandler, true));
-            Future<List<String>> errorResultF = pool.submit(
+            Future<List<String>> errorResultF = POOL.submit(
                     new ProcessReader(errorStream, successFlag, progressFlag, returnResult, reportHandler, false));
             List<String> outputResult = outputResultF.get();
             List<String> errorResult = errorResultF.get();
@@ -176,12 +176,12 @@ public class ShellHelper {
 
         private class ProcessReader implements Callable<List<String>> {
 
-            private InputStream stream;
-            private String successFlag;
-            private String progressFlag;
-            private boolean returnResult;
-            private ReportHandler reportHandler;
-            private boolean isOutput;
+            private final InputStream stream;
+            private final String successFlag;
+            private final String progressFlag;
+            private final boolean returnResult;
+            private final ReportHandler reportHandler;
+            private final boolean isOutput;
 
             ProcessReader(InputStream stream, String successFlag, String progressFlag,
                           boolean returnResult, ReportHandler reportHandler, boolean isOutput) {
@@ -203,10 +203,10 @@ public class ShellHelper {
                     while (!stop && (message = reader.readLine()) != null) {
                         if (isOutput) {
                             reportHandler.outputlog(message);
-                            logger.trace("Shell output content:" + message);
+                            LOGGER.trace("Shell output content:" + message);
                         } else {
                             reportHandler.errorlog(message);
-                            logger.trace("Shell error content:" + message);
+                            LOGGER.trace("Shell error content:" + message);
                         }
                         if (returnResult) {
                             result.add(message);
@@ -219,19 +219,19 @@ public class ShellHelper {
                         if (progressFlag != null
                                 && message.toLowerCase().contains(progressFlag.toLowerCase())) {
                             reportHandler.onProgress(
-                                    Integer.valueOf(message.substring(message.indexOf(progressFlag) + progressFlag.length()).trim()));
+                                    Integer.parseInt(message.substring(message.indexOf(progressFlag) + progressFlag.length()).trim()));
                         }
                     }
                 } catch (IOException e) {
                     String error = e.getMessage() + ", cmd : " + cmd
                             + "\r\n" + String.join("\r\n", result);
-                    logger.error("Execute fail: " + error, e);
+                    LOGGER.error("Execute fail: " + error, e);
                     reportHandler.onFail(error);
                 } finally {
                     if (0 != process.waitFor()) {
                         String error = "Abnormal termination , cmd : " + cmd
                                 + "\r\n" + String.join("\r\n", result);
-                        logger.warn("Execute fail: " + error);
+                        LOGGER.warn("Execute fail: " + error);
                         reportHandler.onFail(error);
                     }
                 }

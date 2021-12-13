@@ -16,8 +16,8 @@
 
 package com.ecfront.dew.common.test;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Avg Test.
@@ -26,7 +26,7 @@ import org.junit.Test;
  */
 public class AvgTest {
 
-    private Accumulator accumulator = new Accumulator();
+    private final Accumulator accumulator = new Accumulator();
 
     /**
      * Test.
@@ -36,23 +36,23 @@ public class AvgTest {
         accumulator.addDateValue(1);
         accumulator.addDateValue(2);
         accumulator.addDateValue(3);
-        Assert.assertEquals(2,accumulator.m,0);
+        Assertions.assertEquals(2, accumulator.m, 0);
         accumulator.addDateValue(4);
         accumulator.addDateValue(5);
         accumulator.addDateValue(6);
         accumulator.addDateValue(7);
-        Assert.assertEquals(4,accumulator.m,0);
+        Assertions.assertEquals(4, accumulator.m, 0);
     }
 
     static class Accumulator {
         private double m;
         private double s;
-        private int N;
+        private int n;
 
         public void addDateValue(double x) {
-            N++;
-            s = s + 1.0 * (N - 1) / N * (x - m) * (x - m);
-            m = m + (x - m) / N;
+            n++;
+            s = s + 1.0 * (n - 1) / n * (x - m) * (x - m);
+            m = m + (x - m) / n;
         }
 
         public double mean() {
@@ -60,7 +60,7 @@ public class AvgTest {
         }
 
         public double var() {
-            return s / (N - 1);
+            return s / (n - 1);
         }
 
         public double stddev() {

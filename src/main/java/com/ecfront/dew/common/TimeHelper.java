@@ -29,12 +29,6 @@ import java.util.TimeZone;
 public class TimeHelper {
 
     /**
-     * Instantiates a new Time helper.
-     */
-    TimeHelper() {
-    }
-
-    /**
      * The Msf.
      */
     public final SimpleDateFormat msf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
@@ -62,7 +56,6 @@ public class TimeHelper {
      * The Yf.
      */
     public final SimpleDateFormat yf = new SimpleDateFormat("yyyy");
-
     /**
      * The Yyyy mm dd hh mm ss sss.
      */
@@ -75,6 +68,11 @@ public class TimeHelper {
      * The Yyyy mm dd.
      */
     public final SimpleDateFormat yyyy_MM_dd = new SimpleDateFormat("yyyy-MM-dd");
+    /**
+     * Instantiates a new Time helper.
+     */
+    TimeHelper() {
+    }
 
     /**
      * Utc 2 local.

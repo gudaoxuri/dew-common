@@ -26,7 +26,7 @@
     <description>Dew公共模块</description>
     <url>https://github.com/gudaoxuri/dew-common</url>
     <packaging>jar</packaging>
-    <version>3.0.0-beta3</version>
+    <version>3.0.0-beta4</version>
 
     <properties>
         <java.version>11</java.version>
@@ -36,18 +36,18 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
-        <jackson.version>2.11.2</jackson.version>
+        <jackson.version>2.13.0</jackson.version>
         <beanutils.version>1.9.4</beanutils.version>
         <jbcrypt.version>0.4</jbcrypt.version>
-        <slf4j.version>1.7.30</slf4j.version>
-        <junit.version>4.12</junit.version>
+        <slf4j.version>1.7.32</slf4j.version>
+        <junit.version>5.8.2</junit.version>
+        <checkstyle.version>9.2</checkstyle.version>
 
-        <asciidoctor.maven.plugin.version>2.1.0</asciidoctor.maven.plugin.version>
-        <asciidoctorj.version>2.4.1</asciidoctorj.version>
-        <asciidoctorj.pdf.version>1.5.3</asciidoctorj.pdf.version>
-        <jruby.version>9.2.13.0</jruby.version>
+        <asciidoctor.maven.plugin.version>2.2.1</asciidoctor.maven.plugin.version>
+        <asciidoctorj.version>2.5.2</asciidoctorj.version>
+        <jruby.version>9.3.2.0</jruby.version>
 
-        <graalvm.version>20.2.0</graalvm.version>
+        <graalvm.version>21.3.0</graalvm.version>
         <mainClass></mainClass>
         <imageName></imageName>
     </properties>
@@ -117,8 +117,8 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
@@ -154,7 +154,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -182,12 +181,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.0.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.18</version>
+                        <version>${checkstyle.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>

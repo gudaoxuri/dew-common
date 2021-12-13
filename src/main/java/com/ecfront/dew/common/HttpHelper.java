@@ -56,25 +56,10 @@ import java.util.stream.Collectors;
  */
 public class HttpHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpHelper.class);
 
     private final HttpClient httpClient;
     private Function<PreRequestContext, PreRequestContext> preRequestFun;
-
-    private static class DefaultTrustManager implements X509TrustManager {
-        @Override
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
-        }
-
-        @Override
-        public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
-        }
-
-        @Override
-        public X509Certificate[] getAcceptedIssuers() {
-            return null;
-        }
-    }
 
     /**
      * 初始化.
@@ -85,18 +70,18 @@ public class HttpHelper {
     HttpHelper(int defaultTimeoutMS, boolean autoRedirect) {
         final Properties props = System.getProperties();
         props.setProperty("jdk.internal.httpclient.disableHostnameVerification", Boolean.TRUE.toString());
-        var allowAllHeaders = ManagementFactory.getRuntimeMXBean().getInputArguments().stream()
-                .anyMatch(arg -> arg.contains("--add-opens=java.net.http/jdk.internal.net.http.common"));
+        var allowAllHeaders = ManagementFactory.getRuntimeMXBean().getInputArguments().stream().anyMatch(arg -> arg.contains("--add-opens=java.net"
+                + ".http/jdk.internal.net.http.common"));
         if (allowAllHeaders) {
-            /**
-             * 解决JDK11对请求头限制的Bug.
-             * <p>
-             * 如果请求头有包含 "connection", "content-length", "date", "expect", "from", "host", "upgrade", "via", "warning" 字段，
-             * 则需要调用此方法解除限制。
-             * <p>
-             * NOTE: 需要在运行参数中添加 --add-opens java.net.http/jdk.internal.net.http.common=ALL-UNNAMED
-             *
-             * @return the resp
+            /*
+              解决JDK11对请求头限制的Bug.
+              <p>
+              如果请求头有包含 "connection", "content-length", "date", "expect", "from", "host", "upgrade", "via", "warning" 字段，
+              则需要调用此方法解除限制。
+              <p>
+              NOTE: 需要在运行参数中添加 --add-opens java.net.http/jdk.internal.net.http.common=ALL-UNNAMED
+
+              @return the resp
              * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8213696">JDK-8213696</a>
              */
             try {
@@ -112,10 +97,11 @@ public class HttpHelper {
         try {
             SSLContext ctx = SSLContext.getInstance("TLS");
             ctx.init(new KeyManager[0], new TrustManager[]{new DefaultTrustManager()}, new SecureRandom());
-            var httpClientBuild = HttpClient.newBuilder()
-                    .followRedirects(autoRedirect ? HttpClient.Redirect.ALWAYS : HttpClient.Redirect.NEVER)
-                    .sslContext(ctx)
-                    .sslParameters(new SSLParameters());
+            var httpClientBuild =
+                    HttpClient.newBuilder()
+                            .followRedirects(autoRedirect ? HttpClient.Redirect.ALWAYS : HttpClient.Redirect.NEVER)
+                            .sslContext(ctx)
+                            .sslParameters(new SSLParameters());
             if (defaultTimeoutMS != -1 && defaultTimeoutMS != 0) {
                 httpClientBuild.connectTimeout(Duration.ofMillis(defaultTimeoutMS));
             }
@@ -180,8 +166,7 @@ public class HttpHelper {
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
      */
-    public String get(String url, Map<String, String> header, String contentType, String charset,
-                      int timeoutMS) throws RTIOException {
+    public String get(String url, Map<String, String> header, String contentType, String charset, int timeoutMS) throws RTIOException {
         return request("GET", url, null, header, contentType, charset, timeoutMS).result;
     }
 
@@ -231,8 +216,7 @@ public class HttpHelper {
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
      */
-    public ResponseWrap getWrap(String url, Map<String, String> header, String contentType, String charset,
-                                int timeoutMS) throws RTIOException {
+    public ResponseWrap getWrap(String url, Map<String, String> header, String contentType, String charset, int timeoutMS) throws RTIOException {
         return request("GET", url, null, header, contentType, charset, timeoutMS);
     }
 
@@ -298,8 +282,7 @@ public class HttpHelper {
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
      */
-    public String post(String url, Object body, Map<String, String> header, String contentType, String charset,
-                       int timeoutMS) throws RTIOException {
+    public String post(String url, Object body, Map<String, String> header, String contentType, String charset, int timeoutMS) throws RTIOException {
         return request("POST", url, body, header, contentType, charset, timeoutMS).result;
     }
 
@@ -365,8 +348,8 @@ public class HttpHelper {
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
      */
-    public ResponseWrap postWrap(String url, Object body, Map<String, String> header, String contentType, String charset,
-                                 int timeoutMS) throws RTIOException {
+    public ResponseWrap postWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int timeoutMS)
+            throws RTIOException {
         return request("POST", url, body, header, contentType, charset, timeoutMS);
     }
 
@@ -432,8 +415,7 @@ public class HttpHelper {
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
      */
-    public String put(String url, Object body, Map<String, String> header, String contentType, String charset,
-                      int timeoutMS) throws RTIOException {
+    public String put(String url, Object body, Map<String, String> header, String contentType, String charset, int timeoutMS) throws RTIOException {
         return request("PUT", url, body, header, contentType, charset, timeoutMS).result;
     }
 
@@ -499,8 +481,8 @@ public class HttpHelper {
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
      */
-    public ResponseWrap putWrap(String url, Object body, Map<String, String> header, String contentType, String charset,
-                                int timeoutMS) throws RTIOException {
+    public ResponseWrap putWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int timeoutMS)
+            throws RTIOException {
         return request("PUT", url, body, header, contentType, charset, timeoutMS);
     }
 
@@ -566,8 +548,8 @@ public class HttpHelper {
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
      */
-    public String patch(String url, Object body, Map<String, String> header, String contentType, String charset,
-                        int timeoutMS) throws RTIOException {
+    public String patch(String url, Object body, Map<String, String> header, String contentType, String charset, int timeoutMS)
+            throws RTIOException {
         return request("PATCH", url, body, header, contentType, charset, timeoutMS).result;
     }
 
@@ -633,8 +615,8 @@ public class HttpHelper {
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
      */
-    public ResponseWrap patchWrap(String url, Object body, Map<String, String> header, String contentType, String charset,
-                                  int timeoutMS) throws RTIOException {
+    public ResponseWrap patchWrap(String url, Object body, Map<String, String> header, String contentType, String charset, int timeoutMS)
+            throws RTIOException {
         return request("PATCH", url, body, header, contentType, charset, timeoutMS);
     }
 
@@ -684,8 +666,7 @@ public class HttpHelper {
      * @return 请求结果 string
      * @throws RTIOException the rtio exception
      */
-    public String delete(String url, Map<String, String> header, String contentType, String charset,
-                         int timeoutMS) throws RTIOException {
+    public String delete(String url, Map<String, String> header, String contentType, String charset, int timeoutMS) throws RTIOException {
         return request("DELETE", url, null, header, contentType, charset, timeoutMS).result;
     }
 
@@ -735,8 +716,7 @@ public class HttpHelper {
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
      */
-    public ResponseWrap deleteWrap(String url, Map<String, String> header, String contentType, String charset,
-                                   int timeoutMS) throws RTIOException {
+    public ResponseWrap deleteWrap(String url, Map<String, String> header, String contentType, String charset, int timeoutMS) throws RTIOException {
         return request("DELETE", url, null, header, contentType, charset, timeoutMS);
     }
 
@@ -786,8 +766,8 @@ public class HttpHelper {
      * @return 请求结果 map
      * @throws RTIOException the rtio exception
      */
-    public Map<String, List<String>> head(String url, Map<String, String> header, String contentType, String charset,
-                                          int timeoutMS) throws RTIOException {
+    public Map<String, List<String>> head(String url, Map<String, String> header, String contentType, String charset, int timeoutMS)
+            throws RTIOException {
         return request("HEAD", url, null, header, contentType, charset, timeoutMS).head;
     }
 
@@ -837,8 +817,8 @@ public class HttpHelper {
      * @return 请求结果 map
      * @throws RTIOException the rtio exception
      */
-    public Map<String, List<String>> options(String url, Map<String, String> header, String contentType, String charset,
-                                             int timeoutMS) throws RTIOException {
+    public Map<String, List<String>> options(String url, Map<String, String> header, String contentType, String charset, int timeoutMS)
+            throws RTIOException {
         return request("OPTIONS", url, null, header, contentType, charset, timeoutMS).head;
     }
 
@@ -858,9 +838,7 @@ public class HttpHelper {
      * @return 请求结果 ，包含扩展信息
      * @throws RTIOException the rtio exception
      */
-    public ResponseWrap request(String method, String url, Object body,
-                                Map<String, String> header, String contentType,
-                                String requestCharset,
+    public ResponseWrap request(String method, String url, Object body, Map<String, String> header, String contentType, String requestCharset,
                                 int timeoutMS) throws RTIOException {
         if (header == null) {
             header = new HashMap<>();
@@ -880,42 +858,39 @@ public class HttpHelper {
                     case "application/x-www-form-urlencoded":
                         if (body instanceof Map<?, ?>) {
                             String finalRequestCharset = requestCharset;
-                            var strBody = ((Map<String, String>) body).entrySet().stream()
-                                    .map(entry -> {
-                                        var key = URLEncoder.encode(entry.getKey(), Charset.forName(finalRequestCharset));
-                                        var value = URLEncoder.encode(entry.getValue(), Charset.forName(finalRequestCharset));
-                                        return key + "=" + value;
-                                    })
-                                    .collect(Collectors.joining("&"));
+                            var strBody = ((Map<String, String>) body).entrySet().stream().map(entry -> {
+                                var key = URLEncoder.encode(entry.getKey(), Charset.forName(finalRequestCharset));
+                                var value = URLEncoder.encode(entry.getValue(), Charset.forName(finalRequestCharset));
+                                return key + "=" + value;
+                            }).collect(Collectors.joining("&"));
                             entity = HttpRequest.BodyPublishers.ofString(strBody, Charset.forName(requestCharset));
 
                         } else if (body instanceof String) {
                             entity = HttpRequest.BodyPublishers.ofString((String) body, Charset.forName(requestCharset));
                         } else {
-                            throw new IllegalArgumentException("The body only support Map OR String types"
-                                    + " when content type is application/x-www-form-urlencoded");
+                            throw new IllegalArgumentException("The body only support Map OR String types" + " when content type is "
+                                    + "application/x-www-form-urlencoded");
                         }
                         break;
                     case "multipart/form-data":
                         header.put("Content-Transfer-Encoding", "binary");
                         var fileBody = (File) body;
-                        MultiPartBodyPublisher publisher = new MultiPartBodyPublisher()
-                                .addPart(fileBody.getName(), () -> {
-                                    try {
-                                        return new FileInputStream(fileBody);
-                                    } catch (FileNotFoundException e) {
-                                        e.printStackTrace();
-                                        return null;
-                                    }
-                                }, fileBody.getName(), $.mime.getContentType(fileBody));
+                        MultiPartBodyPublisher publisher = new MultiPartBodyPublisher().addPart(fileBody.getName(), () -> {
+                            try {
+                                return new FileInputStream(fileBody);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                                return null;
+                            }
+                        }, fileBody.getName(), $.mime.getContentType(fileBody));
                         header.put("Content-Type", "multipart/form-data; boundary=" + publisher.getBoundary());
                         entity = publisher.build();
                         break;
                     default:
                         if (body instanceof String) {
                             entity = HttpRequest.BodyPublishers.ofString((String) body, Charset.forName(requestCharset));
-                        } else if (body instanceof Integer || body instanceof Long || body instanceof Float
-                                || body instanceof Double || body instanceof BigDecimal || body instanceof Boolean) {
+                        } else if (body instanceof Integer || body instanceof Long || body instanceof Float || body instanceof Double
+                                || body instanceof BigDecimal || body instanceof Boolean) {
                             entity = HttpRequest.BodyPublishers.ofString(body.toString(), Charset.forName(requestCharset));
                         } else if (body instanceof Date) {
                             entity = HttpRequest.BodyPublishers.ofString(((Date) body).getTime() + "", Charset.forName(requestCharset));
@@ -933,7 +908,8 @@ public class HttpHelper {
             header.put("Content-Type", contentType);
         }
         if (preRequestFun != null) {
-            var preRequestContext = preRequestFun.apply(new PreRequestContext(method.toUpperCase(), url, entity, header, timeoutMS));
+            var preRequestContext =
+                    preRequestFun.apply(new PreRequestContext(method.toUpperCase(), url, entity, header, timeoutMS));
             method = preRequestContext.getMethod();
             url = preRequestContext.getUrl();
             entity = preRequestContext.getEntity();
@@ -980,7 +956,7 @@ public class HttpHelper {
         } catch (URISyntaxException e) {
             throw new RTException("The URL [" + url + "] is NOT valid.");
         }
-        logger.trace("HTTP [" + method + "]" + url);
+        LOGGER.trace("HTTP [" + method + "]" + url);
         var httpRequest = builder.build();
         try {
             var httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -994,8 +970,23 @@ public class HttpHelper {
             responseWrap.head = httpResponse.headers().map();
             return responseWrap;
         } catch (IOException | InterruptedException e) {
-            logger.warn("HTTP [" + httpRequest.method() + "] " + url + " ERROR.");
+            LOGGER.warn("HTTP [" + httpRequest.method() + "] " + url + " ERROR.");
             throw new RTIOException(e);
+        }
+    }
+
+    private static class DefaultTrustManager implements X509TrustManager {
+        @Override
+        public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
         }
     }
 
@@ -1224,6 +1215,13 @@ public class HttpHelper {
          */
         static class PartsSpecification {
 
+            private PartsSpecification.TYPE type;
+            private String name;
+            private String value;
+            private Path path;
+            private Supplier<InputStream> stream;
+            private String filename;
+            private String contentType;
             /**
              * The enum Type.
              */
@@ -1246,14 +1244,6 @@ public class HttpHelper {
                 FINAL_BOUNDARY
             }
 
-            private PartsSpecification.TYPE type;
-            private String name;
-            private String value;
-            private Path path;
-            private Supplier<InputStream> stream;
-            private String filename;
-            private String contentType;
-
         }
 
         /**
@@ -1261,7 +1251,7 @@ public class HttpHelper {
          */
         class PartsIterator implements Iterator<byte[]> {
 
-            private Iterator<PartsSpecification> iter;
+            private final Iterator<PartsSpecification> iter;
             private InputStream currentFileInput;
 
             private boolean done;
@@ -1311,11 +1301,8 @@ public class HttpHelper {
                     }
                     PartsSpecification nextPart = iter.next();
                     if (PartsSpecification.TYPE.STRING.equals(nextPart.type)) {
-                        String part =
-                                "--" + boundary + "\r\n" +
-                                        "Content-Disposition: form-data; name=" + nextPart.name + "\r\n" +
-                                        "Content-Type: text/plain; charset=UTF-8\r\n\r\n" +
-                                        nextPart.value + "\r\n";
+                        String part = "--" + boundary + "\r\n" + "Content-Disposition: form-data; name=" + nextPart.name + "\r\n" + "Content-Type: " +
+                                "text/plain; charset=UTF-8\r\n\r\n" + nextPart.value + "\r\n";
                         return part.getBytes(StandardCharsets.UTF_8);
                     }
                     if (PartsSpecification.TYPE.FINAL_BOUNDARY.equals(nextPart.type)) {
@@ -1340,9 +1327,8 @@ public class HttpHelper {
                         currentFileInput = nextPart.stream.get();
                     }
                     String partHeader =
-                            "--" + boundary + "\r\n" +
-                                    "Content-Disposition: form-data; name=" + nextPart.name + "; filename=" + filename + "\r\n" +
-                                    "Content-Type: " + contentType + "\r\n\r\n";
+                            "--" + boundary + "\r\n" + "Content-Disposition: form-data; name="
+                                    + nextPart.name + "; filename=" + filename + "\r\n" + "Content-Type: " + contentType + "\r\n\r\n";
                     return partHeader.getBytes(StandardCharsets.UTF_8);
                 } else {
                     byte[] buf = new byte[8192];

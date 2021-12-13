@@ -39,21 +39,11 @@ import java.util.*;
  *
  * @author gudaoxuri
  */
-public class JsonHelper {
+public final class JsonHelper {
 
     private static final Map<String, JsonHelper> INSTANCES = new HashMap<>();
 
     private ObjectMapper mapper;
-
-    /**
-     * Pick json helper.
-     *
-     * @param instanceId the instance id
-     * @return the json helper
-     */
-    static JsonHelper pick(String instanceId) {
-        return INSTANCES.computeIfAbsent(instanceId, k -> new JsonHelper());
-    }
 
     private JsonHelper() {
         if (DependencyHelper.hasDependency("com.fasterxml.jackson.core.JsonProcessingException")) {
@@ -69,6 +59,16 @@ public class JsonHelper {
             mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             setTimeZone(Calendar.getInstance().getTimeZone());
         }
+    }
+
+    /**
+     * Pick json helper.
+     *
+     * @param instanceId the instance id
+     * @return the json helper
+     */
+    static JsonHelper pick(String instanceId) {
+        return INSTANCES.computeIfAbsent(instanceId, k -> new JsonHelper());
     }
 
     /**
