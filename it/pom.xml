@@ -25,7 +25,7 @@
     <name>Dew Common integration test</name>
     <url>https://github.com/gudaoxuri/dew-common</url>
     <packaging>jar</packaging>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0</version>
 
     <properties>
         <java.version>11</java.version>
@@ -38,9 +38,9 @@
 
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-        <junit.version>4.12</junit.version>
+        <junit.version>5.8.2</junit.version>
 
-        <graalvm.version>20.1.0</graalvm.version>
+        <graalvm.version>21.3.0</graalvm.version>
 
         <mainClass>com.ecfront.dew.common.test.graalvm.NativeImageMain</mainClass>
         <imageName>NativeImageTest</imageName>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>com.ecfront.dew</groupId>
             <artifactId>common</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.0-beta4</version>
             <exclusions>
                 <!-- 去除 HotSpot 兼容处理 -->
                 <exclusion>
@@ -68,9 +68,10 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

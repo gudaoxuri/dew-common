@@ -70,8 +70,8 @@ public class HttpHelper {
     HttpHelper(int defaultTimeoutMS, boolean autoRedirect) {
         final Properties props = System.getProperties();
         props.setProperty("jdk.internal.httpclient.disableHostnameVerification", Boolean.TRUE.toString());
-        var allowAllHeaders = ManagementFactory.getRuntimeMXBean().getInputArguments().stream().anyMatch(arg -> arg.contains("--add-opens=java.net"
-                + ".http/jdk.internal.net.http.common"));
+        var allowAllHeaders = ManagementFactory.getRuntimeMXBean().getInputArguments().stream().anyMatch(arg ->
+                arg.contains("--add-opens=java.net.http/jdk.internal.net.http.common"));
         if (allowAllHeaders) {
             /*
               解决JDK11对请求头限制的Bug.
@@ -1222,6 +1222,7 @@ public class HttpHelper {
             private Supplier<InputStream> stream;
             private String filename;
             private String contentType;
+
             /**
              * The enum Type.
              */

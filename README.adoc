@@ -37,7 +37,7 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 <dependency>
   <groupId>com.ecfront.dew</groupId>
   <artifactId>common</artifactId>
-  <version>3.0.0-beta</version>
+  <version>3.0.0-beta3</version>
 </dependency>
 
 <!-- < JDK11 -->
