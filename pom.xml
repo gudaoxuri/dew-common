@@ -26,7 +26,7 @@
     <description>Dew公共模块</description>
     <url>https://github.com/gudaoxuri/dew-common</url>
     <packaging>jar</packaging>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 
     <properties>
         <java.version>11</java.version>
@@ -36,18 +36,18 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
-        <jackson.version>2.13.3</jackson.version>
+        <jackson.version>2.13.4</jackson.version>
         <beanutils.version>1.9.4</beanutils.version>
         <jbcrypt.version>0.4</jbcrypt.version>
-        <slf4j.version>1.7.36</slf4j.version>
-        <junit.version>5.8.2</junit.version>
+        <slf4j.version>2.0.0</slf4j.version>
+        <junit.version>5.9.0</junit.version>
         <checkstyle.version>10.1</checkstyle.version>
 
         <asciidoctor.maven.plugin.version>2.2.1</asciidoctor.maven.plugin.version>
         <asciidoctorj.version>2.5.2</asciidoctorj.version>
         <jruby.version>9.3.2.0</jruby.version>
 
-        <graalvm.version>22.1.0.1</graalvm.version>
+        <graalvm.version>22.2.0</graalvm.version>
         <graalvm.plugin.version>21.2.0</graalvm.plugin.version>
         <mainClass></mainClass>
         <imageName></imageName>
