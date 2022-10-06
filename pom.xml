@@ -26,7 +26,7 @@
     <description>Dew公共模块</description>
     <url>https://github.com/gudaoxuri/dew-common</url>
     <packaging>jar</packaging>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
 
     <properties>
         <java.version>11</java.version>
@@ -36,7 +36,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
-        <jackson.version>2.13.4</jackson.version>
+        <jackson.version>2.14.0-rc1</jackson.version>
         <beanutils.version>1.9.4</beanutils.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <slf4j.version>2.0.0</slf4j.version>
@@ -379,7 +379,7 @@
     <repositories>
         <repository>
             <id>Sonatype OSS Snapshot Repository</id>
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
