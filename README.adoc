@@ -24,7 +24,6 @@ Dew Common的理念是简化Java开发中最常用的操作，同时尽可能少
 . 脚本处理
 . 响应处理及分页模型
 . Tuple支持
-. Java11支持
 . GraalVM支持
 
 == 使用
@@ -33,18 +32,10 @@ NOTE: 文档地址： http://gudaoxuri.github.io/dew-common/[http://gudaoxuri.gi
 
 [source,xml]
 ----
-<!-- >= JDK11 -->
 <dependency>
   <groupId>com.ecfront.dew</groupId>
   <artifactId>common</artifactId>
   <version>3.0.2</version>
-</dependency>
-
-<!-- < JDK11 -->
-<dependency>
-  <groupId>com.ecfront.dew</groupId>
-  <artifactId>common</artifactId>
-  <version>1.5.0</version>
 </dependency>
 ----
 
@@ -342,7 +333,7 @@ String conf=$.file.readAllByClassPath("conf1.json","UTF-8");
 
 TIP: 更多示例见`FileHelperTest.java`
 
-=== 常用字段操作（$.amount）
+=== 常用金额操作（$.amount）
 
 [source,java]
 ----

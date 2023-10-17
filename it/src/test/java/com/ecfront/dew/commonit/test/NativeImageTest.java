@@ -17,7 +17,7 @@
 package com.ecfront.dew.commonit.test;
 
 import com.ecfront.dew.common.test.graalvm.NativeImageMain;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * The type Native image test.

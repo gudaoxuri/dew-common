@@ -40,7 +40,7 @@ public class ShellHelperTest {
      * @throws InterruptedException the interrupted exception
      * @throws ExecutionException   the execution exception
      */
-    // @Test
+    @Test
     public void testENV() throws InterruptedException, ExecutionException {
         $.shell.execute("cd xxx && npm run build:uat", new HashMap<>() {
             {
@@ -90,12 +90,13 @@ public class ShellHelperTest {
      *
      * @throws InterruptedException the interrupted exception
      */
-    // @Test
+    @Test
     public void testBash() throws InterruptedException {
         if (!$.file.isWindows()) {
             final List<String> statusResult = new ArrayList<>();
             CountDownLatch cdl = new CountDownLatch(1);
             String testFilePath = this.getClass().getResource("/").getPath();
+            $.shell.execute("chmod 777 " + testFilePath + "shell-test.sh");
             $.shell.execute(testFilePath + "shell-test.sh", // 执行脚本
                     "done!", // 成功标识，只要捕捉到此标识就视为成功，为null时不会调用ReportHandler的success方法
                     "step", // 进度标识，只要捕捉到此标识就更新进度，格式为 <progressFlag>空格<progress>,如： progress 40，为null时不会调用ReportHandler的progress方法

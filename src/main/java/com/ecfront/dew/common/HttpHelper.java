@@ -19,7 +19,6 @@ package com.ecfront.dew.common;
 import com.ecfront.dew.common.exception.RTException;
 import com.ecfront.dew.common.exception.RTGeneralSecurityException;
 import com.ecfront.dew.common.exception.RTIOException;
-import com.ecfront.dew.common.exception.RTReflectiveOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,25 +72,19 @@ public class HttpHelper {
         var allowAllHeaders = ManagementFactory.getRuntimeMXBean().getInputArguments().stream().anyMatch(arg ->
                 arg.contains("--add-opens=java.net.http/jdk.internal.net.http.common"));
         if (allowAllHeaders) {
-            /*
-              解决JDK11对请求头限制的Bug.
-              <p>
-              如果请求头有包含 "connection", "content-length", "date", "expect", "from", "host", "upgrade", "via", "warning" 字段，
-              则需要调用此方法解除限制。
-              <p>
-              NOTE: 需要在运行参数中添加 --add-opens java.net.http/jdk.internal.net.http.common=ALL-UNNAMED
-
-              @return the resp
-             * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8213696">JDK-8213696</a>
-             */
             try {
-                var disallowedHeads = jdk.internal.net.http.common.Utils.class.getDeclaredField("DISALLOWED_HEADERS_SET");
+                // 解决JDK11对请求头限制的Bug.
+                // 如果请求头有包含 "connection", "content-length", "date", "expect", "from", "host", "upgrade", "via", "warning" 字段，
+                // 则需要调用此方法解除限制。
+                // NOTE: 需要在运行参数中添加 --add-opens java.net.http/jdk.internal.net.http.common=ALL-UNNAMED
+                // @see <a href="https://bugs.openjdk.java.net/browse/JDK-8213696">JDK-8213696</a>
+                var jdkUtilsClazz = Class.forName("jdk.internal.net.http.common.Utils");
+                var disallowedHeads = jdkUtilsClazz.getDeclaredField("DISALLOWED_HEADERS_SET");
                 var modifiersField = Field.class.getDeclaredField("modifiers");
                 modifiersField.setAccessible(true);
                 modifiersField.setInt(disallowedHeads, disallowedHeads.getModifiers() & ~Modifier.FINAL);
                 $.bean.setValue(null, disallowedHeads, new HashSet<String>());
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RTReflectiveOperationException(e);
+            } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException ignore) {
             }
         }
         try {

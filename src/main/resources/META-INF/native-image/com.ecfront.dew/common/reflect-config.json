@@ -1,235 +1,274 @@
 [
 {
-  "name":"[B"}
-,
+  "name":"[B"
+},
 {
-  "name":"[C"}
-,
+  "name":"[C"
+},
 {
-  "name":"[D"}
-,
+  "name":"[D"
+},
 {
-  "name":"[F"}
-,
+  "name":"[F"
+},
 {
-  "name":"[I"}
-,
+  "name":"[I"
+},
 {
-  "name":"[J"}
-,
+  "name":"[J"
+},
 {
-  "name":"[Lcom.fasterxml.jackson.databind.deser.Deserializers;"}
-,
+  "name":"[Lcom.fasterxml.jackson.databind.deser.Deserializers;"
+},
 {
-  "name":"[Lcom.fasterxml.jackson.databind.deser.KeyDeserializers;"}
-,
+  "name":"[Lcom.fasterxml.jackson.databind.deser.KeyDeserializers;"
+},
 {
-  "name":"[Lcom.fasterxml.jackson.databind.deser.ValueInstantiators;"}
-,
+  "name":"[Lcom.fasterxml.jackson.databind.deser.ValueInstantiators;"
+},
 {
-  "name":"[Lcom.fasterxml.jackson.databind.ser.Serializers;"}
-,
+  "name":"[Lcom.fasterxml.jackson.databind.ser.Serializers;"
+},
 {
-  "name":"[Ljava.io.File;"}
-,
+  "name":"[Ljava.io.File;"
+},
 {
-  "name":"[Ljava.lang.Boolean;"}
-,
+  "name":"[Ljava.lang.Boolean;"
+},
 {
-  "name":"[Ljava.lang.Byte;"}
-,
+  "name":"[Ljava.lang.Byte;"
+},
 {
-  "name":"[Ljava.lang.Character;"}
-,
+  "name":"[Ljava.lang.Character;"
+},
 {
-  "name":"[Ljava.lang.Class;"}
-,
+  "name":"[Ljava.lang.Class;"
+},
 {
-  "name":"[Ljava.lang.Double;"}
-,
+  "name":"[Ljava.lang.Double;"
+},
 {
-  "name":"[Ljava.lang.Float;"}
-,
+  "name":"[Ljava.lang.Float;"
+},
 {
-  "name":"[Ljava.lang.Integer;"}
-,
+  "name":"[Ljava.lang.Integer;"
+},
 {
-  "name":"[Ljava.lang.Long;"}
-,
+  "name":"[Ljava.lang.Long;"
+},
 {
-  "name":"[Ljava.lang.Short;"}
-,
+  "name":"[Ljava.lang.Short;"
+},
 {
-  "name":"[Ljava.lang.String;"}
-,
+  "name":"[Ljava.lang.String;"
+},
 {
-  "name":"[Ljava.math.BigDecimal;"}
-,
+  "name":"[Ljava.math.BigDecimal;"
+},
 {
-  "name":"[Ljava.math.BigInteger;"}
-,
+  "name":"[Ljava.math.BigInteger;"
+},
 {
-  "name":"[Ljava.net.URL;"}
-,
+  "name":"[Ljava.net.URL;"
+},
 {
-  "name":"[Ljava.sql.Date;"}
-,
+  "name":"[Ljava.sql.Date;"
+},
 {
-  "name":"[Ljava.sql.Time;"}
-,
+  "name":"[Ljava.sql.Time;"
+},
 {
-  "name":"[Ljava.sql.Timestamp;"}
-,
+  "name":"[Ljava.sql.Timestamp;"
+},
 {
-  "name":"[Ljava.util.Calendar;"}
-,
+  "name":"[Ljava.util.Calendar;"
+},
 {
-  "name":"[Ljava.util.Date;"}
-,
+  "name":"[Ljava.util.Date;"
+},
 {
-  "name":"[S"}
-,
+  "name":"[Ljava.util.HashMap$Node;"
+},
 {
-  "name":"[Z"}
-,
+  "name":"[S"
+},
 {
-  "name":"com.fasterxml.jackson.core.JsonProcessingException"}
-,
+  "name":"[Z"
+},
 {
-  "name":"com.fasterxml.jackson.databind.ext.Java7HandlersImpl",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "name":"com.fasterxml.jackson.core.JsonProcessingException"
+},
 {
   "name":"com.fasterxml.jackson.databind.ext.Java7SupportImpl",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"com.sun.crypto.provider.AESCipher$General",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.ARCFOURCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.ChaCha20Cipher$ChaCha20Poly1305",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.DESCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.DESedeCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"com.sun.crypto.provider.DHParameters",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.GaloisCounterMode$AESGCM",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"com.sun.crypto.provider.TlsKeyMaterialGenerator",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"com.sun.crypto.provider.TlsMasterSecretGenerator",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"com.sun.crypto.provider.TlsPrfGenerator$V12",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
-  "name":"java.io.File"}
-,
+  "name":"java.io.File"
+},
 {
-  "name":"java.io.PrintStream"}
-,
+  "name":"java.io.PrintStream"
+},
 {
   "name":"java.io.Serializable",
-  "queryAllDeclaredMethods":true}
-,
+  "queryAllDeclaredMethods":true
+},
 {
-  "name":"java.lang.Boolean"}
-,
+  "name":"java.lang.Boolean"
+},
 {
-  "name":"java.lang.Class"}
-,
+  "name":"java.lang.Class"
+},
 {
   "name":"java.lang.ClassLoader",
-  "methods":[{"name":"setDefaultAssertionStatus","parameterTypes":["boolean"] }]}
-,
+  "methods":[{"name":"setDefaultAssertionStatus","parameterTypes":["boolean"] }]
+},
 {
   "name":"java.lang.Cloneable",
-  "queryAllDeclaredMethods":true}
-,
+  "queryAllDeclaredMethods":true
+},
 {
-  "name":"java.lang.Object"}
-,
+  "name":"java.lang.Object"
+},
 {
-  "name":"java.lang.String"}
-,
+  "name":"java.lang.String"
+},
+{
+  "name":"java.lang.Thread",
+  "fields":[{"name":"threadLocalRandomProbe"}]
+},
 {
   "name":"java.lang.Throwable",
-  "queriedMethods":[{"name":"initCause","parameterTypes":["java.lang.Throwable"] }]}
-,
+  "methods":[{"name":"initCause","parameterTypes":["java.lang.Throwable"] }]
+},
 {
   "name":"java.lang.reflect.Field",
-  "fields":[{"name":"modifiers"}]}
-,
+  "fields":[{"name":"modifiers"}]
+},
 {
-  "name":"java.security.AlgorithmParametersSpi"}
-,
+  "name":"java.security.AlgorithmParametersSpi"
+},
 {
-  "name":"java.security.MessageDigestSpi"}
-,
+  "name":"java.security.SecureRandomParameters"
+},
 {
-  "name":"java.security.SecureRandomParameters"}
-,
+  "name":"java.security.interfaces.ECPrivateKey"
+},
 {
-  "name":"java.security.interfaces.ECPrivateKey"}
-,
+  "name":"java.security.interfaces.ECPublicKey"
+},
 {
-  "name":"java.security.interfaces.ECPublicKey"}
-,
+  "name":"java.security.interfaces.RSAPrivateKey"
+},
 {
-  "name":"java.security.interfaces.RSAPrivateKey"}
-,
-{
-  "name":"java.security.interfaces.RSAPublicKey"}
-,
+  "name":"java.security.interfaces.RSAPublicKey"
+},
 {
   "name":"java.util.AbstractMap",
   "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true}
-,
+  "queryAllDeclaredMethods":true
+},
 {
   "name":"java.util.HashMap",
   "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true}
-,
+  "queryAllDeclaredMethods":true
+},
 {
-  "name":"java.util.List"}
-,
+  "name":"java.util.List"
+},
 {
   "name":"java.util.Map",
-  "queryAllDeclaredMethods":true}
-,
+  "queryAllDeclaredMethods":true
+},
 {
-  "name":"java.util.Properties"}
-,
+  "name":"java.util.Properties"
+},
+{
+  "name":"java.util.concurrent.ForkJoinTask",
+  "fields":[{"name":"aux"}, {"name":"status"}]
+},
+{
+  "name":"java.util.concurrent.atomic.AtomicBoolean",
+  "fields":[{"name":"value"}]
+},
+{
+  "name":"java.util.concurrent.atomic.AtomicReference",
+  "fields":[{"name":"value"}]
+},
+{
+  "name":"java.util.concurrent.atomic.Striped64",
+  "fields":[{"name":"base"}, {"name":"cellsBusy"}]
+},
 {
   "name":"javax.security.auth.x500.X500Principal",
   "fields":[{"name":"thisX500Name"}],
-  "queriedMethods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]
+},
+{
+  "name":"jdk.internal.misc.Unsafe"
+},
 {
   "name":"jdk.internal.net.http.common.Utils",
-  "fields":[{"name":"DISALLOWED_HEADERS_SET"}]}
-,
+  "fields":[{"name":"DISALLOWED_HEADERS_SET"}]
+},
 {
-  "name":"org.apache.commons.beanutils.BeanUtilsBean"}
-,
+  "name":"org.apache.commons.beanutils.BeanUtilsBean"
+},
 {
-  "name":"org.apache.commons.logging.LogFactory"}
-,
+  "name":"org.apache.commons.logging.LogFactory"
+},
 {
   "name":"org.apache.commons.logging.impl.Jdk14Logger",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }, {"name":"setLogFactory","parameterTypes":["org.apache.commons.logging.LogFactory"] }]
+},
 {
-  "name":"org.apache.commons.logging.impl.Log4JLogger"}
-,
+  "name":"org.apache.commons.logging.impl.Log4JLogger"
+},
 {
   "name":"org.apache.commons.logging.impl.LogFactoryImpl",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"org.apache.commons.logging.impl.WeakHashtable",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+}
 ]

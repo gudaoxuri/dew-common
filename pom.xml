@@ -26,7 +26,7 @@
     <description>Dew公共模块</description>
     <url>https://github.com/gudaoxuri/dew-common</url>
     <packaging>jar</packaging>
-    <version>3.0.3</version>
+    <version>3.0.4</version>
 
     <properties>
         <java.version>11</java.version>
@@ -36,19 +36,19 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
-        <jackson.version>2.14.2</jackson.version>
+        <jackson.version>2.15.3</jackson.version>
         <beanutils.version>1.9.4</beanutils.version>
         <jbcrypt.version>0.4</jbcrypt.version>
-        <slf4j.version>2.0.6</slf4j.version>
-        <junit.version>5.9.2</junit.version>
-        <checkstyle.version>10.7.0</checkstyle.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <junit.version>5.10.0</junit.version>
+        <checkstyle.version>10.12.4</checkstyle.version>
 
         <asciidoctor.maven.plugin.version>2.2.2</asciidoctor.maven.plugin.version>
         <asciidoctorj.version>2.5.7</asciidoctorj.version>
         <jruby.version>9.3.2.0</jruby.version>
 
-        <graalvm.version>22.3.1</graalvm.version>
-        <graalvm.plugin.version>22.3.1</graalvm.plugin.version>
+        <graalvm.version>23.0.1</graalvm.version>
+        <graalvm.plugin.version>23.0.1</graalvm.plugin.version>
         <mainClass></mainClass>
         <imageName></imageName>
     </properties>
@@ -138,8 +138,8 @@
         <developer>
             <name>gudaoxuri</name>
             <email>i@sunisle.org</email>
-            <organization>ecfront</organization>
-            <organizationUrl>http://www.ecfront.com</organizationUrl>
+            <organization>idealworld</organization>
+            <organizationUrl>https://idealworld.group/</organizationUrl>
         </developer>
     </developers>
 
