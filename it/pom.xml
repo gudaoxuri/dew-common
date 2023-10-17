@@ -40,7 +40,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         <junit.version>5.10.0</junit.version>
 
-        <graalvm.version>23.0.1</graalvm.version>
+        <graalvm.version>22.3.3</graalvm.version>
 
         <mainClass>com.ecfront.dew.common.test.graalvm.NativeImageMain</mainClass>
         <imageName>NativeImageTest</imageName>
