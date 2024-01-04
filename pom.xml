@@ -72,11 +72,17 @@
         </dependency>
         <!--$.json dependency end-->
         <!--$.bean dependency begin-->
-        <!-- todo -->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>${beanutils.version}</version>
+            <exclusions>
+                <!-- This package has a security vulnerability and has been excluded -->
+                <exclusion>
+                    <artifactId>commons-collections</artifactId>
+                    <groupId>commons-collections</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--$.bean dependency end-->
         <!--$.encrypt dependency begin-->
