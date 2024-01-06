@@ -26,10 +26,10 @@
     <description>Dew公共模块</description>
     <url>https://github.com/gudaoxuri/dew-common</url>
     <packaging>jar</packaging>
-    <version>3.0.4</version>
+    <version>3.0.5</version>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
         <maven.compiler.encoding>${project.build.sourceEncoding}</maven.compiler.encoding>
@@ -47,8 +47,8 @@
         <asciidoctorj.version>2.5.7</asciidoctorj.version>
         <jruby.version>9.3.2.0</jruby.version>
 
-        <graalvm.version>22.3.3</graalvm.version>
-        <graalvm.plugin.version>22.3.3</graalvm.plugin.version>
+        <graalvm.version>23.0.2</graalvm.version>
+        <graalvm.plugin.version>21.2.0</graalvm.plugin.version>
         <mainClass></mainClass>
         <imageName></imageName>
     </properties>
@@ -76,6 +76,13 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>${beanutils.version}</version>
+            <exclusions>
+                <!-- This package has a security vulnerability and has been excluded -->
+                <exclusion>
+                    <artifactId>commons-collections</artifactId>
+                    <groupId>commons-collections</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--$.bean dependency end-->
         <!--$.encrypt dependency begin-->
@@ -155,7 +162,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.12.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -183,6 +190,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.2</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -220,7 +228,6 @@
                         </goals>
                         <configuration>
                             <backend>html5</backend>
-                            <sourceHighlighter>coderay</sourceHighlighter>
                             <attributes>
                                 <imagesdir>./images</imagesdir>
                                 <toc>left</toc>
