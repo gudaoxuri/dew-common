@@ -872,8 +872,7 @@ public class HttpHelper {
                             try {
                                 return new FileInputStream(fileBody);
                             } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                                return null;
+                                throw new RTIOException(e);
                             }
                         }, fileBody.getName(), $.mime.getContentType(fileBody));
                         header.put("Content-Type", "multipart/form-data; boundary=" + publisher.getBoundary());
@@ -889,6 +888,10 @@ public class HttpHelper {
                             entity = HttpRequest.BodyPublishers.ofString(((Date) body).getTime() + "", Charset.forName(requestCharset));
                         } else if (body instanceof File) {
                             entity = HttpRequest.BodyPublishers.ofFile(((File) body).toPath());
+                        } else if (body instanceof InputStream) {
+                            entity = HttpRequest.BodyPublishers.fromPublisher(
+                                    HttpRequest.BodyPublishers.ofInputStream(() -> (InputStream) body),
+                                    ((InputStream) body).available());
                         } else {
                             entity = HttpRequest.BodyPublishers.ofString($.json.toJsonString(body), Charset.forName(requestCharset));
                         }
