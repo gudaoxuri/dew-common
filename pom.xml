@@ -22,7 +22,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
         <jackson.version>2.17.0</jackson.version>
-        <beanutils.version>1.9.4</beanutils.version>
+        <beanutils.version>1.11.0</beanutils.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <slf4j.version>2.0.9</slf4j.version>
         <junit.version>5.10.2</junit.version>
